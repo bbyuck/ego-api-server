@@ -1,0 +1,19 @@
+spring:
+  datasource:
+#    외부 접속
+    url: jdbc:mariadb://124.50.218.182:3306/ego-api-server-dev
+#    집 접속
+#    url: jdbc:mariadb://192.168.219.101:3306/ego-api-server-dev
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: root
+    password: kang9411**
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        #        show_sql: true
+        format_sql: true
+logging.level:
+  org.hibernate.SQL: debug
+  org.hibernate.type: trace
