@@ -15,15 +15,15 @@ public class Score {
     @Column(name = "SCORE_ID")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "RELATED_FINISHED_MATCHING_ID", referencedColumnName = "FINISHED_MATCHING_ID")
     private FinishedMatching relatedFinishedMatching;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "GIVER_ID", referencedColumnName = "USER_ID")
     private User giver;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "RECEIVER_ID", referencedColumnName = "USER_ID")
     private User receiver;
 

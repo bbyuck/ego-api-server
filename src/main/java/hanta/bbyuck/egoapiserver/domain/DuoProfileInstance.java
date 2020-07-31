@@ -58,11 +58,11 @@ public class DuoProfileInstance {
     @Enumerated(EnumType.STRING)
     private Position main_position;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "OWNER_ID", referencedColumnName = "USER_ID")
     private User owner;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "RELATED_FINISHED_MATCHING_ID", referencedColumnName = "FINISHED_MATCHING_ID")
     private FinishedMatching relatedFinishedMatching;
 }

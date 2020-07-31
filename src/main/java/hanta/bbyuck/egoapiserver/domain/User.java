@@ -47,7 +47,7 @@ public class User {
     @Column(name = "type", length = 45)
     private String type;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "participating_duo_matching", referencedColumnName = "IN_PROGRESS_DUO_MATCHING_ID")
     private InProgressDuoMatching inProgressDuoMatching;
 
@@ -59,7 +59,7 @@ public class User {
      * duo_profile_card
      */
 
-    @OneToOne(mappedBy = "owner")
+    @OneToOne(mappedBy = "owner", fetch = FetchType.LAZY)
     private DuoProfileCard duoProfileCard;
 
 

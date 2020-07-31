@@ -16,7 +16,7 @@ public class StatisticTestAnswer {
     @Column(name = "S_TEST_ANSWER_ID")
     private Long id;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "RESPONDENT_ID")
     private User respondent;
 

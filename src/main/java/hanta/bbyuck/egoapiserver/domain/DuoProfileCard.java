@@ -14,7 +14,7 @@ public class DuoProfileCard {
     @Column(name = "DUO_PROFILE_CARD_ID")
     private Long id;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
     private User owner;
 

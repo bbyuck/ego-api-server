@@ -15,11 +15,11 @@ public class DuoRequest {
     @Column(name = "DUO_REQUEST_ID")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SENDER_ID", referencedColumnName = "USER_ID")
     private User sender;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "RECEIVER_ID", referencedColumnName = "USER_ID")
     private User receiver;
 
