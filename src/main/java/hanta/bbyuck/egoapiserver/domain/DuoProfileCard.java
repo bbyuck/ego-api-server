@@ -22,42 +22,83 @@ public class DuoProfileCard {
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private Boolean voice;
 
-    @Column(length = 20)
-    private String summoner_name;
-    @Column(length = 2)
+    @Column(name = "summoner_name", length = 20)
+    private String summonerName;
+
+    @Column(name = "tier", length = 2)
     private String tier;
-    private Integer tier_lev;
+
+    @Column(name = "tier_lev")
+    private Integer tierLev;
+
+    @Column(name = "lp")
     private Integer lp;
 
-    @Column(length = 20)
+    @Column(name = "champion1", length = 20)
     private String champion1;
 
-    @Column(length = 20)
+    @Column(name = "champion2", length = 20)
     private String champion2;
 
-    @Column(length = 20)
+    @Column(name = "champion3", length = 20)
     private String champion3;
 
-    @Column(columnDefinition = "TINYINT")
+    @Column(name="top", columnDefinition = "TINYINT")
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private Boolean top;
 
-    @Column(columnDefinition = "TINYINT")
+    @Column(name = "jungle", columnDefinition = "TINYINT")
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private Boolean jungle;
 
-    @Column(columnDefinition = "TINYINT")
+    @Column(name = "mid", columnDefinition = "TINYINT")
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private Boolean mid;
 
-    @Column(columnDefinition = "TINYINT")
+    @Column(name = "ad", columnDefinition = "TINYINT")
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private Boolean ad;
 
-    @Column(columnDefinition = "TINYINT")
+    @Column(name = "support", columnDefinition = "TINYINT")
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private Boolean support;
 
     @Enumerated(EnumType.STRING)
-    private Position main_position;
+    @Column(name = "main_position", length = 7)
+    private Position mainPosition;
+
+    /*
+     * 편의 메서드
+     */
+    public void makeProfileCard(User _owner,
+                                Boolean _voice,
+                                String _summonerName,
+                                String _tier,
+                                Integer _tierLev,
+                                Integer _lp,
+                                String _champion1,
+                                String _champion2,
+                                String _champion3,
+                                Boolean _top,
+                                Boolean _jungle,
+                                Boolean _mid,
+                                Boolean _ad,
+                                Boolean _support,
+                                Position _mainPosition) {
+        this.owner = _owner;
+        this.voice = _voice;
+        this.summonerName = _summonerName;
+        this.tier = _tier;
+        this.tierLev = _tierLev;
+        this.lp = _lp;
+        this.champion1 = _champion1;
+        this.champion2 = _champion2;
+        this.champion3 = _champion3;
+        this.top = _top;
+        this.jungle = _jungle;
+        this.mid = _mid;
+        this.ad = _ad;
+        this.support = _support;
+        this.mainPosition = _mainPosition;
+    }
 }

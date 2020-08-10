@@ -1,6 +1,8 @@
 package hanta.bbyuck.egoapiserver.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -15,6 +17,10 @@ public class User {
     @Id @GeneratedValue
     @Column(name = "USER_ID")
     private Long id;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "privilege", length = 10)
+    private Privilege privilege;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "sns_vendor", length = 10)
@@ -36,7 +42,7 @@ public class User {
     */
 
     @Column(name = "last_login_time")
-    private LocalDateTime lastLogiTime;
+    private LocalDateTime lastLoginTime;
 
     @Column(name = "last_active_time")
     private LocalDateTime lastActiveTime;
@@ -81,4 +87,20 @@ public class User {
     private List<Score> receivedSocreList = new ArrayList<>();
 
 
+    /*
+     * 편의 메서드
+     */
+
+    public void createUser(SnsVendor _snsVendor, String _snsId, String _email) {
+        this.snsVendor = _snsVendor;
+        this.privilege = Privilege.USER;
+        this.snsId = _snsId;
+        this.email = _email;
+        this.status = MatchingStatus.INACTIVE;
+        this.type = null;
+        this.lastLoginTime = null;
+        this.lastActiveTime = null;
+        this.regTime = LocalDateTime.now();
+        this.inProgressDuoMatching = null;
+    }
 }
