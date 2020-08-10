@@ -14,8 +14,9 @@ public class DuoProfileCardRepository {
     private final EntityManager em;
 
     @Transactional
-    public void save(DuoProfileCard duoProfileCard) {
+    public Long save(DuoProfileCard duoProfileCard) {
         em.persist(duoProfileCard);
+        return duoProfileCard.getId();
     }
 
 

@@ -17,13 +17,13 @@ public class SwaggerConfig {
     @SuppressWarnings("deprecation")
     private ApiInfo apiInfo() {
         ApiInfo apiInfo = new ApiInfo(
-                "Title",
-                "Description",
-                "Version",
-                "Terms of Service URL",
-                "Contact Name",
-                "License",
-                "LicenseURL"
+                "ego api server",
+                "eSports 매칭 플랫폼 ego API Doc.",
+                "0.0.1.Beta",
+                "",
+                "Bbyuck - HYUK",
+                "The Apache License, Version 2.0",
+                "https://httpd.apache.org/docs/2.4/license.html"
         );
         return apiInfo;
     }
@@ -35,6 +35,7 @@ public class SwaggerConfig {
                 .select()
                 .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.any())
-                .build();
+                .build()
+                .apiInfo(apiInfo());
     }
 }

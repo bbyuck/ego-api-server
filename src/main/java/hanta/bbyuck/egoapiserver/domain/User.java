@@ -18,6 +18,9 @@ public class User {
     @Column(name = "USER_ID")
     private Long id;
 
+    @Column(name = "user_auth", length = 44)
+    private String userAuth;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "privilege", length = 10)
     private Privilege privilege;
@@ -92,6 +95,7 @@ public class User {
      */
 
     public void createUser(SnsVendor _snsVendor, String _snsId, String _email) {
+        this.userAuth = null;
         this.snsVendor = _snsVendor;
         this.privilege = Privilege.USER;
         this.snsId = _snsId;
@@ -102,5 +106,9 @@ public class User {
         this.lastActiveTime = null;
         this.regTime = LocalDateTime.now();
         this.inProgressDuoMatching = null;
+    }
+
+    public void assignAuth(String auth) {
+        this.userAuth = auth;
     }
 }

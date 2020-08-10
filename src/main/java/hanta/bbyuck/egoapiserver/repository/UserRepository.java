@@ -15,8 +15,9 @@ public class UserRepository {
     private final EntityManager em;
 
     @Transactional
-    public void save(User user) {
+    public Long save(User user) {
         em.persist(user);
+        return user.getId();
     }
 
     public User find(Long id) {
@@ -34,6 +35,5 @@ public class UserRepository {
         } else {
             return findUser.get(0);
         }
-
     }
 }
