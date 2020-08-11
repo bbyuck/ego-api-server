@@ -1,21 +1,30 @@
 package hanta.bbyuck.egoapiserver.util;
 
+import hanta.bbyuck.egoapiserver.exception.logical.AES256Exception;
 import org.jasypt.contrib.org.apache.commons.codec_1_3.binary.Base64;
-import org.springframework.context.annotation.Bean;
 
 import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
 
+//throws java.io.UnsupportedEncodingException,
+//        NoSuchAlgorithmException,
+//        NoSuchPaddingException,
+//        InvalidKeyException,
+//        InvalidAlgorithmParameterException,
+//        IllegalBlockSizeException,
+//        BadPaddingException
+
 public class AES256Util {
     private static volatile AES256Util INSTANCE;
 
-    final static String secretKey = "10oeganhkylpphgyss1wjhyateog20bb"; //32bit
-    static String IV = "cqoskfmwo1sxzspd"; //16bit
+    private final static String secretKey = "10oeganhkylpphgyss1wjhyateog20bb"; //32bit
+    private static String IV = "cqoskfmwo1sxzspd"; //16bit
 
     public static AES256Util getInstance() {
         if (INSTANCE == null) {
@@ -32,41 +41,39 @@ public class AES256Util {
     }
 
     //암호화
-    public static String AES_Encode(String str) throws java.io.UnsupportedEncodingException,
-            NoSuchAlgorithmException,
-            NoSuchPaddingException,
-            InvalidKeyException,
-            InvalidAlgorithmParameterException,
-            IllegalBlockSizeException,
-            BadPaddingException {
-        byte[] keyData = secretKey.getBytes();
+    public String encode(String str)  {
+        try {
+            byte[] keyData = secretKey.getBytes();
 
-        SecretKey secureKey = new SecretKeySpec(keyData, "AES");
+            SecretKey secureKey = new SecretKeySpec(keyData, "AES");
 
-        Cipher c = Cipher.getInstance("AES/CBC/PKCS5Padding");
-        c.init(Cipher.ENCRYPT_MODE, secureKey, new IvParameterSpec(IV.getBytes()));
+            Cipher c = Cipher.getInstance("AES/CBC/PKCS5Padding");
+            c.init(Cipher.ENCRYPT_MODE, secureKey, new IvParameterSpec(IV.getBytes()));
 
-        byte[] encrypted = c.doFinal(str.getBytes("UTF-8"));
-        String enStr = new String(Base64.encodeBase64(encrypted));
+            byte[] encrypted = c.doFinal(str.getBytes("UTF-8"));
 
-        return enStr;
+            return new String(Base64.encodeBase64(encrypted));
+        } catch (NoSuchAlgorithmException | BadPaddingException | InvalidKeyException | InvalidAlgorithmParameterException | NoSuchPaddingException | IllegalBlockSizeException | UnsupportedEncodingException e) {
+            e.printStackTrace();
+            throw new AES256Exception();
+        }
     }
 
     //복호화
-    public static String AES_Decode(String str) throws java.io.UnsupportedEncodingException,
-            NoSuchAlgorithmException,
-            NoSuchPaddingException,
-            InvalidKeyException,
-            InvalidAlgorithmParameterException,
-            IllegalBlockSizeException,
-            BadPaddingException {
-        byte[] keyData = secretKey.getBytes();
-        SecretKey secureKey = new SecretKeySpec(keyData, "AES");
-        Cipher c = Cipher.getInstance("AES/CBC/PKCS5Padding");
-        c.init(Cipher.DECRYPT_MODE, secureKey, new IvParameterSpec(IV.getBytes("UTF-8")));
+    public String decode(String str) {
+        try {
+            byte[] keyData = secretKey.getBytes();
+            SecretKey secureKey = new SecretKeySpec(keyData, "AES");
+            Cipher c = Cipher.getInstance("AES/CBC/PKCS5Padding");
+            c.init(Cipher.DECRYPT_MODE, secureKey, new IvParameterSpec(IV.getBytes("UTF-8")));
 
-        byte[] byteStr = Base64.decodeBase64(str.getBytes());
+            byte[] byteStr = Base64.decodeBase64(str.getBytes());
 
-        return new String(c.doFinal(byteStr), "UTF-8");
+            return new String(c.doFinal(byteStr), "UTF-8");
+        }
+        catch (NoSuchAlgorithmException | BadPaddingException | InvalidKeyException | InvalidAlgorithmParameterException | NoSuchPaddingException | IllegalBlockSizeException | UnsupportedEncodingException e) {
+            e.printStackTrace();
+            throw new AES256Exception();
+        }
     }
 }

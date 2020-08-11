@@ -1,9 +1,6 @@
 package hanta.bbyuck.egoapiserver.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -13,8 +10,15 @@ import java.util.List;
 @Entity
 @Getter
 @Table(name = "user")
+@SequenceGenerator(
+        name = "user_seq_generator",
+        sequenceName = "user_sequence"
+)
 public class User {
-    @Id @GeneratedValue
+    @Id @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "user_seq_generator"
+    )
     @Column(name = "USER_ID")
     private Long id;
 
@@ -37,7 +41,7 @@ public class User {
 
     @Column(name = "matching_status", length = 10)
     @Enumerated(EnumType.STRING)
-    private MatchingStatus status;
+    private UserStatus status;
     /*
      * INACTIVE -> 최근 활동 시각에서 30분 이상 지났을 경우
      * ACTIVE   -> 최근 활동 시각에서 30분 이내
@@ -71,7 +75,6 @@ public class User {
     @OneToOne(mappedBy = "owner", fetch = FetchType.LAZY)
     private DuoProfileCard duoProfileCard;
 
-
     /*
      * duo_request
      */
@@ -89,7 +92,6 @@ public class User {
     @OneToMany(mappedBy = "receiver")
     private List<Score> receivedSocreList = new ArrayList<>();
 
-
     /*
      * 편의 메서드
      */
@@ -100,7 +102,7 @@ public class User {
         this.privilege = Privilege.USER;
         this.snsId = _snsId;
         this.email = _email;
-        this.status = MatchingStatus.INACTIVE;
+        this.status = UserStatus.INACTIVE;
         this.type = null;
         this.lastLoginTime = null;
         this.lastActiveTime = null;
@@ -111,4 +113,21 @@ public class User {
     public void assignAuth(String auth) {
         this.userAuth = auth;
     }
+
+    public void updateLoginTime() {
+        this.lastLoginTime = LocalDateTime.now();
+    }
+    public void updateActiveTime() {
+        this.lastActiveTime = LocalDateTime.now();
+    }
+    public void updateUserStatus(UserStatus newStatus) {
+        this.status = newStatus;
+    }
+    public void updateDuoMatching(InProgressDuoMatching inProgressDuoMatching) {
+        this.inProgressDuoMatching = inProgressDuoMatching;
+    }
+    public Boolean ownDuoProfileCard() {
+        return this.duoProfileCard != null;
+    }
+
 }

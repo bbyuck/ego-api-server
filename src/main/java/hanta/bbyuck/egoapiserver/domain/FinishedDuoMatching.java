@@ -11,11 +11,18 @@ import java.util.List;
 
 @Entity
 @Getter
-@Table(name = "finished_matching")
-public class FinishedMatching {
+@Table(name = "finished_duo_matching")
+@SequenceGenerator(
+        name = "duo_matching_seq_generator",
+        sequenceName = "duo_matching_sequence"
+)
+public class FinishedDuoMatching {
 
-    @Id @GeneratedValue
-    @Column(name = "FINISHED_MATCHING_ID")
+    @Id @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "duo_matching_seq_generator"
+    )
+    @Column(name = "FINISHED_DUO_MATCHING_ID")
     private Long id;
 
     @Column(name = "start_time")
@@ -29,6 +36,6 @@ public class FinishedMatching {
      * 일대다 인스턴스
      */
 
-    @OneToMany(mappedBy = "relatedFinishedMatching")
+    @OneToMany(mappedBy = "relatedFinishedDuoMatching")
     private List<DuoProfileInstance> participatedProfiles = new ArrayList<>();
 }

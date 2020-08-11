@@ -9,10 +9,16 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Table(name = "statistic_test_answer")
+@SequenceGenerator(
+        name = "statistic_test_answer_seq_generator",
+        sequenceName = "statistic_data_sequence"
+)
 public class StatisticTestAnswer {
 
-    @Id
-    @GeneratedValue
+    @Id @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "statistic_test_answer_seq_generator"
+    )
     @Column(name = "S_TEST_ANSWER_ID")
     private Long id;
 

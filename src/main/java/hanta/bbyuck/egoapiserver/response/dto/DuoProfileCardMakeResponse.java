@@ -1,4 +1,4 @@
-package hanta.bbyuck.egoapiserver.response;
+package hanta.bbyuck.egoapiserver.response.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -8,7 +8,4 @@ public class DuoProfileCardMakeResponse {
 
     @ApiModelProperty(example = "1421442")
     private Long profileCardId;
-
-    @ApiModelProperty(example = "true")
-    private Boolean duoProfileCardMakeSuccess;
 }

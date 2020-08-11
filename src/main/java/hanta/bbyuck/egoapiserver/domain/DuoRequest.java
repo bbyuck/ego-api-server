@@ -9,9 +9,16 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Table(name = "duo_request")
+@SequenceGenerator(
+        name = "duo_request_seq_generator",
+        sequenceName = "duo_request_sequence"
+)
 public class DuoRequest {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "duo_request_seq_generator"
+    )
     @Column(name = "DUO_REQUEST_ID")
     private Long id;
 

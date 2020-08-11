@@ -3,22 +3,19 @@ package hanta.bbyuck.egoapiserver.api;
 import hanta.bbyuck.egoapiserver.domain.SnsVendor;
 import hanta.bbyuck.egoapiserver.repository.UserRepository;
 import hanta.bbyuck.egoapiserver.request.UserAuthRequest;
-import hanta.bbyuck.egoapiserver.response.UserAuthResponse;
+import hanta.bbyuck.egoapiserver.response.dto.UserAuthResponse;
 import hanta.bbyuck.egoapiserver.util.AES256Util;
-import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class UserControllerTest {
 
     @Autowired UserRepository userRepository;
     @Autowired UserController userController;
-    AES256Util aes256Util = AES256Util.getInstance();
-
+    @Autowired AES256Util aes256Util;
 
     @Test
     public void nums() throws Exception {
@@ -48,12 +45,9 @@ public class UserControllerTest {
         userAuthRequest2.setEmail(email2);
         userAuthRequest2.setSnsId(snsId2);
         userAuthRequest2.setSnsVendor(SnsVendor.KAKAO);
-        // when
-        UserAuthResponse res = userController.login(userAuthRequest);
-        UserAuthResponse res2 = userController.login(userAuthRequest2);
+
 
         // then
-
 
     }
 }

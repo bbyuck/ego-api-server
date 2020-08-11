@@ -1,6 +1,5 @@
 package hanta.bbyuck.egoapiserver.request;
 
-import hanta.bbyuck.egoapiserver.domain.MatchingStatus;
 import hanta.bbyuck.egoapiserver.domain.SnsVendor;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

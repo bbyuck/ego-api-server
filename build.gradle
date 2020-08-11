@@ -34,6 +34,7 @@ dependencies {
 
 	compile group: 'com.github.ulisesbocchio', name: 'jasypt-spring-boot-starter', version: '3.0.3'
 	compile group: 'commons-codec', name: 'commons-codec', version: '1.14'
+	compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
 
 
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'

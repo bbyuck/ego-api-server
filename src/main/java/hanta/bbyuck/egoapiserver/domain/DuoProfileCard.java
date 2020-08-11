@@ -9,8 +9,15 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Table(name = "duo_profile_card")
+@SequenceGenerator(
+        name = "duo_profile_card_seq_generator",
+        sequenceName = "duo_profile_card_sequence"
+)
 public class DuoProfileCard {
-    @Id @GeneratedValue
+    @Id @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "duo_profile_card_seq_generator"
+    )
     @Column(name = "DUO_PROFILE_CARD_ID")
     private Long id;
 
