@@ -2,7 +2,7 @@ package hanta.bbyuck.egoapiserver.api;
 
 import hanta.bbyuck.egoapiserver.request.UserAuthRequest;
 import hanta.bbyuck.egoapiserver.response.ResponseMessage;
-import hanta.bbyuck.egoapiserver.response.dto.UserAuthResponse;
+import hanta.bbyuck.egoapiserver.response.UserAuthResponseDto;
 import hanta.bbyuck.egoapiserver.service.UserService;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
@@ -29,8 +29,8 @@ public class UserController {
     @GetMapping("/api/v0.0.1/user/auth")
     public ResponseMessage loginTest(@RequestBody UserAuthRequest request) {
         String returnAuth = userService.login(request);
-        UserAuthResponse userAuthResponse = new UserAuthResponse();
-        userAuthResponse.setUserAuth(returnAuth);
+        UserAuthResponseDto userAuthResponseDto = new UserAuthResponseDto();
+        userAuthResponseDto.setUserAuth(returnAuth);
 
         return new ResponseMessage("Auth API call success", returnAuth);
     }

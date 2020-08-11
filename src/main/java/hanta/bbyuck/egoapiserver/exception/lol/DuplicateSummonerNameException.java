@@ -1,11 +1,11 @@
-package hanta.bbyuck.egoapiserver.exception.logical;
+package hanta.bbyuck.egoapiserver.exception.lol;
 
 import hanta.bbyuck.egoapiserver.exception.http.AbstractResponseException;
 import org.springframework.http.HttpStatus;
 
 public class DuplicateSummonerNameException extends AbstractResponseException {
     private static final long serialVersionUID = 1L;
-    private static final String ERR_CODE = "DP-101";
+    private static final String ERR_CODE = "LOL-DP-501";
 
     public DuplicateSummonerNameException() {
         super();

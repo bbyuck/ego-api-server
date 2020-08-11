@@ -1,5 +1,7 @@
-package hanta.bbyuck.egoapiserver.domain;
+package hanta.bbyuck.egoapiserver.domain.lol;
 
+import hanta.bbyuck.egoapiserver.domain.Position;
+import hanta.bbyuck.egoapiserver.domain.User;
 import lombok.Getter;
 import org.hibernate.annotations.Type;
 
@@ -7,18 +9,18 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Table(name = "duo_profile_instance")
+@Table(name = "lol_duo_profile_instance")
 @SequenceGenerator(
-        name = "duo_profile_instance_seq_generator",
-        sequenceName = "duo_profile_instance_sequence"
+        name = "lol_duo_profile_instance_seq_generator",
+        sequenceName = "lol_duo_profile_instance_sequence"
 )
-public class DuoProfileInstance {
+public class LolDuoProfileInstance {
 
     @Id @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "duo_profile_instance_seq_generator"
+            generator = "lol_duo_profile_instance_seq_generator"
     )
-    @Column(name = "DUO_PROFILE_INSTANCE_ID")
+    @Column(name = "LOL_DUO_PROFILE_INSTANCE_ID")
     private Long id;
 
     @Column(columnDefinition = "TINYINT")
@@ -69,6 +71,6 @@ public class DuoProfileInstance {
     private User owner;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "RELATED_FINISHED_DUO_MATCHING_ID", referencedColumnName = "FINISHED_DUO_MATCHING_ID")
-    private FinishedDuoMatching relatedFinishedDuoMatching;
+    @JoinColumn(name = "RELATED_FINISHED_DUO_MATCHING_ID", referencedColumnName = "LOL_FINISHED_DUO_MATCHING_ID")
+    private LolFinishedDuoMatching relatedLolFinishedDuoMatching;
 }

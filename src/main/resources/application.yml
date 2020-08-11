@@ -1,9 +1,9 @@
 spring:
   datasource:
 #    외부 접속
-    url: ENC(U9Tf8RbGFDj7V6QmRgb2CwAKvLRXRerjSnKXFVxk3WNpjTi2eOcKAgSPfLdHOPKAEp8GQMV3aIW+k+PC7P2gDw==)
+#    url: ENC(U9Tf8RbGFDj7V6QmRgb2CwAKvLRXRerjSnKXFVxk3WNpjTi2eOcKAgSPfLdHOPKAEp8GQMV3aIW+k+PC7P2gDw==)
 #    집 접속
-#    url: jdbc:mariadb://192.168.219.101:3306/ego-api-server-dev
+    url: jdbc:mariadb://192.168.219.101:3306/ego-api-server-dev
 #    빌드 후 배포
 #    url: jdbc:mariadb://localhost:3306/ego-api-server-dev
     driver-class-name: org.mariadb.jdbc.Driver

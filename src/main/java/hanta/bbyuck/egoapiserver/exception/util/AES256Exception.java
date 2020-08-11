@@ -1,4 +1,4 @@
-package hanta.bbyuck.egoapiserver.exception.logical;
+package hanta.bbyuck.egoapiserver.exception.util;
 
 import hanta.bbyuck.egoapiserver.exception.http.AbstractResponseException;
 import org.springframework.http.HttpStatus;

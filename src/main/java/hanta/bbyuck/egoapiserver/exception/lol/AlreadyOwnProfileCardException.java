@@ -1,11 +1,11 @@
-package hanta.bbyuck.egoapiserver.exception.logical;
+package hanta.bbyuck.egoapiserver.exception.lol;
 
 import hanta.bbyuck.egoapiserver.exception.http.AbstractResponseException;
 import org.springframework.http.HttpStatus;
 
 public class AlreadyOwnProfileCardException extends AbstractResponseException {
     private static final long serialVersionUID = 1L;
-    private static final String ERR_CODE = "DP-100";
+    private static final String ERR_CODE = "LOL-DP-500";
 
     public AlreadyOwnProfileCardException() {
         super();

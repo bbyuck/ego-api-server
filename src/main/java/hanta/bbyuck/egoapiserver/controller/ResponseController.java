@@ -1,9 +1,9 @@
 package hanta.bbyuck.egoapiserver.controller;
 
 import hanta.bbyuck.egoapiserver.exception.http.*;
-import hanta.bbyuck.egoapiserver.exception.logical.UnknownException;
-import hanta.bbyuck.egoapiserver.exception.logical.UserAuthenticationException;
-import hanta.bbyuck.egoapiserver.exception.logical.UserNotFoundException;
+import hanta.bbyuck.egoapiserver.exception.lol.UnknownException;
+import hanta.bbyuck.egoapiserver.exception.lol.UserAuthenticationException;
+import hanta.bbyuck.egoapiserver.exception.lol.UserNotFoundException;
 import hanta.bbyuck.egoapiserver.response.ResponseMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

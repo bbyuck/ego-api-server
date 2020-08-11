@@ -1,11 +1,11 @@
-package hanta.bbyuck.egoapiserver.request;
+package hanta.bbyuck.egoapiserver.request.lol;
 
 import hanta.bbyuck.egoapiserver.domain.Position;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-public class DuoProfileCardMakeRequest {
+public class LolDuoProfileCardMakeRequestDto {
     @ApiModelProperty(example = "73bHwJ0Tw12KbrhDDyqJSUMgCVol5bfcLW+fZxBfPkY=  ::  localStorage 저장값")
     private String ownerAuth;
 

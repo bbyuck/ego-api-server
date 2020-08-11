@@ -1,4 +1,4 @@
-package hanta.bbyuck.egoapiserver.exception.logical;
+package hanta.bbyuck.egoapiserver.exception.lol;
 
 import hanta.bbyuck.egoapiserver.exception.http.AbstractResponseException;
 import org.springframework.http.HttpStatus;
@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 public class UserAuthenticationException extends AbstractResponseException {
 
     private static final long serialVersionUID = 1L;
-    private static final String ERR_CODE = "A-999";
+    private static final String ERR_CODE = "ALL-999";
 
     public UserAuthenticationException() {
         super();

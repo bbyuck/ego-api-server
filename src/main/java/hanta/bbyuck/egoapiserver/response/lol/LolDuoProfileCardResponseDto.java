@@ -1,11 +1,10 @@
-package hanta.bbyuck.egoapiserver.response.dto;
+package hanta.bbyuck.egoapiserver.response.lol;
 
 import hanta.bbyuck.egoapiserver.domain.Position;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-public class DuoProfileCardResponse {
+public class LolDuoProfileCardResponseDto {
     private Boolean voice;
     private String summonerName;
     private String tier;

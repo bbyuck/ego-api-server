@@ -1,11 +1,11 @@
-package hanta.bbyuck.egoapiserver.exception.logical;
+package hanta.bbyuck.egoapiserver.exception.lol;
 
 import hanta.bbyuck.egoapiserver.exception.http.AbstractResponseException;
 import org.springframework.http.HttpStatus;
 
 public class UnknownException extends AbstractResponseException {
     private static final long serialVersionUID = 1L;
-    private static final String ERR_CODE = "N-000";
+    private static final String ERR_CODE = "UNKNOWN-000";
 
     public UnknownException() {
         super();

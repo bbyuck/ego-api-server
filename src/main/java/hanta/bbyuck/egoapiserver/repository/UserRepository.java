@@ -2,7 +2,7 @@ package hanta.bbyuck.egoapiserver.repository;
 
 import hanta.bbyuck.egoapiserver.domain.SnsVendor;
 import hanta.bbyuck.egoapiserver.domain.User;
-import hanta.bbyuck.egoapiserver.exception.logical.UserAuthenticationException;
+import hanta.bbyuck.egoapiserver.exception.lol.UserAuthenticationException;
 import hanta.bbyuck.egoapiserver.util.AES256Util;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -42,12 +42,17 @@ public class UserRepository {
     }
 
     // 성능 튜닝 필
-    public User find(String userAuth) throws NoResultException{
+    public User find(String userAuth) {
         String query = "select u from User u where u.userAuth = :userAuth";
 
-        return em.createQuery(query, User.class)
-                .setParameter("userAuth", userAuth)
-                .getSingleResult();
+        try {
+            return em.createQuery(query, User.class)
+                    .setParameter("userAuth", userAuth)
+                    .getSingleResult();
+        } catch(NoResultException e) {
+            throw new UserAuthenticationException("유저 인증 실패 : 잘못된 키 입력입니다.");
+        }
+
     }
 
     public User findBySnsId(SnsVendor snsVendor, String snsId) throws NoResultException{

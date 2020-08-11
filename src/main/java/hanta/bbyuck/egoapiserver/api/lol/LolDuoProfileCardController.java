@@ -1,11 +1,11 @@
-package hanta.bbyuck.egoapiserver.api;
+package hanta.bbyuck.egoapiserver.api.lol;
 
-import hanta.bbyuck.egoapiserver.request.DuoProfileCardMakeRequest;
-import hanta.bbyuck.egoapiserver.request.DuoProfileCardRequest;
+import hanta.bbyuck.egoapiserver.request.lol.LolDuoProfileCardRequestDto;
+import hanta.bbyuck.egoapiserver.request.lol.LolDuoProfileCardMakeRequestDto;
 import hanta.bbyuck.egoapiserver.response.ResponseMessage;
-import hanta.bbyuck.egoapiserver.response.dto.DuoProfileCardMakeResponse;
-import hanta.bbyuck.egoapiserver.response.dto.DuoProfileCardResponse;
-import hanta.bbyuck.egoapiserver.service.DuoProfileCardService;
+import hanta.bbyuck.egoapiserver.response.lol.LolDuoProfileCardMakeResponseDto;
+import hanta.bbyuck.egoapiserver.response.lol.LolDuoProfileCardResponseDto;
+import hanta.bbyuck.egoapiserver.service.lol.LolDuoProfileCardService;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,10 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class DuoProfileCardController {
-    private final DuoProfileCardService duoProfileCardService;
-
-
+public class LolDuoProfileCardController {
+    private final LolDuoProfileCardService lolDuoProfileCardService;
     @ApiOperation(value = "프로필 카드 만들기", notes = "유저 인증 정보와 프로필 카드 제작 입력값을 이용해 프로필 카드를 제작합니다.\n" +
             "1. 이미 듀오 프로필 카드를 보유하고 있는 유저가 API 호출시 에러가 발생합니다.(프로필카드 중복생성 방지)\n" +
             "2. 이미 프로필 카드에 등록된 소환사명으로 API 호출시 에러가 발생합니다.")
@@ -40,23 +38,22 @@ public class DuoProfileCardController {
             @ApiImplicitParam(name = "mainPosition", value = "메인 포지션 대문자", defaultValue = "JUNGLE")
     })
     @PostMapping("/api/v0.0.1/duo-profile-card")
-    public ResponseMessage make(@RequestBody DuoProfileCardMakeRequest request) {
-        Long profileCardId = duoProfileCardService.makeDuoProfileCard(request);
-        DuoProfileCardMakeResponse response = new DuoProfileCardMakeResponse();
+    public ResponseMessage make(@RequestBody LolDuoProfileCardMakeRequestDto request) {
+        Long profileCardId = lolDuoProfileCardService.makeDuoProfileCard(request);
+        LolDuoProfileCardMakeResponseDto response = new LolDuoProfileCardMakeResponseDto();
         response.setProfileCardId(profileCardId);
 
         return new ResponseMessage("Duo Profile Card Make API Call Success!", response);
     }
 
-    @ApiOperation(value = "프로필카드 데이터 요청", notes = "유저 인증 정보와 만들어 둔 프로필 카드 ID로 프로필카드 데이터 리턴.\n" +
-            "1. 클라이언트에서 다른 임의의 프로필 카드 번호를 입력해 API 호출시 에러가 발생합니다.")
+    @ApiOperation(value = "프로필카드 데이터 요청", notes = "유저 인증 정보로 프로필카드 데이터 리턴.\n" +
+            "1. 프로필카드가 없을 경우 404 Not Found와 함께 에러 메세지 response 리턴")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "duoProfileCardId", value = "듀오 프로필카드 ID 값", defaultValue = "1"),
             @ApiImplicitParam(name = "ownerAuth", value = "인증 정보", defaultValue = "dwqdqweqe123213214")
     })
     @GetMapping("/api/v0.0.1/duo-profile-card")
-    public ResponseMessage getDuoProfile(@RequestBody DuoProfileCardRequest request) {
-        DuoProfileCardResponse response = duoProfileCardService.take(request);
+    public ResponseMessage getDuoProfile(@RequestBody LolDuoProfileCardRequestDto request) {
+        LolDuoProfileCardResponseDto response = lolDuoProfileCardService.take(request);
         return new ResponseMessage("Duo Profile Card Get API Call Success!", response);
     }
 }

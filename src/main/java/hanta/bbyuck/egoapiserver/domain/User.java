@@ -1,5 +1,8 @@
 package hanta.bbyuck.egoapiserver.domain;
 
+import hanta.bbyuck.egoapiserver.domain.lol.LolDuoProfileCard;
+import hanta.bbyuck.egoapiserver.domain.lol.LolDuoRequest;
+import hanta.bbyuck.egoapiserver.domain.lol.LolInProgressDuoMatching;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -61,8 +64,8 @@ public class User {
     private String type;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "participating_duo_matching", referencedColumnName = "IN_PROGRESS_DUO_MATCHING_ID")
-    private InProgressDuoMatching inProgressDuoMatching;
+    @JoinColumn(name = "participating_duo_matching", referencedColumnName = "LOL_IN_PROGRESS_DUO_MATCHING_ID")
+    private LolInProgressDuoMatching lolInProgressDuoMatching;
 
     /*
      * 양방향 인스턴스
@@ -73,17 +76,17 @@ public class User {
      */
 
     @OneToOne(mappedBy = "owner", fetch = FetchType.LAZY)
-    private DuoProfileCard duoProfileCard;
+    private LolDuoProfileCard lolDuoProfileCard;
 
     /*
      * duo_request
      */
 
     @OneToMany(mappedBy = "sender")
-    private List<DuoRequest> sentRequest = new ArrayList<>();
+    private List<LolDuoRequest> sentLolDuoRequest = new ArrayList<>();
 
     @OneToMany(mappedBy = "receiver")
-    private List<DuoRequest> receivedRequest = new ArrayList<>();
+    private List<LolDuoRequest> receivedLolDuoRequest = new ArrayList<>();
 
     /*
      * score
@@ -107,7 +110,7 @@ public class User {
         this.lastLoginTime = null;
         this.lastActiveTime = null;
         this.regTime = LocalDateTime.now();
-        this.inProgressDuoMatching = null;
+        this.lolInProgressDuoMatching = null;
     }
 
     public void assignAuth(String auth) {
@@ -123,11 +126,11 @@ public class User {
     public void updateUserStatus(UserStatus newStatus) {
         this.status = newStatus;
     }
-    public void updateDuoMatching(InProgressDuoMatching inProgressDuoMatching) {
-        this.inProgressDuoMatching = inProgressDuoMatching;
+    public void updateLolDuoMatching(LolInProgressDuoMatching lolInProgressDuoMatching) {
+        this.lolInProgressDuoMatching = lolInProgressDuoMatching;
     }
-    public Boolean ownDuoProfileCard() {
-        return this.duoProfileCard != null;
+    public Boolean ownLolDuoProfileCard() {
+        return this.lolDuoProfileCard != null;
     }
 
 }

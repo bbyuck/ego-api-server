@@ -1,5 +1,6 @@
-package hanta.bbyuck.egoapiserver.domain;
+package hanta.bbyuck.egoapiserver.domain.lol;
 
+import hanta.bbyuck.egoapiserver.domain.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,18 +9,18 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Table(name = "duo_request")
+@Table(name = "lol_duo_request")
 @SequenceGenerator(
-        name = "duo_request_seq_generator",
-        sequenceName = "duo_request_sequence"
+        name = "lol_duo_request_seq_generator",
+        sequenceName = "lol_duo_request_sequence"
 )
-public class DuoRequest {
+public class LolDuoRequest {
 
     @Id @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "duo_request_seq_generator"
+            generator = "lol_duo_request_seq_generator"
     )
-    @Column(name = "DUO_REQUEST_ID")
+    @Column(name = "LOL_DUO_REQUEST_ID")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

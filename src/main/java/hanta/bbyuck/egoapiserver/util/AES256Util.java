@@ -1,6 +1,6 @@
 package hanta.bbyuck.egoapiserver.util;
 
-import hanta.bbyuck.egoapiserver.exception.logical.AES256Exception;
+import hanta.bbyuck.egoapiserver.exception.util.AES256Exception;
 import org.jasypt.contrib.org.apache.commons.codec_1_3.binary.Base64;
 
 import javax.crypto.*;

@@ -77,8 +77,4 @@ public class StatisticTestAnswer {
     @Column(columnDefinition = "TINYINT")
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private Boolean answer_13;
-
-    @Column(columnDefinition = "TINYINT")
-    @Type(type = "org.hibernate.type.NumericBooleanType")
-    private Boolean answer_14;
 }

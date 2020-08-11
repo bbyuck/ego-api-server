@@ -1,4 +1,4 @@
-package hanta.bbyuck.egoapiserver.response.dto;
+package hanta.bbyuck.egoapiserver.response;
 
 import lombok.Data;
 

@@ -1,5 +1,7 @@
-package hanta.bbyuck.egoapiserver.domain;
+package hanta.bbyuck.egoapiserver.domain.lol;
 
+import hanta.bbyuck.egoapiserver.domain.Position;
+import hanta.bbyuck.egoapiserver.domain.User;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
@@ -8,17 +10,17 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Table(name = "duo_profile_card")
+@Table(name = "lol_duo_profile_card")
 @SequenceGenerator(
-        name = "duo_profile_card_seq_generator",
-        sequenceName = "duo_profile_card_sequence"
+        name = "lol_duo_profile_card_seq_generator",
+        sequenceName = "lol_duo_profile_card_sequence"
 )
-public class DuoProfileCard {
+public class LolDuoProfileCard {
     @Id @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "duo_profile_card_seq_generator"
+            generator = "lol_duo_profile_card_seq_generator"
     )
-    @Column(name = "DUO_PROFILE_CARD_ID")
+    @Column(name = "LOL_DUO_PROFILE_CARD_ID")
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
