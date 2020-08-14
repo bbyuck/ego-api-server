@@ -1,5 +1,6 @@
 package hanta.bbyuck.egoapiserver.controller;
 
+import hanta.bbyuck.egoapiserver.exception.AbstractResponseException;
 import hanta.bbyuck.egoapiserver.exception.http.*;
 import hanta.bbyuck.egoapiserver.exception.lol.UnknownException;
 import hanta.bbyuck.egoapiserver.exception.lol.UserAuthenticationException;

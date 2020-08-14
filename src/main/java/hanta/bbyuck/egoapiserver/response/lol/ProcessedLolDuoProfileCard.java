@@ -11,7 +11,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Data
-public class LimitedLolDuoProfileCard {
+public class ProcessedLolDuoProfileCard {
     private Long profileCardId;
     private Boolean voice;
     private LocalDateTime lastActiveTime;

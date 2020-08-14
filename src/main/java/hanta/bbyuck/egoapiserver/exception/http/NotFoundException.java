@@ -1,8 +1,9 @@
 package hanta.bbyuck.egoapiserver.exception.http;
 
+import hanta.bbyuck.egoapiserver.exception.AbstractResponseException;
 import org.springframework.http.HttpStatus;
 
-public class NotFoundException extends AbstractResponseException{
+public class NotFoundException extends AbstractResponseException {
     private static final long serialVersionUID = 1L;
     private static final String ERR_CODE = "H-007";
 

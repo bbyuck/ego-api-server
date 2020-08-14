@@ -1,4 +1,4 @@
-package hanta.bbyuck.egoapiserver.exception.http;
+package hanta.bbyuck.egoapiserver.exception;
 
 import org.springframework.http.HttpStatus;
 

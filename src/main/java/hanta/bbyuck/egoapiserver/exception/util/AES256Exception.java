@@ -1,6 +1,6 @@
 package hanta.bbyuck.egoapiserver.exception.util;
 
-import hanta.bbyuck.egoapiserver.exception.http.AbstractResponseException;
+import hanta.bbyuck.egoapiserver.exception.AbstractResponseException;
 import org.springframework.http.HttpStatus;
 
 public class AES256Exception extends AbstractResponseException {

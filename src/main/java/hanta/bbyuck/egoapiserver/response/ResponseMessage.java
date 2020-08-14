@@ -1,6 +1,6 @@
 package hanta.bbyuck.egoapiserver.response;
 
-import hanta.bbyuck.egoapiserver.exception.http.AbstractResponseException;
+import hanta.bbyuck.egoapiserver.exception.AbstractResponseException;
 import hanta.bbyuck.egoapiserver.response.error.ErrorMessage;
 import lombok.Getter;
 

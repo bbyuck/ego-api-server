@@ -3,23 +3,23 @@ package hanta.bbyuck.egoapiserver.exception.lol;
 import hanta.bbyuck.egoapiserver.exception.AbstractResponseException;
 import org.springframework.http.HttpStatus;
 
-public class DuplicateSummonerNameException extends AbstractResponseException {
+public class AlreadyMatchingException extends AbstractResponseException {
     private static final long serialVersionUID = 1L;
-    private static final String ERR_CODE = "LOL-DP-200";
+    private static final String ERR_CODE = "LOL-M-100";
 
-    public DuplicateSummonerNameException() {
+    public AlreadyMatchingException() {
         super();
     }
 
-    public DuplicateSummonerNameException(String msg) {
+    public AlreadyMatchingException(String msg) {
         super(msg);
     }
 
-    public DuplicateSummonerNameException(Throwable e) {
+    public AlreadyMatchingException(Throwable e) {
         super(e);
     }
 
-    public DuplicateSummonerNameException(String errorMessage, Throwable e) {
+    public AlreadyMatchingException(String errorMessage, Throwable e) {
         super(errorMessage, e);
     }
 

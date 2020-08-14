@@ -21,23 +21,20 @@ import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 
 
-/*
- * 유저 500명
- */
-@Component
+//@Component
 @RequiredArgsConstructor
 public class InitDB {
 
     private final InitService initService;
 
-    @PostConstruct
+//    @PostConstruct
     public void init() {
         initService.dbInit1();
 //        initService.dbInit2();
     }
 
-    @Component
-    @Transactional
+//    @Component
+//    @Transactional
     @RequiredArgsConstructor
     static class InitService {
         private final UserService userService;
@@ -47,9 +44,11 @@ public class InitDB {
         private final AES256Util aes256Util;
         private final EntityManager em;
 
+        private static final int TEST_USER_COUNT = 2000;
+
 
         public void dbInit1() {
-            for (int i = 1; i <= 1000; i++) {
+            for (int i = 1; i <= TEST_USER_COUNT; i++) {
                 UserAuthRequestDto user = new UserAuthRequestDto();
                 if (i % 10 == 0) user.setSnsVendor(SnsVendor.NAVER);
                 else user.setSnsVendor(SnsVendor.KAKAO);
@@ -68,7 +67,7 @@ public class InitDB {
                 }
             }
 
-            for (int i = 1; i <= 1000; i++) {
+            for (int i = 1; i <= TEST_USER_COUNT; i++) {
                 LolDuoProfileCardMakeRequestDto profileCardDto = new LolDuoProfileCardMakeRequestDto();
 
                 profileCardDto.setOwnerAuth(aes256Util.encode(String.format("%019d", i)));

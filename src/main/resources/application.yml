@@ -11,7 +11,7 @@ spring:
     password: ENC(1YIK9SFycb5E5ApY0Wpvr7cqZYQ/s7MG)
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     properties:
       hibernate:
         #        show_sql: true

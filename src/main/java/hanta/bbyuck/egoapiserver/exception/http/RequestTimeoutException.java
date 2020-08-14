@@ -1,5 +1,6 @@
 package hanta.bbyuck.egoapiserver.exception.http;
 
+import hanta.bbyuck.egoapiserver.exception.AbstractResponseException;
 import org.springframework.http.HttpStatus;
 
 public class RequestTimeoutException extends AbstractResponseException {

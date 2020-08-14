@@ -80,8 +80,10 @@ public class LolDuoProfileCardController {
         return new ResponseMessage("Duo Profile Card Update API Call Success!");
     }
 
-    @GetMapping("/api/v0.0.1/lol/duo/match-deck")
-    public ResponseMessage getMachingDeck(@RequestBody LolDuoMatchDeckRequestDto requestDto) {
+
+    @ApiOperation(value = "프로필 카드 열람", notes = "매칭 시작 및 새로고침시 프로필 카드 덱 요청에 따른 덱 반환")
+   @GetMapping("/api/v0.0.1/lol/duo/match-deck")
+    public ResponseMessage getMachingDeckV1(@RequestBody LolDuoMatchDeckRequestDto requestDto) {
         LolDuoProfileCardDeck deck = lolDuoProfileCardService.takeDeck(requestDto);
         return new ResponseMessage("Lol duo profile card deck return API Call Success!", deck);
     }
