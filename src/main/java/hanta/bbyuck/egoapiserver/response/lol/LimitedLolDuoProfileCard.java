@@ -1,16 +1,21 @@
 package hanta.bbyuck.egoapiserver.response.lol;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import hanta.bbyuck.egoapiserver.domain.User;
 import hanta.bbyuck.egoapiserver.domain.lol.LolPosition;
 import hanta.bbyuck.egoapiserver.domain.lol.LolTier;
 import lombok.Data;
+import org.hibernate.annotations.Type;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Data
-public class LolDuoProfileCardResponseDto {
-    LocalDateTime lastUpdateTime;
+public class LimitedLolDuoProfileCard {
+    private Long profileCardId;
     private Boolean voice;
-    private String summonerName;
+    private LocalDateTime lastActiveTime;
+    private String limitedSummonerName;
     private LolTier tier;
     private Integer tierLev;
     private Integer lp;

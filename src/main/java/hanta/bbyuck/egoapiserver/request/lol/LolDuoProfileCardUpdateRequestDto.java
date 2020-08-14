@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-public class LolDuoProfileCardMakeRequestDto {
+public class LolDuoProfileCardUpdateRequestDto {
     @ApiModelProperty(example = "73bHwJ0Tw12KbrhDDyqJSUMgCVol5bfcLW+fZxBfPkY=  ::  localStorage 저장값")
     private String ownerAuth;
 

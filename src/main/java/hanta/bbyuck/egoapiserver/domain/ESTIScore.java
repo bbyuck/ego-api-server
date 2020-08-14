@@ -8,18 +8,18 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Table(name = "score")
+@Table(name = "esti_score")
 @SequenceGenerator(
-        name = "score_seq_generator",
-        sequenceName = "score_sequence"
+        name = "esti_score_seq_generator",
+        sequenceName = "esti_score_sequence"
 )
-public class Score {
+public class ESTIScore {
 
     @Id @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "score_seq_generator"
+            generator = "esti_score_seq_generator"
     )
-    @Column(name = "SCORE_ID")
+    @Column(name = "ESTI_SCORE_ID")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

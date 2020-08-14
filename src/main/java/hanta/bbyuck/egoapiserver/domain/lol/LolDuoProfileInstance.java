@@ -1,6 +1,5 @@
 package hanta.bbyuck.egoapiserver.domain.lol;
 
-import hanta.bbyuck.egoapiserver.domain.Position;
 import hanta.bbyuck.egoapiserver.domain.User;
 import lombok.Getter;
 import org.hibernate.annotations.Type;
@@ -64,7 +63,7 @@ public class LolDuoProfileInstance {
     private Boolean support;
 
     @Enumerated(EnumType.STRING)
-    private Position main_position;
+    private LolPosition main_Lol_position;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "OWNER_ID", referencedColumnName = "USER_ID")

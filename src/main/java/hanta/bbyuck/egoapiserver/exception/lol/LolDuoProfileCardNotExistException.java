@@ -3,23 +3,23 @@ package hanta.bbyuck.egoapiserver.exception.lol;
 import hanta.bbyuck.egoapiserver.exception.http.AbstractResponseException;
 import org.springframework.http.HttpStatus;
 
-public class ProfileCardNotExistException extends AbstractResponseException {
+public class LolDuoProfileCardNotExistException extends AbstractResponseException {
     private static final long serialVersionUID = 1L;
-    private static final String ERR_CODE = "LOL-DP-400";
+    private static final String ERR_CODE = "LOL-DP-100";
 
-    public ProfileCardNotExistException() {
+    public LolDuoProfileCardNotExistException() {
         super();
     }
 
-    public ProfileCardNotExistException(String msg) {
+    public LolDuoProfileCardNotExistException(String msg) {
         super(msg);
     }
 
-    public ProfileCardNotExistException(Throwable e) {
+    public LolDuoProfileCardNotExistException(Throwable e) {
         super(e);
     }
 
-    public ProfileCardNotExistException(String errorMessage, Throwable e) {
+    public LolDuoProfileCardNotExistException(String errorMessage, Throwable e) {
         super(errorMessage, e);
     }
 

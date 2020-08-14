@@ -2,7 +2,8 @@ package hanta.bbyuck.egoapiserver.service;
 
 import hanta.bbyuck.egoapiserver.domain.User;
 import hanta.bbyuck.egoapiserver.repository.UserRepository;
-import hanta.bbyuck.egoapiserver.request.UserAuthRequest;
+import hanta.bbyuck.egoapiserver.request.UserAuthRequestDto;
+import hanta.bbyuck.egoapiserver.util.AES256Util;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,22 +13,22 @@ import javax.persistence.NoResultException;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final AES256Util aes256Util;
 
-    public String join(UserAuthRequest request) {
+    public String join(UserAuthRequestDto request) {
         User user = new User();
         user.createUser(request.getSnsVendor(),
-                request.getSnsId(),
-                request.getEmail());
+                aes256Util.encode(request.getSnsId()),
+                aes256Util.encode(request.getEmail()));
         user.updateLoginTime();
-        userRepository.save(user);
-
-        return user.getUserAuth();
+        user.updateActiveTime();
+        return userRepository.save(user);
     }
 
-    public String login(UserAuthRequest request) {
+    public String login(UserAuthRequestDto request) {
         try {
-            User user = userRepository.findBySnsId(request.getSnsVendor(), request.getSnsId());
-            user.updateLoginTime();
+            User user = userRepository.findBySnsId(request.getSnsVendor(), aes256Util.encode(request.getSnsId()));
+            userRepository.updateLoginTime(user);
             return user.getUserAuth();
         }
         catch (NoResultException e) {

@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-public class UserAuthRequest {
+public class UserAuthRequestDto {
     @ApiModelProperty(example = "NAVER")
     public SnsVendor snsVendor;
     @ApiModelProperty(example = "214141412421412441")

@@ -25,8 +25,14 @@ public class User {
     @Column(name = "USER_ID")
     private Long id;
 
+    @Column
+    private String salt;
+
     @Column(name = "user_auth", length = 44)
     private String userAuth;
+
+    @Column(name = "user_key", length = 64)
+    private String userKey;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "privilege", length = 10)
@@ -36,13 +42,13 @@ public class User {
     @Column(name = "sns_vendor", length = 10)
     private SnsVendor snsVendor;
 
-    @Column(name = "sns_id", length = 40)
+    @Column(name = "sns_id", length = 250)
     private String snsId;
 
-    @Column(name = "email", length = 45)
+    @Column(name = "email", length = 250)
     private String email;
 
-    @Column(name = "matching_status", length = 10)
+    @Column(name = "matching_status", length = 50)
     @Enumerated(EnumType.STRING)
     private UserStatus status;
     /*
@@ -60,8 +66,9 @@ public class User {
     @Column(name = "reg_time")
     private LocalDateTime regTime;
 
-    @Column(name = "type", length = 45)
-    private String type;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type", length = 4)
+    private ESTIType type;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "participating_duo_matching", referencedColumnName = "LOL_IN_PROGRESS_DUO_MATCHING_ID")
@@ -71,12 +78,6 @@ public class User {
      * 양방향 인스턴스
      */
 
-    /*
-     * duo_profile_card
-     */
-
-    @OneToOne(mappedBy = "owner", fetch = FetchType.LAZY)
-    private LolDuoProfileCard lolDuoProfileCard;
 
     /*
      * duo_request
@@ -93,7 +94,7 @@ public class User {
      */
 
     @OneToMany(mappedBy = "receiver")
-    private List<Score> receivedSocreList = new ArrayList<>();
+    private List<ESTIScore> receivedESTISocreList = new ArrayList<>();
 
     /*
      * 편의 메서드
@@ -116,6 +117,9 @@ public class User {
     public void assignAuth(String auth) {
         this.userAuth = auth;
     }
+    public void assignSalt(String salt) { this.salt = salt; }
+    public void assignKey(String key) { this.userKey = key; }
+    public void assignType(ESTIType type) { this.type = type; }
 
     public void updateLoginTime() {
         this.lastLoginTime = LocalDateTime.now();
@@ -129,8 +133,6 @@ public class User {
     public void updateLolDuoMatching(LolInProgressDuoMatching lolInProgressDuoMatching) {
         this.lolInProgressDuoMatching = lolInProgressDuoMatching;
     }
-    public Boolean ownLolDuoProfileCard() {
-        return this.lolDuoProfileCard != null;
-    }
+
 
 }

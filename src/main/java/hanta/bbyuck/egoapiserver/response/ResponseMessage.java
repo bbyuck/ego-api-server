@@ -27,6 +27,15 @@ public class ResponseMessage {
         this.error = null;
     }
 
+    public ResponseMessage(String msg) {
+        this.code = "success";
+        this.status = true;
+        this.message = msg;
+        this.timestamp = LocalDateTime.now();
+        this.returnObj = null;
+        this.error = null;
+    }
+
     public ResponseMessage(AbstractResponseException exception, String referedUrl) {
         this.returnObj = null;
         this.code = exception.getERR_CODE();
