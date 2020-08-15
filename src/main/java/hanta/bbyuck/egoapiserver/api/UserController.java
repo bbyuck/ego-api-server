@@ -18,7 +18,7 @@ public class UserController {
     private final UserService userService;
     private final ESTITestService estiTestService;
 
-    @ApiOperation(value = "로그인", notes = "SNS 인증을 통한 회원가입 및 로그인을 수행합니다.\n" +
+    @ApiOperation(value = "유저 인증 (로그인 + 회원가입)", notes = "SNS 인증을 통한 회원가입 및 로그인을 수행합니다.\n" +
             "1. SNS 제공자 대문자로 반드시 맞추어서 입력할 것 \n" +
             "2. SNS별로 중복 가입 가능 ex) 1명의 유저가 카카오로 한 번, 네이버로 한 번 가입 가능 -> 클라이언트에서 UX 설계로 해결\n" +
             "3. 기존 회원이면 자동으로 로그인, 회원 정보에 존재하지 않는다면 회원가입 후 자동으로 로그인\n" +

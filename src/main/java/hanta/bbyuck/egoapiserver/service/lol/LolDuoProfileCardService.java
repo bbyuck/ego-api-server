@@ -1,9 +1,8 @@
 package hanta.bbyuck.egoapiserver.service.lol;
 
 import hanta.bbyuck.egoapiserver.domain.UserStatus;
-import hanta.bbyuck.egoapiserver.domain.lol.LolTier;
 import hanta.bbyuck.egoapiserver.exception.lol.AlreadyMatchingException;
-import hanta.bbyuck.egoapiserver.response.lol.ProcessedLolDuoProfileCard;
+import hanta.bbyuck.egoapiserver.response.lol.LolProcessedDuoProfileCard;
 import hanta.bbyuck.egoapiserver.response.lol.LolDuoProfileCardDeck;
 import hanta.bbyuck.egoapiserver.domain.lol.LolDuoProfileCard;
 import hanta.bbyuck.egoapiserver.domain.User;
@@ -23,9 +22,9 @@ import org.springframework.stereotype.Service;
 import javax.persistence.NoResultException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
+
+import static hanta.bbyuck.egoapiserver.util.ServiceUtil.addCardToProcessedDeck;
 
 @Service
 @RequiredArgsConstructor
@@ -281,7 +280,7 @@ public class LolDuoProfileCardService {
         }
 
         List<LolDuoProfileCard> cardList = lolDuoProfileCardRepository.findCustomizedListV1(owner);
-        List<ProcessedLolDuoProfileCard> cardDeck = new ArrayList<>();
+        List<LolProcessedDuoProfileCard> cardDeck = new ArrayList<>();
 
         for(LolDuoProfileCard card : cardList) {
             addCardToProcessedDeck(cardDeck, card);
@@ -291,26 +290,5 @@ public class LolDuoProfileCardService {
         deck.setDuoProfileCards(cardDeck);
         deck.setMakeTime(LocalDateTime.now());
         return deck;
-    }
-
-    private void addCardToProcessedDeck(List<ProcessedLolDuoProfileCard> cards, LolDuoProfileCard card) {
-        ProcessedLolDuoProfileCard processedCard = new ProcessedLolDuoProfileCard();
-        processedCard.setProfileCardId(card.getId());
-        processedCard.setVoice(card.getVoice());
-        processedCard.setLimitedSummonerName(card.getSummonerName().substring(0, 1) + "***");
-        processedCard.setTier(card.getTier());
-        processedCard.setTierLev(card.getTierLev());
-        processedCard.setLp(card.getLp());
-        processedCard.setChampion1(card.getChampion1());
-        processedCard.setChampion2(card.getChampion2());
-        processedCard.setChampion3(card.getChampion3());
-        processedCard.setTop(card.getTop());
-        processedCard.setJungle(card.getJungle());
-        processedCard.setMid(card.getMid());
-        processedCard.setAd(card.getAd());
-        processedCard.setSupport(card.getSupport());
-        processedCard.setMainLolPosition(card.getMainLolPosition());
-        processedCard.setLastActiveTime(card.getOwner().getLastActiveTime());
-        cards.add(processedCard);
     }
 }

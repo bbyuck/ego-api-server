@@ -80,16 +80,6 @@ public class User {
 
 
     /*
-     * duo_request
-     */
-
-    @OneToMany(mappedBy = "sender")
-    private List<LolDuoRequest> sentLolDuoRequest = new ArrayList<>();
-
-    @OneToMany(mappedBy = "receiver")
-    private List<LolDuoRequest> receivedLolDuoRequest = new ArrayList<>();
-
-    /*
      * score
      */
 

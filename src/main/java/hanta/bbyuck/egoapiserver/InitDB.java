@@ -29,8 +29,8 @@ public class InitDB {
 
 //    @PostConstruct
     public void init() {
-        initService.dbInit1();
-//        initService.dbInit2();
+//        initService.dbInit1();
+        initService.dbInit2();
     }
 
 //    @Component
@@ -156,10 +156,8 @@ public class InitDB {
             em.flush();
         }
 
-//        public void dbInit2() {
-//            for (int i = 1; i <= 500; i++) {
-//
-//            }
-//        }
+        public void dbInit2() {
+
+        }
     }
 }

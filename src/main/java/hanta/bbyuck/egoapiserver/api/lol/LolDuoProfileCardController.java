@@ -45,8 +45,8 @@ public class LolDuoProfileCardController {
     }
 
 
-    @ApiOperation(value = "프로필카드 데이터 요청", notes = "유저 인증 정보로 프로필카드 데이터 리턴.\n" +
-            "1. 프로필카드가 없을 경우 404 Not Found와 함께 에러 메세지 response 리턴")
+    @ApiOperation(value = "단일 유저 프로필 카드 데이터 요청", notes = "유저 인증 정보로 프로필카드 데이터 리턴.\n" +
+            "1. 프로필 카드가 없을 경우 404 Not Found와 함께 에러 메세지 response 리턴")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "ownerAuth", value = "인증 정보", defaultValue = "dwqdqweqe123213214")
     })
@@ -73,16 +73,22 @@ public class LolDuoProfileCardController {
             @ApiImplicitParam(name = "support", value = "서포터를 포지션 선택했는지 여부", defaultValue = "false"),
             @ApiImplicitParam(name = "mainPosition", value = "메인 포지션 대문자", defaultValue = "JUNGLE")
     })
-    @ApiOperation(value = "프로필카드 수정", notes = "유저 인증 정보와 새로운 프로필카드 데이터로 프로필카드 업데이트")
+
+
+    @ApiOperation(value = "프로필카드 수정",
+            notes = "유저 인증 정보와 새로운 프로필카드 데이터로 프로필카드 업데이트")
+    @ApiImplicitParam(name = "ownerAuth", value = "회원가입시 할당받은 유저 인증값", defaultValue = "73bHwJ0Tw12KbrhDDyqJSUMgCVol5bfcLW+fZxBfPkY=")
     @PutMapping("/api/v0.0.1/lol/duo/my-card")
     public ResponseMessage updateDuoProfileCard(@RequestBody LolDuoProfileCardUpdateRequestDto requestDto) {
         lolDuoProfileCardService.updateMyCard(requestDto);
         return new ResponseMessage("Duo Profile Card Update API Call Success!");
     }
 
-
-    @ApiOperation(value = "프로필 카드 열람", notes = "매칭 시작 및 새로고침시 프로필 카드 덱 요청에 따른 덱 반환")
-   @GetMapping("/api/v0.0.1/lol/duo/match-deck")
+    @ApiOperation(value = "매치 기능 프로필 카드 열람",
+            notes = "매칭 시작 및 새로고침시 프로필 카드 덱 요청에 따른 덱 반환\n" +
+                    "1. 이미 매칭중인 유저가 신청할 시 Bad Request 발생")
+    @ApiImplicitParam(name = "ownerAuth", value = "회원가입시 할당받은 유저 인증값", defaultValue = "73bHwJ0Tw12KbrhDDyqJSUMgCVol5bfcLW+fZxBfPkY=")
+    @GetMapping("/api/v0.0.1/lol/duo/match-deck")
     public ResponseMessage getMachingDeckV1(@RequestBody LolDuoMatchDeckRequestDto requestDto) {
         LolDuoProfileCardDeck deck = lolDuoProfileCardService.takeDeck(requestDto);
         return new ResponseMessage("Lol duo profile card deck return API Call Success!", deck);

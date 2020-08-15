@@ -64,6 +64,10 @@ public class LolDuoProfileCardRepository {
                 requestDto.getMainLolPosition());
     }
 
+    public LolDuoProfileCard findById(Long id) {
+       return em.find(LolDuoProfileCard.class, id);
+    }
+
     public LolDuoProfileCard find(User owner) throws NoResultException{
         String query = "select ldpc from LolDuoProfileCard ldpc where ldpc.owner = :owner";
         return em.createQuery(query, LolDuoProfileCard.class)
@@ -87,7 +91,6 @@ public class LolDuoProfileCardRepository {
 
     public List<LolDuoProfileCard> findCustomizedListV1(User owner) {
         LolDuoProfileCard reqUserCard = find(owner);
-        System.out.println("repository 관련 쿼리 시작");
 
         /*
          * 1. 티어로 구분

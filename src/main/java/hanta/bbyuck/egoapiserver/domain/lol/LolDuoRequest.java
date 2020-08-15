@@ -32,4 +32,12 @@ public class LolDuoRequest {
     private User receiver;
 
     private LocalDateTime request_time;
+
+    /*
+     * 편의 메서드
+     */
+
+    public void updateRequestTime() { this.request_time = LocalDateTime.now(); }
+    public void assignSender(User user) { this.sender = user; }
+    public void assignReceiver(User user) { this.receiver = user; }
 }
