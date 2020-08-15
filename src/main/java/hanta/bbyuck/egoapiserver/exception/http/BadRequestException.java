@@ -16,7 +16,7 @@ public class BadRequestException extends AbstractResponseException {
     }
 
     public BadRequestException(String errorMessage) {
-        super(errorMessage);
+        super("잘못된 요청 : " + errorMessage);
     }
 
     public BadRequestException(String errorMessage, Throwable e) {

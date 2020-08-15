@@ -8,8 +8,10 @@ import hanta.bbyuck.egoapiserver.domain.lol.LolTier;
 import hanta.bbyuck.egoapiserver.repository.UserRepository;
 import hanta.bbyuck.egoapiserver.request.UserAuthRequestDto;
 import hanta.bbyuck.egoapiserver.request.lol.LolDuoProfileCardMakeRequestDto;
+import hanta.bbyuck.egoapiserver.request.lol.LolDuoRequestDto;
 import hanta.bbyuck.egoapiserver.service.UserService;
 import hanta.bbyuck.egoapiserver.service.lol.LolDuoProfileCardService;
+import hanta.bbyuck.egoapiserver.service.lol.LolDuoRequestService;
 import hanta.bbyuck.egoapiserver.util.AES256Util;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.RequiredArgsConstructor;
@@ -40,12 +42,14 @@ public class InitDB {
         private final UserService userService;
         private final UserRepository userRepository;
 
+        private final LolDuoRequestService lolDuoRequestService;
+
         private final LolDuoProfileCardService lolDuoProfileCardService;
         private final AES256Util aes256Util;
         private final EntityManager em;
 
         private static final int TEST_USER_COUNT = 2000;
-
+        private static final int TEST_REQUEST_COUNT = 100;
 
         public void dbInit1() {
             for (int i = 1; i <= TEST_USER_COUNT; i++) {
@@ -85,7 +89,7 @@ public class InitDB {
                 Boolean mid;
                 Boolean ad;
                 Boolean support;
-                LolPosition mainLolPosition;
+                LolPosition mainLolPosition = LolPosition.AD;
 
                 if (i % 7 == 0) voice = true;
                 else voice = false;
@@ -114,24 +118,24 @@ public class InitDB {
                 champion3 = "LUX";
 
                 top = i % 6 == 0;
-                jungle = i % 8 == 0;
+                jungle = i % 5 == 0;
                 mid = i % 3 == 0;
                 ad = i % 2 == 0;
-                support = i % 15 == 0;
+                support = i % 7 == 0;
 
-                if (i % 3 == 0) {
+                if (i % 6 == 0) {
                     mainLolPosition = LolPosition.TOP;
                 }
-                else if (i % 4 == 0) {
+                else if (i % 5 == 0) {
                     mainLolPosition = LolPosition.JUNGLE;
                 }
-                else if (i % 7 == 0) {
+                else if (i % 3 == 0) {
                     mainLolPosition = LolPosition.MID;
                 }
-                else if (i % 11 == 0) {
+                else if (i % 2 == 0) {
                     mainLolPosition = LolPosition.AD;
                 }
-                else {
+                else if (i % 7 == 0) {
                     mainLolPosition = LolPosition.SUPPORT;
                 }
 
@@ -157,7 +161,9 @@ public class InitDB {
         }
 
         public void dbInit2() {
+            for (int i = 7; i <= 40; i *= 2) {
 
+            }
         }
     }
 }

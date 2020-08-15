@@ -1,10 +1,11 @@
 package hanta.bbyuck.egoapiserver.api.lol;
 
+import hanta.bbyuck.egoapiserver.domain.lol.LolDuoProfileCard;
 import hanta.bbyuck.egoapiserver.request.lol.LolDuoMatchDeckRequestDto;
 import hanta.bbyuck.egoapiserver.request.lol.LolDuoProfileCardRequestDto;
 import hanta.bbyuck.egoapiserver.request.lol.LolDuoProfileCardMakeRequestDto;
 import hanta.bbyuck.egoapiserver.request.lol.LolDuoProfileCardUpdateRequestDto;
-import hanta.bbyuck.egoapiserver.response.lol.LolDuoProfileCardDeck;
+import hanta.bbyuck.egoapiserver.response.lol.LolProcessedDuoProfileCardDeck;
 import hanta.bbyuck.egoapiserver.response.ResponseMessage;
 import hanta.bbyuck.egoapiserver.response.lol.LolDuoProfileCardResponseDto;
 import hanta.bbyuck.egoapiserver.service.lol.LolDuoProfileCardService;
@@ -46,7 +47,8 @@ public class LolDuoProfileCardController {
 
 
     @ApiOperation(value = "단일 유저 프로필 카드 데이터 요청", notes = "유저 인증 정보로 프로필카드 데이터 리턴.\n" +
-            "1. 프로필 카드가 없을 경우 404 Not Found와 함께 에러 메세지 response 리턴")
+            "1. 프로필 카드가 없을 경우 404 Not Found와 함께 에러 메세지 response 리턴",
+            response = LolDuoProfileCardResponseDto.class)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "ownerAuth", value = "인증 정보", defaultValue = "dwqdqweqe123213214")
     })
@@ -86,11 +88,12 @@ public class LolDuoProfileCardController {
 
     @ApiOperation(value = "매치 기능 프로필 카드 열람",
             notes = "매칭 시작 및 새로고침시 프로필 카드 덱 요청에 따른 덱 반환\n" +
-                    "1. 이미 매칭중인 유저가 신청할 시 Bad Request 발생")
+                    "1. 이미 매칭중인 유저가 신청할 시 Bad Request 발생",
+            response = LolProcessedDuoProfileCardDeck.class)
     @ApiImplicitParam(name = "ownerAuth", value = "회원가입시 할당받은 유저 인증값", defaultValue = "73bHwJ0Tw12KbrhDDyqJSUMgCVol5bfcLW+fZxBfPkY=")
     @GetMapping("/api/v0.0.1/lol/duo/match-deck")
-    public ResponseMessage getMachingDeckV1(@RequestBody LolDuoMatchDeckRequestDto requestDto) {
-        LolDuoProfileCardDeck deck = lolDuoProfileCardService.takeDeck(requestDto);
+    public ResponseMessage getMatchingDeck(@RequestBody LolDuoMatchDeckRequestDto requestDto) {
+        LolProcessedDuoProfileCardDeck deck = lolDuoProfileCardService.takeDeck(requestDto);
         return new ResponseMessage("Lol duo profile card deck return API Call Success!", deck);
     }
 }

@@ -1,9 +1,9 @@
 package hanta.bbyuck.egoapiserver.service.lol;
 
 import hanta.bbyuck.egoapiserver.domain.UserStatus;
-import hanta.bbyuck.egoapiserver.exception.lol.AlreadyMatchingException;
+import hanta.bbyuck.egoapiserver.exception.http.BadRequestException;
 import hanta.bbyuck.egoapiserver.response.lol.LolProcessedDuoProfileCard;
-import hanta.bbyuck.egoapiserver.response.lol.LolDuoProfileCardDeck;
+import hanta.bbyuck.egoapiserver.response.lol.LolProcessedDuoProfileCardDeck;
 import hanta.bbyuck.egoapiserver.domain.lol.LolDuoProfileCard;
 import hanta.bbyuck.egoapiserver.domain.User;
 import hanta.bbyuck.egoapiserver.exception.lol.AlreadyOwnProfileCardException;
@@ -271,12 +271,12 @@ public class LolDuoProfileCardService {
     }
 */
 
-    public LolDuoProfileCardDeck takeDeck(LolDuoMatchDeckRequestDto requestDto) {
-        LolDuoProfileCardDeck deck = new LolDuoProfileCardDeck();
+    public LolProcessedDuoProfileCardDeck takeDeck(LolDuoMatchDeckRequestDto requestDto) {
+        LolProcessedDuoProfileCardDeck deck = new LolProcessedDuoProfileCardDeck();
         User owner = userRepository.find(requestDto.getUserAuth());
 
         if (owner.getStatus() != UserStatus.INACTIVE && owner.getStatus() != UserStatus.ACTIVE) {
-            throw new AlreadyMatchingException("이미 매칭에 참여중인 유저입니다.");
+            throw new BadRequestException("이미 매칭에 참여중인 유저입니다.");
         }
 
         List<LolDuoProfileCard> cardList = lolDuoProfileCardRepository.findCustomizedListV1(owner);

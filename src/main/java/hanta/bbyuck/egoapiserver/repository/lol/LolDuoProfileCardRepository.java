@@ -65,7 +65,7 @@ public class LolDuoProfileCardRepository {
     }
 
     public LolDuoProfileCard findById(Long id) {
-       return em.find(LolDuoProfileCard.class, id);
+        return em.find(LolDuoProfileCard.class, id);
     }
 
     public LolDuoProfileCard find(User owner) throws NoResultException{

@@ -31,7 +31,7 @@ public class ResponseController {
     }
 
     @ExceptionHandler(BadRequestException.class)
-    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ResponseMessage badRequestException(HttpServletRequest request, final BadRequestException exception) {
         log.error("BadRequestException : " + exception.getMessage());
         return new ResponseMessage(new BadRequestException(exception.getMessage(), exception), request.getRequestURL().toString());

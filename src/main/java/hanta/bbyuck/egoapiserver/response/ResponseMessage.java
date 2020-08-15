@@ -1,8 +1,8 @@
 package hanta.bbyuck.egoapiserver.response;
 
 import hanta.bbyuck.egoapiserver.exception.AbstractResponseException;
-import hanta.bbyuck.egoapiserver.response.error.ErrorMessage;
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 
@@ -15,8 +15,8 @@ public class ResponseMessage {
     private Boolean status;
     private String message;
     private LocalDateTime timestamp;
+    private String referedURL;
     private Object returnObj;
-    private ErrorMessage error;
 
     public ResponseMessage(String msg, Object returnObj) {
         this.code = "success";
@@ -24,7 +24,7 @@ public class ResponseMessage {
         this.message = msg;
         this.timestamp = LocalDateTime.now();
         this.returnObj = returnObj;
-        this.error = null;
+        this.referedURL = "";
     }
 
     public ResponseMessage(String msg) {
@@ -33,16 +33,17 @@ public class ResponseMessage {
         this.message = msg;
         this.timestamp = LocalDateTime.now();
         this.returnObj = null;
-        this.error = null;
+        this.referedURL = "";
     }
 
     public ResponseMessage(AbstractResponseException exception, String referedUrl) {
+        HttpStatus httpStatus = exception.getHttpStatus();
         this.returnObj = null;
         this.code = exception.getERR_CODE();
         this.status = false;
-        this.message = null;
-        this.error = new ErrorMessage(this.code, exception.getMessage(), referedUrl);
+        this.message = exception.getMessage();
         this.timestamp = LocalDateTime.now();
+        this.referedURL = referedUrl;
     }
 
 
