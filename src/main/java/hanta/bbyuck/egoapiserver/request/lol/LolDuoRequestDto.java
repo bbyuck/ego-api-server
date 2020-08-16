@@ -5,9 +5,9 @@ import lombok.Data;
 
 @Data
 public class LolDuoRequestDto {
-    @ApiModelProperty(name = "senderAuth", example = "dsaodakp1212141242oinoi3n42")
-    private String senderAuth;
+    @ApiModelProperty(name = "userAuth", example = "dsaodakp1212141242oinoi3n42")
+    private String userAuth;
 
-    @ApiModelProperty(name = "receiverProfileCardId", example = "12")
-    private Long receiverProfileCardId;
+    @ApiModelProperty(name = "opponentProfileCardId", example = "12")
+    private Long opponentProfileCardId;
 }

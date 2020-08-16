@@ -32,8 +32,8 @@ public class LolDuoRequestService {
     public void sendRequest(LolDuoRequestDto requestDto) {
         LolDuoRequest duoRequest = new LolDuoRequest();
 
-        User sender = userRepository.find(requestDto.getSenderAuth());
-        User receiver = lolDuoProfileCardRepository.findById(requestDto.getReceiverProfileCardId()).getOwner();
+        User sender = userRepository.find(requestDto.getUserAuth());
+        User receiver = lolDuoProfileCardRepository.findById(requestDto.getOpponentProfileCardId()).getOwner();
 
         if(sender == receiver) {
             throw new BadRequestException("본인에게는 요청을 보낼 수 없습니다.");
@@ -63,6 +63,40 @@ public class LolDuoRequestService {
         duoRequest.updateRequestTime();
 
         lolDuoRequestRepository.save(duoRequest);
+    }
+
+    /*
+     * 내가 받은 요청 거절 (메서드 호출자가 receiver)
+     */
+    public void rejectRequest(LolDuoRequestDto requestDto) {
+       User reqUser = userRepository.find(requestDto.getUserAuth());
+       User opponent = lolDuoProfileCardRepository.findById(requestDto.getOpponentProfileCardId()).getOwner();
+       
+       LolDuoRequest request = lolDuoRequestRepository.findRequest(opponent, reqUser);
+       
+       lolDuoRequestRepository.remove(request);
+    }
+
+    /*
+     * 내가 보낸 요청 취소 (메서드 호출자가 sender)
+     */
+    public void cancelRequest(LolDuoRequestDto requestDto) {
+        User reqUser = userRepository.find(requestDto.getUserAuth());
+        User opponent = lolDuoProfileCardRepository.findById(requestDto.getOpponentProfileCardId()).getOwner();
+
+        LolDuoRequest request = lolDuoRequestRepository.findRequest(reqUser, opponent);
+
+        lolDuoRequestRepository.remove(request);
+    }
+
+    public void rejectAllRequest(LolDuoRequestDto requestDto) {
+        User reqUser = userRepository.find(requestDto.getUserAuth());
+        lolDuoRequestRepository.removeAllReceived(reqUser);
+    }
+
+    public void cancelAllRequest(LolDuoRequestDto requestDto) {
+        User reqUser = userRepository.find(requestDto.getUserAuth());
+        lolDuoRequestRepository.removeAllSent(reqUser);
     }
 
     // 메소드 호출한 유저가 sender
@@ -104,6 +138,4 @@ public class LolDuoRequestService {
 
         return receivedRequestDeck;
     }
-
-
 }

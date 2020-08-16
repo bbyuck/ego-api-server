@@ -73,7 +73,7 @@ public class ResponseController {
     }
 
     @ExceptionHandler(NotFoundException.class)
-    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
     public ResponseMessage notFoundException(HttpServletRequest request, final NotFoundException exception) {
         log.error("NotFoundException : " + exception.getMessage());
         return new ResponseMessage(new NotFoundException(exception.getMessage(), exception), request.getRequestURL().toString());

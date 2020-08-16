@@ -16,7 +16,7 @@ public class NotFoundException extends AbstractResponseException {
     }
 
     public NotFoundException(String errorMessage) {
-        super(errorMessage);
+        super("해당 리소스 없음 : " + errorMessage);
     }
 
     public NotFoundException(String errorMessage, Throwable e) {

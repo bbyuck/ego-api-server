@@ -2,6 +2,8 @@ package hanta.bbyuck.egoapiserver.repository.lol;
 
 import hanta.bbyuck.egoapiserver.domain.User;
 import hanta.bbyuck.egoapiserver.domain.lol.LolDuoRequest;
+import hanta.bbyuck.egoapiserver.exception.http.NotFoundException;
+import hanta.bbyuck.egoapiserver.request.lol.LolDuoRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +21,25 @@ public class LolDuoRequestRepository {
     @Transactional
     public void save(LolDuoRequest request) {
         em.persist(request);
+    }
+
+    @Transactional
+    public void remove(LolDuoRequest request) { em.remove(request); }
+
+    @Transactional
+    public void removeAllSent(User user) {
+        String query = "delete from LolDuoRequest ldr where ldr.sender = :sender";
+        em.createQuery(query)
+                .setParameter("sender", user)
+                .executeUpdate();
+    }
+
+    @Transactional
+    public void removeAllReceived(User user) {
+        String query = "delete from LolDuoRequest ldr where ldr.receiver = :receiver";
+        em.createQuery(query)
+                .setParameter("receiver", user)
+                .executeUpdate();
     }
 
     public LolDuoRequest findRequest(User sender, User receiver){
