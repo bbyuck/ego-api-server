@@ -23,6 +23,7 @@ public class LolDuoProfileCardController {
             "1. 이미 듀오 프로필 카드를 보유하고 있는 유저가 API 호출시 에러가 발생합니다.(프로필카드 중복생성 방지)\n" +
             "2. 이미 프로필 카드에 등록된 소환사명으로 API 호출시 에러가 발생합니다.")
     @ApiImplicitParams({
+            @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00"),
             @ApiImplicitParam(name = "ownerAuth", value = "회원가입시 할당받은 유저 인증값", defaultValue = "73bHwJ0Tw12KbrhDDyqJSUMgCVol5bfcLW+fZxBfPkY="),
             @ApiImplicitParam(name = "voice", value = "보이스 채팅 여부", defaultValue = "true"),
             @ApiImplicitParam(name = "summonerName", value = "소환사명", defaultValue = "세주하리"),
@@ -46,10 +47,12 @@ public class LolDuoProfileCardController {
     }
 
 
+
     @ApiOperation(value = "단일 유저 프로필 카드 데이터 요청", notes = "유저 인증 정보로 프로필카드 데이터 리턴.\n" +
             "1. 프로필 카드가 없을 경우 404 Not Found와 함께 에러 메세지 response 리턴",
             response = LolDuoProfileCardResponseDto.class)
     @ApiImplicitParams({
+            @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00"),
             @ApiImplicitParam(name = "ownerAuth", value = "인증 정보", defaultValue = "dwqdqweqe123213214")
     })
     @GetMapping("/api/v0.0.1/lol/duo/my-card")
@@ -58,7 +61,12 @@ public class LolDuoProfileCardController {
         return new ResponseMessage("Duo Profile Card Get API Call Success!", responseDto);
     }
 
+
+
+    @ApiOperation(value = "프로필카드 수정",
+            notes = "유저 인증 정보와 새로운 프로필카드 데이터로 프로필카드 업데이트")
     @ApiImplicitParams({
+            @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00"),
             @ApiImplicitParam(name = "ownerAuth", value = "회원가입시 할당받은 유저 인증값", defaultValue = "73bHwJ0Tw12KbrhDDyqJSUMgCVol5bfcLW+fZxBfPkY="),
             @ApiImplicitParam(name = "voice", value = "보이스 채팅 여부", defaultValue = "true"),
             @ApiImplicitParam(name = "summonerName", value = "소환사명", defaultValue = "세주하리"),
@@ -75,11 +83,6 @@ public class LolDuoProfileCardController {
             @ApiImplicitParam(name = "support", value = "서포터를 포지션 선택했는지 여부", defaultValue = "false"),
             @ApiImplicitParam(name = "mainPosition", value = "메인 포지션 대문자", defaultValue = "JUNGLE")
     })
-
-
-    @ApiOperation(value = "프로필카드 수정",
-            notes = "유저 인증 정보와 새로운 프로필카드 데이터로 프로필카드 업데이트")
-    @ApiImplicitParam(name = "ownerAuth", value = "회원가입시 할당받은 유저 인증값", defaultValue = "73bHwJ0Tw12KbrhDDyqJSUMgCVol5bfcLW+fZxBfPkY=")
     @PutMapping("/api/v0.0.1/lol/duo/my-card")
     public ResponseMessage updateDuoProfileCard(@RequestBody LolDuoProfileCardUpdateRequestDto requestDto) {
         lolDuoProfileCardService.updateMyCard(requestDto);
@@ -90,7 +93,10 @@ public class LolDuoProfileCardController {
             notes = "매칭 시작 및 새로고침시 프로필 카드 덱 요청에 따른 덱 반환\n" +
                     "1. 이미 매칭중인 유저가 신청할 시 Bad Request 발생",
             response = LolProcessedDuoProfileCardDeck.class)
-    @ApiImplicitParam(name = "ownerAuth", value = "회원가입시 할당받은 유저 인증값", defaultValue = "73bHwJ0Tw12KbrhDDyqJSUMgCVol5bfcLW+fZxBfPkY=")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userAuth", value = "유저 인증 정보", defaultValue = "sdsnadnsao21n3o1ni3o1"),
+            @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00")
+    })
     @GetMapping("/api/v0.0.1/lol/duo/match-deck")
     public ResponseMessage getMatchingDeck(@RequestBody LolDuoMatchDeckRequestDto requestDto) {
         LolProcessedDuoProfileCardDeck deck = lolDuoProfileCardService.takeDeck(requestDto);

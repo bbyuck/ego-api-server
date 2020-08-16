@@ -1,6 +1,7 @@
 package hanta.bbyuck.egoapiserver.service.lol;
 
 import hanta.bbyuck.egoapiserver.domain.UserStatus;
+import hanta.bbyuck.egoapiserver.exception.UnauthorizedAppVersionException;
 import hanta.bbyuck.egoapiserver.exception.http.BadRequestException;
 import hanta.bbyuck.egoapiserver.response.lol.LolProcessedDuoProfileCard;
 import hanta.bbyuck.egoapiserver.response.lol.LolProcessedDuoProfileCardDeck;
@@ -16,6 +17,7 @@ import hanta.bbyuck.egoapiserver.request.lol.LolDuoProfileCardMakeRequestDto;
 import hanta.bbyuck.egoapiserver.request.lol.LolDuoProfileCardRequestDto;
 import hanta.bbyuck.egoapiserver.request.lol.LolDuoProfileCardUpdateRequestDto;
 import hanta.bbyuck.egoapiserver.response.lol.LolDuoProfileCardResponseDto;
+import hanta.bbyuck.egoapiserver.util.ClientVersionManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -31,42 +33,46 @@ import static hanta.bbyuck.egoapiserver.util.ServiceUtil.addCardToProcessedDeck;
 public class LolDuoProfileCardService {
     private final LolDuoProfileCardRepository lolDuoProfileCardRepository;
     private final UserRepository userRepository;
-    private static final int MAX_CARD_NUM = 100;
+    private final ClientVersionManager clientVersionManager;
 
-    public void makeDuoProfileCard(LolDuoProfileCardMakeRequestDto lolDuoProfileCardMakeRequestDto) throws NoResultException{
-        User reqUser = userRepository.find(lolDuoProfileCardMakeRequestDto.getOwnerAuth());
+    public void makeDuoProfileCard(LolDuoProfileCardMakeRequestDto requestDto) throws NoResultException{
+        clientVersionManager.checkClientVersion(requestDto.getClientVersion());
+
+        User reqUser = userRepository.find(requestDto.getOwnerAuth());
 
         if(lolDuoProfileCardRepository.isExist(reqUser)) {
             throw new AlreadyOwnProfileCardException("이미 듀오 프로필 카드를 보유하고 있습니다.");
         }
 
-        if (lolDuoProfileCardRepository.isExistSummonerName(lolDuoProfileCardMakeRequestDto.getSummonerName())){
+        if (lolDuoProfileCardRepository.isExistSummonerName(requestDto.getSummonerName())){
             throw new DuplicateSummonerNameException("이미 등록된 소환사명입니다.");
         }
 
         LolDuoProfileCard lolDuoProfileCard = new LolDuoProfileCard();
         lolDuoProfileCard.makeProfileCard(
                 reqUser,
-                lolDuoProfileCardMakeRequestDto.getVoice(),
-                lolDuoProfileCardMakeRequestDto.getSummonerName(),
-                lolDuoProfileCardMakeRequestDto.getTier(),
-                lolDuoProfileCardMakeRequestDto.getTierLev(),
-                lolDuoProfileCardMakeRequestDto.getLp(),
-                lolDuoProfileCardMakeRequestDto.getChampion1(),
-                lolDuoProfileCardMakeRequestDto.getChampion2(),
-                lolDuoProfileCardMakeRequestDto.getChampion3(),
-                lolDuoProfileCardMakeRequestDto.getTop(),
-                lolDuoProfileCardMakeRequestDto.getJungle(),
-                lolDuoProfileCardMakeRequestDto.getMid(),
-                lolDuoProfileCardMakeRequestDto.getAd(),
-                lolDuoProfileCardMakeRequestDto.getSupport(),
-                lolDuoProfileCardMakeRequestDto.getMainLolPosition());
+                requestDto.getVoice(),
+                requestDto.getSummonerName(),
+                requestDto.getTier(),
+                requestDto.getTierLev(),
+                requestDto.getLp(),
+                requestDto.getChampion1(),
+                requestDto.getChampion2(),
+                requestDto.getChampion3(),
+                requestDto.getTop(),
+                requestDto.getJungle(),
+                requestDto.getMid(),
+                requestDto.getAd(),
+                requestDto.getSupport(),
+                requestDto.getMainLolPosition());
         lolDuoProfileCardRepository.save(lolDuoProfileCard);
     }
 
-    public LolDuoProfileCardResponseDto take(LolDuoProfileCardRequestDto request) {
+    public LolDuoProfileCardResponseDto take(LolDuoProfileCardRequestDto requestDto) {
+        clientVersionManager.checkClientVersion(requestDto.getClientVersion());
+
         try {
-            User reqUser = userRepository.find(request.getOwnerAuth());
+            User reqUser = userRepository.find(requestDto.getOwnerAuth());
             LolDuoProfileCard findCard = lolDuoProfileCardRepository.find(reqUser);
 
             LolDuoProfileCardResponseDto response = new LolDuoProfileCardResponseDto();
@@ -93,6 +99,8 @@ public class LolDuoProfileCardService {
     }
 
     public void updateMyCard(LolDuoProfileCardUpdateRequestDto requestDto) {
+        clientVersionManager.checkClientVersion(requestDto.getClientVersion());
+
         // 수정시 authCheck 할 것
         userRepository.authCheck(requestDto.getOwnerAuth());
 
@@ -272,6 +280,8 @@ public class LolDuoProfileCardService {
 */
 
     public LolProcessedDuoProfileCardDeck takeDeck(LolDuoMatchDeckRequestDto requestDto) {
+        clientVersionManager.checkClientVersion(requestDto.getClientVersion());
+
         LolProcessedDuoProfileCardDeck deck = new LolProcessedDuoProfileCardDeck();
         User owner = userRepository.find(requestDto.getUserAuth());
 

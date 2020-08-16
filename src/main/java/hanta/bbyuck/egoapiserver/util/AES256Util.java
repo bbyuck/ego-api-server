@@ -12,14 +12,6 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
 
-//throws java.io.UnsupportedEncodingException,
-//        NoSuchAlgorithmException,
-//        NoSuchPaddingException,
-//        InvalidKeyException,
-//        InvalidAlgorithmParameterException,
-//        IllegalBlockSizeException,
-//        BadPaddingException
-
 public class AES256Util {
     private static volatile AES256Util INSTANCE;
 

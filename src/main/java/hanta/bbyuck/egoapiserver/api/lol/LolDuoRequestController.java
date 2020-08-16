@@ -25,7 +25,8 @@ public class LolDuoRequestController {
                     "4. 만일 클라이언트로 받은 모든 유저덱을 소진했다면 새로운 프로필카드 덱 요청")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userAuth", value = "유저 인증 정보", defaultValue = "sdsnadnsao21n3o1ni3o1"),
-            @ApiImplicitParam(name = "opponentProfileCardId", value = "요청받는 유저의 프로필 카드 id (Number 숫자타입)", defaultValue = "13")
+            @ApiImplicitParam(name = "opponentProfileCardId", value = "요청받는 유저의 프로필 카드 id (Number 숫자타입)", defaultValue = "13"),
+            @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00")
     })
     @PostMapping("/api/v0.0.1/lol/duo/match-request")
     public ResponseMessage sendRequest(@RequestBody LolDuoRequestDto lolDuoRequestDto) {
@@ -43,6 +44,7 @@ public class LolDuoRequestController {
             response = LolRequestDuoProfileCardDeck.class)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userAuth", value = "유저 인증 정보", defaultValue = "sdsnadnsao21n3o1ni3o1"),
+            @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00")
     })
     @GetMapping("api/v0.0.1/lol/duo/sent-request")
     public ResponseMessage getSentRequest(@RequestBody LolDuoRequestGetDto requestDto) {
@@ -59,6 +61,7 @@ public class LolDuoRequestController {
             response = LolRequestDuoProfileCardDeck.class)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userAuth", value = "유저 인증 정보", defaultValue = "sdsnadnsao21n3o1ni3o1"),
+            @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00")
     })
     @GetMapping("api/v0.0.1/lol/duo/received-request")
     public ResponseMessage getReceivedRequest(@RequestBody LolDuoRequestGetDto requestDto) {
@@ -71,7 +74,8 @@ public class LolDuoRequestController {
                     "1. 단건 삭제")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userAuth", value = "유저 인증 정보", defaultValue = "sdsnadnsao21n3o1ni3o1"),
-            @ApiImplicitParam(name = "opponentProfileCardId", value = "대상 유저 프로필 카드 id", defaultValue = "51")
+            @ApiImplicitParam(name = "opponentProfileCardId", value = "대상 유저 프로필 카드 id", defaultValue = "51"),
+            @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00")
     })
     @DeleteMapping("/api/v0.0.1/lol/duo/sent-request")
     public ResponseMessage cancelRequest(@RequestBody LolDuoRequestDto requestDto) {
@@ -84,7 +88,8 @@ public class LolDuoRequestController {
                     "1. 단건 삭제")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userAuth", value = "유저 인증 정보", defaultValue = "sdsnadnsao21n3o1ni3o1"),
-            @ApiImplicitParam(name = "opponentProfileCardId", value = "대상 유저 프로필 카드 id", defaultValue = "51")
+            @ApiImplicitParam(name = "opponentProfileCardId", value = "대상 유저 프로필 카드 id", defaultValue = "51"),
+            @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00")
     })
     @DeleteMapping("/api/v0.0.1/lol/duo/received-request")
     public ResponseMessage rejectRequest(@RequestBody LolDuoRequestDto requestDto) {
@@ -95,7 +100,10 @@ public class LolDuoRequestController {
     @ApiOperation(value = "롤 듀오 보낸 요청 전체 삭제",
             notes = "롤 듀오 보낸 요청 전체 삭제하기 API\n" +
                     "1. 전체 삭제")
-    @ApiImplicitParam(name = "userAuth", value = "유저 인증 정보", defaultValue = "sdsnadnsao21n3o1ni3o1")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userAuth", value = "유저 인증 정보", defaultValue = "sdsnadnsao21n3o1ni3o1"),
+            @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00")
+    })
     @DeleteMapping("/api/v0.0.1/lol/duo/all-sent-request")
     public ResponseMessage cancelAllRequest(@RequestBody LolDuoRequestDto requestDto) {
         lolDuoRequestService.cancelAllRequest(requestDto);
@@ -105,7 +113,10 @@ public class LolDuoRequestController {
     @ApiOperation(value = "롤 듀오 받은 요청 전체 거절",
             notes = "롤 듀오 받은 요청 전체 거절하기 API\n" +
                     "1. 전체 삭제")
-    @ApiImplicitParam(name = "userAuth", value = "유저 인증 정보", defaultValue = "sdsnadnsao21n3o1ni3o1")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userAuth", value = "유저 인증 정보", defaultValue = "sdsnadnsao21n3o1ni3o1"),
+            @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00")
+    })
     @DeleteMapping("/api/v0.0.1/lol/duo/all-received-request")
     public ResponseMessage rejectAllRequest(@RequestBody LolDuoRequestDto requestDto) {
         lolDuoRequestService.rejectAllRequest(requestDto);

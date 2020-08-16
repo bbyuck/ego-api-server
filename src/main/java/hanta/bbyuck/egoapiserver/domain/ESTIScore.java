@@ -1,6 +1,6 @@
 package hanta.bbyuck.egoapiserver.domain;
 
-import hanta.bbyuck.egoapiserver.domain.lol.LolFinishedDuoMatching;
+import hanta.bbyuck.egoapiserver.domain.lol.LolDuoFinishedMatching;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -23,8 +23,8 @@ public class ESTIScore {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "RELATED_FINISHED_DUO_MATCHING_ID", referencedColumnName = "LOL_FINISHED_DUO_MATCHING_ID")
-    private LolFinishedDuoMatching relatedLolFinishedDuoMatching;
+    @JoinColumn(name = "RELATED_FINISHED_DUO_MATCHING_ID", referencedColumnName = "LOL_DUO_FINISHED_MATCHING_ID")
+    private LolDuoFinishedMatching relatedLolDuoFinishedMatching;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "GIVER_ID", referencedColumnName = "USER_ID")

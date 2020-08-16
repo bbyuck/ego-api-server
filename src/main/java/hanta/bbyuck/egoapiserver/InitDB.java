@@ -31,8 +31,8 @@ public class InitDB {
 
 //    @PostConstruct
     public void init() {
-//        initService.dbInit1();
-        initService.dbInit2();
+        initService.dbInit1();
+//        initService.dbInit2();
     }
 
 //    @Component
@@ -106,7 +106,15 @@ public class InitDB {
 
                 if (tier.equals(LolTier.M) || tier.equals(LolTier.GM) || tier.equals(LolTier.C)) {
                     tierLev = 1;
-                    lp = (tierLev * 100) % 2500;
+                    if(tier.equals(LolTier.M)) {
+                        lp = 100;
+                    }
+                    else if (tier.equals(LolTier.GM)) {
+                        lp = 450;
+                    }
+                    else {
+                        lp = 900;
+                    }
                 }
                 else {
                     tierLev = i % 4 + 1;
@@ -153,6 +161,7 @@ public class InitDB {
                 profileCardDto.setAd(ad);
                 profileCardDto.setSupport(support);
                 profileCardDto.setMainLolPosition(mainLolPosition);
+                profileCardDto.setClientVersion("v1.00");
 
                 lolDuoProfileCardService.makeDuoProfileCard(profileCardDto);
             }

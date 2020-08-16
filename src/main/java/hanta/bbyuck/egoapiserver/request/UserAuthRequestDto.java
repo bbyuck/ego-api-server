@@ -12,4 +12,6 @@ public class UserAuthRequestDto {
     public String snsId;
     @ApiModelProperty(example = "k941026h@naver.com")
     public String email;
+    @ApiModelProperty(example = "v1.00")
+    public String clientVersion;
 }

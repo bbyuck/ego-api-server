@@ -70,6 +70,6 @@ public class LolDuoProfileInstance {
     private User owner;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "RELATED_FINISHED_DUO_MATCHING_ID", referencedColumnName = "LOL_FINISHED_DUO_MATCHING_ID")
-    private LolFinishedDuoMatching relatedLolFinishedDuoMatching;
+    @JoinColumn(name = "RELATED_FINISHED_DUO_MATCHING_ID", referencedColumnName = "LOL_DUO_FINISHED_MATCHING_ID")
+    private LolDuoFinishedMatching relatedLolDuoFinishedMatching;
 }

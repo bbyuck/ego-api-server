@@ -9,6 +9,20 @@ import java.util.Random;
 
 @Slf4j
 public class SHA256Util {
+    private static volatile SHA256Util INSTANCE;
+
+    public static SHA256Util getInstance() {
+        if (INSTANCE == null) {
+            synchronized (SHA256Util.class) {
+                if (INSTANCE == null)
+                    INSTANCE = new SHA256Util();
+            }
+        }
+        return INSTANCE;
+    }
+
+    private SHA256Util() {}
+
     public String encode(String input, String salt) {
         return encode(input, salt.getBytes());
     }

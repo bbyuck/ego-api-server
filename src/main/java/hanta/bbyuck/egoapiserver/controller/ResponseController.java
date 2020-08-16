@@ -1,6 +1,7 @@
 package hanta.bbyuck.egoapiserver.controller;
 
 import hanta.bbyuck.egoapiserver.exception.AbstractResponseException;
+import hanta.bbyuck.egoapiserver.exception.UnauthorizedAppVersionException;
 import hanta.bbyuck.egoapiserver.exception.http.*;
 import hanta.bbyuck.egoapiserver.exception.lol.UnknownException;
 import hanta.bbyuck.egoapiserver.exception.lol.UserAuthenticationException;
@@ -128,10 +129,19 @@ public class ResponseController {
         return new ResponseMessage(new UserAuthenticationException(exception.getMessage(), exception), request.getRequestURL().toString());
     }
 
+    @ExceptionHandler(UnauthorizedAppVersionException.class)
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+    public ResponseMessage unauthorizedAppVersionException(HttpServletRequest request, final UnauthorizedAppVersionException exception) {
+        log.error("UnauthorizedAppVersionException : " + exception.getMessage());
+        return new ResponseMessage(new UnauthorizedAppVersionException(exception.getMessage(), exception), request.getRequestURL().toString());
+    }
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseMessage exception(HttpServletRequest request, final Exception exception) {
         log.error("Exception : " + exception.getMessage());
         return new ResponseMessage(new UnknownException(exception.getMessage(), exception), request.getRequestURL().toString());
     }
+
+
 }

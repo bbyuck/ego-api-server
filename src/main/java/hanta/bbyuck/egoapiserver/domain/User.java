@@ -1,8 +1,6 @@
 package hanta.bbyuck.egoapiserver.domain;
 
-import hanta.bbyuck.egoapiserver.domain.lol.LolDuoProfileCard;
-import hanta.bbyuck.egoapiserver.domain.lol.LolDuoRequest;
-import hanta.bbyuck.egoapiserver.domain.lol.LolInProgressDuoMatching;
+import hanta.bbyuck.egoapiserver.domain.lol.LolDuoInProgressMatching;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -70,9 +68,6 @@ public class User {
     @Column(name = "type", length = 4)
     private ESTIType type;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "participating_duo_matching", referencedColumnName = "LOL_IN_PROGRESS_DUO_MATCHING_ID")
-    private LolInProgressDuoMatching lolInProgressDuoMatching;
 
     /*
      * 양방향 인스턴스
@@ -101,7 +96,6 @@ public class User {
         this.lastLoginTime = null;
         this.lastActiveTime = null;
         this.regTime = LocalDateTime.now();
-        this.lolInProgressDuoMatching = null;
     }
 
     public void assignAuth(String auth) {
@@ -120,9 +114,7 @@ public class User {
     public void updateUserStatus(UserStatus newStatus) {
         this.status = newStatus;
     }
-    public void updateLolDuoMatching(LolInProgressDuoMatching lolInProgressDuoMatching) {
-        this.lolInProgressDuoMatching = lolInProgressDuoMatching;
-    }
+
 
 
 }

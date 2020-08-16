@@ -18,7 +18,7 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
         ApiInfo apiInfo = new ApiInfo(
                 "ego api server",
-                "eSports 매칭 플랫폼 ego API Doc.",
+                "eSports 매칭 플랫폼 ego API Doc. --> 현재 이용 가능한 클라이언트 버전 : v1.00, v1.01, v1.02",
                 "0.0.1.Beta",
                 "",
                 "Bbyuck - HYUK",
