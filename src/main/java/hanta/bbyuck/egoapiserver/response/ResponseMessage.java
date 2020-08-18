@@ -36,8 +36,9 @@ public class ResponseMessage {
         this.referedURL = "";
     }
 
+
+
     public ResponseMessage(AbstractResponseException exception, String referedUrl) {
-        HttpStatus httpStatus = exception.getHttpStatus();
         this.returnObj = null;
         this.code = exception.getERR_CODE();
         this.status = false;

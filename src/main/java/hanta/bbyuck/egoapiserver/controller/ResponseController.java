@@ -1,18 +1,16 @@
 package hanta.bbyuck.egoapiserver.controller;
 
-import hanta.bbyuck.egoapiserver.exception.AbstractResponseException;
-import hanta.bbyuck.egoapiserver.exception.UnauthorizedAppVersionException;
+import hanta.bbyuck.egoapiserver.exception.*;
 import hanta.bbyuck.egoapiserver.exception.http.*;
 import hanta.bbyuck.egoapiserver.exception.lol.UnknownException;
-import hanta.bbyuck.egoapiserver.exception.lol.UserAuthenticationException;
 import hanta.bbyuck.egoapiserver.exception.lol.UserNotFoundException;
 import hanta.bbyuck.egoapiserver.response.ResponseMessage;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -143,5 +141,16 @@ public class ResponseController {
         return new ResponseMessage(new UnknownException(exception.getMessage(), exception), request.getRequestURL().toString());
     }
 
+    @ExceptionHandler(CAuthenticationEntryPointException.class)
+    @ResponseStatus(value = HttpStatus.FORBIDDEN)
+    public ResponseMessage authenticationEntryPointException(HttpServletRequest request, CAuthenticationEntryPointException e) {
+        return new ResponseMessage(new CAuthenticationEntryPointException(e.getMessage(), e), request.getRequestURL().toString());
+    }
+
+    @ExceptionHandler(CAccessDeniedException.class)
+    @ResponseStatus(value = HttpStatus.FORBIDDEN)
+    public ResponseMessage accessDeniedException(HttpServletRequest request, CAccessDeniedException e) {
+        return new ResponseMessage(new CAccessDeniedException(e.getMessage(), e), request.getRequestURL().toString());
+    }
 
 }

@@ -4,7 +4,6 @@ import hanta.bbyuck.egoapiserver.domain.User;
 import hanta.bbyuck.egoapiserver.domain.UserStatus;
 import hanta.bbyuck.egoapiserver.domain.lol.LolDuoProfileCard;
 import hanta.bbyuck.egoapiserver.domain.lol.LolDuoRequest;
-import hanta.bbyuck.egoapiserver.exception.UnauthorizedAppVersionException;
 import hanta.bbyuck.egoapiserver.exception.http.BadRequestException;
 import hanta.bbyuck.egoapiserver.repository.UserRepository;
 import hanta.bbyuck.egoapiserver.repository.lol.LolDuoProfileCardRepository;
@@ -37,7 +36,7 @@ public class LolDuoRequestService {
 
         LolDuoRequest duoRequest = new LolDuoRequest();
 
-        User sender = userRepository.find(requestDto.getUserAuth());
+        User sender = userRepository.find(requestDto.getGeneratedId());
         User receiver = lolDuoProfileCardRepository.findById(requestDto.getOpponentProfileCardId()).getOwner();
 
         if(sender == receiver) {
@@ -52,10 +51,10 @@ public class LolDuoRequestService {
         }
 
 
-        if (sender.getStatus() != UserStatus.ACTIVE && sender.getStatus() != UserStatus.INACTIVE) {
+        if (sender.getStatus() != UserStatus.ACTIVE) {
             throw new BadRequestException("유저 상태가 맞지 않습니다.");
         }
-        if (receiver.getStatus() != UserStatus.ACTIVE && receiver.getStatus() != UserStatus.INACTIVE) {
+        if (receiver.getStatus() != UserStatus.ACTIVE) {
             throw new BadRequestException("유저 상태가 맞지 않습니다.");
         }
 
@@ -77,7 +76,7 @@ public class LolDuoRequestService {
         clientVersionManager.checkClientVersion(requestDto.getClientVersion());
 
 
-       User reqUser = userRepository.find(requestDto.getUserAuth());
+       User reqUser = userRepository.find(requestDto.getGeneratedId());
        User opponent = lolDuoProfileCardRepository.findById(requestDto.getOpponentProfileCardId()).getOwner();
        
        LolDuoRequest request = lolDuoRequestRepository.findRequest(opponent, reqUser);
@@ -91,7 +90,7 @@ public class LolDuoRequestService {
     public void cancelRequest(LolDuoRequestDto requestDto) {
         clientVersionManager.checkClientVersion(requestDto.getClientVersion());
 
-        User reqUser = userRepository.find(requestDto.getUserAuth());
+        User reqUser = userRepository.find(requestDto.getGeneratedId());
         User opponent = lolDuoProfileCardRepository.findById(requestDto.getOpponentProfileCardId()).getOwner();
 
         LolDuoRequest request = lolDuoRequestRepository.findRequest(reqUser, opponent);
@@ -102,14 +101,14 @@ public class LolDuoRequestService {
     public void rejectAllRequest(LolDuoRequestDto requestDto) {
         clientVersionManager.checkClientVersion(requestDto.getClientVersion());
 
-        User reqUser = userRepository.find(requestDto.getUserAuth());
+        User reqUser = userRepository.find(requestDto.getGeneratedId());
         lolDuoRequestRepository.removeAllReceived(reqUser);
     }
 
     public void cancelAllRequest(LolDuoRequestDto requestDto) {
         clientVersionManager.checkClientVersion(requestDto.getClientVersion());
 
-        User reqUser = userRepository.find(requestDto.getUserAuth());
+        User reqUser = userRepository.find(requestDto.getGeneratedId());
         lolDuoRequestRepository.removeAllSent(reqUser);
     }
 

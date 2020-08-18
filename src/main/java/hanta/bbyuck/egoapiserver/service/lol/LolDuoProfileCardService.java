@@ -1,7 +1,6 @@
 package hanta.bbyuck.egoapiserver.service.lol;
 
 import hanta.bbyuck.egoapiserver.domain.UserStatus;
-import hanta.bbyuck.egoapiserver.exception.UnauthorizedAppVersionException;
 import hanta.bbyuck.egoapiserver.exception.http.BadRequestException;
 import hanta.bbyuck.egoapiserver.response.lol.LolProcessedDuoProfileCard;
 import hanta.bbyuck.egoapiserver.response.lol.LolProcessedDuoProfileCardDeck;
@@ -38,7 +37,7 @@ public class LolDuoProfileCardService {
     public void makeDuoProfileCard(LolDuoProfileCardMakeRequestDto requestDto) throws NoResultException{
         clientVersionManager.checkClientVersion(requestDto.getClientVersion());
 
-        User reqUser = userRepository.find(requestDto.getOwnerAuth());
+        User reqUser = userRepository.find(requestDto.getGeneratedId());
 
         if(lolDuoProfileCardRepository.isExist(reqUser)) {
             throw new AlreadyOwnProfileCardException("이미 듀오 프로필 카드를 보유하고 있습니다.");
@@ -72,7 +71,7 @@ public class LolDuoProfileCardService {
         clientVersionManager.checkClientVersion(requestDto.getClientVersion());
 
         try {
-            User reqUser = userRepository.find(requestDto.getOwnerAuth());
+            User reqUser = userRepository.find(requestDto.getGeneratedId());
             LolDuoProfileCard findCard = lolDuoProfileCardRepository.find(reqUser);
 
             LolDuoProfileCardResponseDto response = new LolDuoProfileCardResponseDto();
@@ -102,9 +101,8 @@ public class LolDuoProfileCardService {
         clientVersionManager.checkClientVersion(requestDto.getClientVersion());
 
         // 수정시 authCheck 할 것
-        userRepository.authCheck(requestDto.getOwnerAuth());
 
-        User owner = userRepository.find(requestDto.getOwnerAuth());
+        User owner = userRepository.find(requestDto.getGeneratedId());
         LolDuoProfileCard lolDuoProfileCard = lolDuoProfileCardRepository.find(owner);
 
         lolDuoProfileCardRepository.update(lolDuoProfileCard, requestDto);
@@ -283,9 +281,9 @@ public class LolDuoProfileCardService {
         clientVersionManager.checkClientVersion(requestDto.getClientVersion());
 
         LolProcessedDuoProfileCardDeck deck = new LolProcessedDuoProfileCardDeck();
-        User owner = userRepository.find(requestDto.getUserAuth());
+        User owner = userRepository.find(requestDto.getGeneratedId());
 
-        if (owner.getStatus() != UserStatus.INACTIVE && owner.getStatus() != UserStatus.ACTIVE) {
+        if (owner.getStatus() != UserStatus.ACTIVE) {
             throw new BadRequestException("이미 매칭에 참여중인 유저입니다.");
         }
 

@@ -48,7 +48,7 @@ public class InitDB {
         private final AES256Util aes256Util;
         private final EntityManager em;
 
-        private static final int TEST_USER_COUNT = 2000;
+        private static final int TEST_USER_COUNT = 3000;
         private static final int TEST_REQUEST_COUNT = 100;
 
         public void dbInit1() {
@@ -63,18 +63,28 @@ public class InitDB {
 
                 user.setEmail(email);
                 user.setSnsId(String.format("%019d", i));
+                user.setClientVersion("v1.00");
                 userService.join(user);
 
-                if(i % 7 == 0 || i % 4 == 0) {
-                    User userEntity = userRepository.find(aes256Util.encode(String.format("%019d", i)));
-                    userEntity.updateUserStatus(UserStatus.LOL_DUO_MATHCING);
-                }
+//                if(i % 7 == 0 || i % 4 == 0) {
+//                    User userEntity = userRepository.findBySnsId(user.getSnsVendor(), aes256Util.encode(user.getSnsId()));
+//                    userEntity.updateUserStatus(UserStatus.LOL_DUO_MATHCING);
+//                }
+                em.flush();
             }
 
             for (int i = 1; i <= TEST_USER_COUNT; i++) {
                 LolDuoProfileCardMakeRequestDto profileCardDto = new LolDuoProfileCardMakeRequestDto();
 
-                profileCardDto.setOwnerAuth(aes256Util.encode(String.format("%019d", i)));
+                SnsVendor snsVendor;
+                String snsId = String.format("%019d", i);
+
+                if (i % 10 == 0) snsVendor = SnsVendor.NAVER;
+                else snsVendor = SnsVendor.KAKAO;
+
+
+
+                profileCardDto.setGeneratedId(aes256Util.encode(snsVendor + " - " + snsId));
 
                 Boolean voice;
                 String summonerName = "소환사명" + i;
@@ -164,9 +174,8 @@ public class InitDB {
                 profileCardDto.setClientVersion("v1.00");
 
                 lolDuoProfileCardService.makeDuoProfileCard(profileCardDto);
+                em.flush();
             }
-
-            em.flush();
         }
 
         public void dbInit2() {

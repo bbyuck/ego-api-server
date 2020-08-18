@@ -1,12 +1,17 @@
 package hanta.bbyuck.egoapiserver.domain;
 
-import hanta.bbyuck.egoapiserver.domain.lol.LolDuoInProgressMatching;
+import lombok.Builder;
 import lombok.Getter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -15,7 +20,7 @@ import java.util.List;
         name = "user_seq_generator",
         sequenceName = "user_sequence"
 )
-public class User {
+public class User implements UserDetails {
     @Id @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
             generator = "user_seq_generator"
@@ -23,18 +28,8 @@ public class User {
     @Column(name = "USER_ID")
     private Long id;
 
-    @Column
-    private String salt;
-
-    @Column(name = "user_auth", length = 44)
-    private String userAuth;
-
-    @Column(name = "user_key", length = 64)
-    private String userKey;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "privilege", length = 10)
-    private Privilege privilege;
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> privileges = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     @Column(name = "sns_vendor", length = 10)
@@ -50,8 +45,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserStatus status;
     /*
-     * INACTIVE -> 최근 활동 시각에서 30분 이상 지났을 경우
-     * ACTIVE   -> 최근 활동 시각에서 30분 이내
+     * ACTIVE   -> 30분 이내
      * MATCHING -> 현재 매칭중
     */
 
@@ -68,6 +62,54 @@ public class User {
     @Column(name = "type", length = 4)
     private ESTIType type;
 
+    @Column(name = "generated_id", length = 255)
+    private String generatedId;
+
+    @Column
+    private String salt;
+
+    @Column(name = "generated_pw", length = 255)
+    private String generatedPw;
+    /*
+     * X-AUTH-TOKEN 관련
+     */
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.privileges.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public String getPassword() {
+        return generatedPw;
+    }
+
+    @Override
+    public String getUsername() {
+        return generatedId;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 
     /*
      * 양방향 인스턴스
@@ -86,23 +128,20 @@ public class User {
      */
 
     public void createUser(SnsVendor _snsVendor, String _snsId, String _email) {
-        this.userAuth = null;
         this.snsVendor = _snsVendor;
-        this.privilege = Privilege.USER;
         this.snsId = _snsId;
         this.email = _email;
-        this.status = UserStatus.INACTIVE;
+        this.status = UserStatus.ACTIVE;
+        this.privileges.add("ROLE_USER");
         this.type = null;
         this.lastLoginTime = null;
         this.lastActiveTime = null;
         this.regTime = LocalDateTime.now();
     }
 
-    public void assignAuth(String auth) {
-        this.userAuth = auth;
-    }
     public void assignSalt(String salt) { this.salt = salt; }
-    public void assignKey(String key) { this.userKey = key; }
+    public void assignPw(String pw) { this.generatedPw = pw; }
+    public void assignId(String id) { this.generatedId = id; }
     public void assignType(ESTIType type) { this.type = type; }
 
     public void updateLoginTime() {

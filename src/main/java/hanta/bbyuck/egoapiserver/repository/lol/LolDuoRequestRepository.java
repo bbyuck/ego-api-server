@@ -14,7 +14,7 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional(readOnly = true, noRollbackFor = Exception.class)
 public class LolDuoRequestRepository {
     private final EntityManager em;
 

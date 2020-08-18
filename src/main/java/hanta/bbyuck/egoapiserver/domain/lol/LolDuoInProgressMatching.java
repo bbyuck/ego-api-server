@@ -23,7 +23,9 @@ public class LolDuoInProgressMatching {
     )
     @Column(name = "LOL_DUO_IN_PROGRESS_MATCHING_ID")
     private Long id;
-    private LocalDateTime start_time;
+
+    @Column(name = "start_time")
+    private LocalDateTime startTime;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "requester_id", referencedColumnName = "USER_ID")
@@ -32,4 +34,20 @@ public class LolDuoInProgressMatching {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "respondent_id", referencedColumnName = "USER_ID")
     private User respondent;
+
+    /*
+     * 편의 메서드
+     */
+
+    public void assignRequester(User user) {
+        this.requester = user;
+    }
+
+    public void assignRespondent(User user) {
+        this.respondent = user;
+    }
+
+    public void setStartTime() {
+        this.startTime = LocalDateTime.now();
+    }
 }

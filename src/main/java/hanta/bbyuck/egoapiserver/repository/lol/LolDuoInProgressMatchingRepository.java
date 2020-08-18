@@ -10,7 +10,7 @@ import javax.persistence.EntityManager;
 
 @Repository
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional(readOnly = true, noRollbackFor = Exception.class)
 public class LolDuoInProgressMatchingRepository {
     private final EntityManager em;
 

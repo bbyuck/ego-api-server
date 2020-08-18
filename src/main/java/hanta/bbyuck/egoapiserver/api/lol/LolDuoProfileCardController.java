@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping(value = "/user/api/v0.0.1/lol/duo")
 @RequiredArgsConstructor
 public class LolDuoProfileCardController {
     private final LolDuoProfileCardService lolDuoProfileCardService;
@@ -23,8 +24,8 @@ public class LolDuoProfileCardController {
             "1. 이미 듀오 프로필 카드를 보유하고 있는 유저가 API 호출시 에러가 발생합니다.(프로필카드 중복생성 방지)\n" +
             "2. 이미 프로필 카드에 등록된 소환사명으로 API 호출시 에러가 발생합니다.")
     @ApiImplicitParams({
+            @ApiImplicitParam(name = "generatedId", value = "회원가입 및 로그인시 제공받은 Id", defaultValue = "sdsnadnsao21n3o1ni3o1"),
             @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00"),
-            @ApiImplicitParam(name = "ownerAuth", value = "회원가입시 할당받은 유저 인증값", defaultValue = "73bHwJ0Tw12KbrhDDyqJSUMgCVol5bfcLW+fZxBfPkY="),
             @ApiImplicitParam(name = "voice", value = "보이스 채팅 여부", defaultValue = "true"),
             @ApiImplicitParam(name = "summonerName", value = "소환사명", defaultValue = "세주하리"),
             @ApiImplicitParam(name = "tier", value = "티어 알파벳 대문자 한 글자 (GM은 두 글자)", defaultValue = "GM"),
@@ -38,9 +39,10 @@ public class LolDuoProfileCardController {
             @ApiImplicitParam(name = "mid", value = "미드를 포지션 선택했는지 여부", defaultValue = "true"),
             @ApiImplicitParam(name = "ad", value = "원딜을 포지션 선택했는지 여부", defaultValue = "false"),
             @ApiImplicitParam(name = "support", value = "서포터를 포지션 선택했는지 여부", defaultValue = "false"),
-            @ApiImplicitParam(name = "mainPosition", value = "메인 포지션 대문자", defaultValue = "JUNGLE")
+            @ApiImplicitParam(name = "mainPosition", value = "메인 포지션 대문자", defaultValue = "JUNGLE"),
+            @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
     })
-    @PostMapping("/api/v0.0.1/lol/duo/my-card")
+    @PostMapping("/my-card")
     public ResponseMessage make(@RequestBody LolDuoProfileCardMakeRequestDto requestDto) {
         lolDuoProfileCardService.makeDuoProfileCard(requestDto);
         return new ResponseMessage("Duo Profile Card Make API Call Success!");
@@ -52,10 +54,11 @@ public class LolDuoProfileCardController {
             "1. 프로필 카드가 없을 경우 404 Not Found와 함께 에러 메세지 response 리턴",
             response = LolDuoProfileCardResponseDto.class)
     @ApiImplicitParams({
+            @ApiImplicitParam(name = "generatedId", value = "회원가입 및 로그인시 제공받은 Id", defaultValue = "sdsnadnsao21n3o1ni3o1"),
             @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00"),
-            @ApiImplicitParam(name = "ownerAuth", value = "인증 정보", defaultValue = "dwqdqweqe123213214")
+            @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
     })
-    @GetMapping("/api/v0.0.1/lol/duo/my-card")
+    @GetMapping("/my-card")
     public ResponseMessage getDuoProfile(@RequestBody LolDuoProfileCardRequestDto requestDto) {
         LolDuoProfileCardResponseDto responseDto = lolDuoProfileCardService.take(requestDto);
         return new ResponseMessage("Duo Profile Card Get API Call Success!", responseDto);
@@ -66,8 +69,8 @@ public class LolDuoProfileCardController {
     @ApiOperation(value = "프로필카드 수정",
             notes = "유저 인증 정보와 새로운 프로필카드 데이터로 프로필카드 업데이트")
     @ApiImplicitParams({
+            @ApiImplicitParam(name = "generatedId", value = "회원가입 및 로그인시 제공받은 Id", defaultValue = "sdsnadnsao21n3o1ni3o1"),
             @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00"),
-            @ApiImplicitParam(name = "ownerAuth", value = "회원가입시 할당받은 유저 인증값", defaultValue = "73bHwJ0Tw12KbrhDDyqJSUMgCVol5bfcLW+fZxBfPkY="),
             @ApiImplicitParam(name = "voice", value = "보이스 채팅 여부", defaultValue = "true"),
             @ApiImplicitParam(name = "summonerName", value = "소환사명", defaultValue = "세주하리"),
             @ApiImplicitParam(name = "tier", value = "티어 알파벳 대문자 한 글자 (GM은 두 글자)", defaultValue = "GM"),
@@ -81,9 +84,10 @@ public class LolDuoProfileCardController {
             @ApiImplicitParam(name = "mid", value = "미드를 포지션 선택했는지 여부", defaultValue = "true"),
             @ApiImplicitParam(name = "ad", value = "원딜을 포지션 선택했는지 여부", defaultValue = "false"),
             @ApiImplicitParam(name = "support", value = "서포터를 포지션 선택했는지 여부", defaultValue = "false"),
-            @ApiImplicitParam(name = "mainPosition", value = "메인 포지션 대문자", defaultValue = "JUNGLE")
+            @ApiImplicitParam(name = "mainPosition", value = "메인 포지션 대문자", defaultValue = "JUNGLE"),
+            @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
     })
-    @PutMapping("/api/v0.0.1/lol/duo/my-card")
+    @PutMapping("/my-card")
     public ResponseMessage updateDuoProfileCard(@RequestBody LolDuoProfileCardUpdateRequestDto requestDto) {
         lolDuoProfileCardService.updateMyCard(requestDto);
         return new ResponseMessage("Duo Profile Card Update API Call Success!");
@@ -94,10 +98,11 @@ public class LolDuoProfileCardController {
                     "1. 이미 매칭중인 유저가 신청할 시 Bad Request 발생",
             response = LolProcessedDuoProfileCardDeck.class)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "userAuth", value = "유저 인증 정보", defaultValue = "sdsnadnsao21n3o1ni3o1"),
-            @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00")
+            @ApiImplicitParam(name = "generatedId", value = "회원가입 및 로그인시 제공받은 Id", defaultValue = "sdsnadnsao21n3o1ni3o1"),
+            @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00"),
+            @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
     })
-    @GetMapping("/api/v0.0.1/lol/duo/match-deck")
+    @GetMapping("/match-deck")
     public ResponseMessage getMatchingDeck(@RequestBody LolDuoMatchDeckRequestDto requestDto) {
         LolProcessedDuoProfileCardDeck deck = lolDuoProfileCardService.takeDeck(requestDto);
         return new ResponseMessage("Lol duo profile card deck return API Call Success!", deck);

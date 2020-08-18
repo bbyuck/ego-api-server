@@ -6,12 +6,13 @@ import lombok.Data;
 
 @Data
 public class UserAuthRequestDto {
-    @ApiModelProperty(example = "NAVER")
+    @ApiModelProperty(name = "snsVendor", example = "NAVER")
     public SnsVendor snsVendor;
-    @ApiModelProperty(example = "214141412421412441")
+    @ApiModelProperty(name = "snsId", example = "214141412421412441")
     public String snsId;
-    @ApiModelProperty(example = "k941026h@naver.com")
+    @ApiModelProperty(name = "email", example = "k941026h@naver.com")
     public String email;
-    @ApiModelProperty(example = "v1.00")
+    @ApiModelProperty(name = "clientVersion", example = "v1.99")
     public String clientVersion;
+
 }

@@ -11,7 +11,7 @@ public class LolDuoProfileCardMakeRequestDto {
     public String clientVersion;
 
     @ApiModelProperty(name = "유저 인증 정보  ::  localStorage 저장값", example = "73bHwJ0Tw12KbrhDDyqJSUMgCVol5bfcLW+fZxBfPkY=")
-    private String ownerAuth;
+    private String generatedId;
 
     @ApiModelProperty(name = "보이스 여부", example = "true")
     private Boolean voice;
