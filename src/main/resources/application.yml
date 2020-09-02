@@ -1,14 +1,14 @@
 spring:
   datasource:
 #    외부 접속
-    url: ENC(U9Tf8RbGFDj7V6QmRgb2CwAKvLRXRerjSnKXFVxk3WNpjTi2eOcKAgSPfLdHOPKAEp8GQMV3aIW+k+PC7P2gDw==)
+    url: jdbc:mariadb://hanta.gg:12402/ego-api-server
 #    집 접속
 #    url: jdbc:mariadb://192.168.219.101:3306/ego-api-server-dev
 #    빌드 후 배포
-#    url: jdbc:mariadb://localhost:3306/ego-api-server-dev
+#    url: jdbc:mariadb://localhost:3306/ego-api-server
     driver-class-name: org.mariadb.jdbc.Driver
-    username: ENC(yHyQNL6Aq2/IETaaAcMN+Q==)
-    password: ENC(1YIK9SFycb5E5ApY0Wpvr7cqZYQ/s7MG)
+    username: root
+    password: hanta950502@
   jpa:
     hibernate:
       ddl-auto: none

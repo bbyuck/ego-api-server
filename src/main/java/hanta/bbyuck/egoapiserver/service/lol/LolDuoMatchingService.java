@@ -1,13 +1,14 @@
 package hanta.bbyuck.egoapiserver.service.lol;
 
 import hanta.bbyuck.egoapiserver.domain.User;
-import hanta.bbyuck.egoapiserver.domain.UserStatus;
-import hanta.bbyuck.egoapiserver.domain.lol.LolDuoInProgressMatching;
+import hanta.bbyuck.egoapiserver.domain.enumset.UserStatus;
+import hanta.bbyuck.egoapiserver.domain.lol.LolDuoMatching;
+import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolDuoMatchingStatus;
 import hanta.bbyuck.egoapiserver.domain.lol.LolDuoProfileCard;
 import hanta.bbyuck.egoapiserver.domain.lol.LolDuoRequest;
 import hanta.bbyuck.egoapiserver.exception.http.BadRequestException;
 import hanta.bbyuck.egoapiserver.repository.UserRepository;
-import hanta.bbyuck.egoapiserver.repository.lol.LolDuoInProgressMatchingRepository;
+import hanta.bbyuck.egoapiserver.repository.lol.LolDuoMatchingRepository;
 import hanta.bbyuck.egoapiserver.repository.lol.LolDuoProfileCardRepository;
 import hanta.bbyuck.egoapiserver.repository.lol.LolDuoRequestRepository;
 import hanta.bbyuck.egoapiserver.request.lol.LolDuoMatchingRequestDto;
@@ -21,8 +22,8 @@ import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
-public class LolDuoInProgressMatchingService {
-    private final LolDuoInProgressMatchingRepository lolDuoInProgressMatchingRepository;
+public class LolDuoMatchingService {
+    private final LolDuoMatchingRepository lolDuoMatchingRepository;
     private final LolDuoProfileCardRepository lolDuoProfileCardRepository;
     private final LolDuoRequestRepository lolDuoRequestRepository;
     private final UserRepository userRepository;
@@ -38,15 +39,21 @@ public class LolDuoInProgressMatchingService {
         LolDuoRequest request = lolDuoRequestRepository.findRequest(opponent, reqUser);
         lolDuoRequestRepository.remove(request);
 
-        LolDuoInProgressMatching matching = new LolDuoInProgressMatching();
+        LolDuoMatching matching = new LolDuoMatching();
         matching.assignRequester(opponent);
         matching.assignRespondent(reqUser);
         matching.setStartTime();
+        matching.setMatchingStatus(LolDuoMatchingStatus.MATCHING_ON);
 
-        reqUser.updateUserStatus(UserStatus.LOL_DUO_MATHCING);
-        opponent.updateUserStatus(UserStatus.LOL_DUO_MATHCING);
+        /*
+         * reqUser는 서버로 요청을 보낸 유저 -> respondent
+         * opponent는 카드를 보고 매치 요청을 보낸 유저 -> requester
+         */
+        reqUser.updateUserStatus(UserStatus.LOL_DUO_MATCHING);
+        opponent.updateUserStatus(UserStatus.LOL_DUO_MATCHING_READY);
 
-        lolDuoInProgressMatchingRepository.save(matching);
+
+        lolDuoMatchingRepository.save(matching);
     }
 
     public void completeMatch(LolDuoMatchingRequestDto requestDto) {
@@ -56,11 +63,11 @@ public class LolDuoInProgressMatchingService {
 
 
         try {
-            LolDuoInProgressMatching matching = lolDuoInProgressMatchingRepository.find(reqUser);
+            LolDuoMatching matching = lolDuoMatchingRepository.find(reqUser);
             matching.getRequester().updateUserStatus(UserStatus.ACTIVE);
             matching.getRespondent().updateUserStatus(UserStatus.ACTIVE);
 
-            lolDuoInProgressMatchingRepository.remove(matching);
+            lolDuoMatchingRepository.remove(matching);
         } catch (NoResultException e) {
             throw new BadRequestException("존재하지 않는 매치입니다.");
         }
@@ -69,7 +76,7 @@ public class LolDuoInProgressMatchingService {
     public LolDuoMatchingResponseDto findMatch(LolDuoMatchingRequestDto requestDto) {
         try {
             User reqUser = userRepository.find(requestDto.getGeneratedId());
-            LolDuoInProgressMatching matching = lolDuoInProgressMatchingRepository.find(reqUser);
+            LolDuoMatching matching = lolDuoMatchingRepository.find(reqUser);
 
             LolDuoProfileCard reqUserCard = lolDuoProfileCardRepository.find(reqUser);
             LolDuoProfileCard opponentCard = null;

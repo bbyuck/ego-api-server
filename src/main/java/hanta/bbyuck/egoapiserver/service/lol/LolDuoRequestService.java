@@ -1,7 +1,7 @@
 package hanta.bbyuck.egoapiserver.service.lol;
 
 import hanta.bbyuck.egoapiserver.domain.User;
-import hanta.bbyuck.egoapiserver.domain.UserStatus;
+import hanta.bbyuck.egoapiserver.domain.enumset.UserStatus;
 import hanta.bbyuck.egoapiserver.domain.lol.LolDuoProfileCard;
 import hanta.bbyuck.egoapiserver.domain.lol.LolDuoRequest;
 import hanta.bbyuck.egoapiserver.exception.http.BadRequestException;

@@ -1,13 +1,9 @@
 package hanta.bbyuck.egoapiserver.response.lol;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import hanta.bbyuck.egoapiserver.domain.User;
-import hanta.bbyuck.egoapiserver.domain.lol.LolPosition;
-import hanta.bbyuck.egoapiserver.domain.lol.LolTier;
+import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolPosition;
+import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolTier;
 import lombok.Data;
-import org.hibernate.annotations.Type;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Data

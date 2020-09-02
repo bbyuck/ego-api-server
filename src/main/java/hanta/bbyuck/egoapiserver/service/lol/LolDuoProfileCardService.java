@@ -1,6 +1,6 @@
 package hanta.bbyuck.egoapiserver.service.lol;
 
-import hanta.bbyuck.egoapiserver.domain.UserStatus;
+import hanta.bbyuck.egoapiserver.domain.enumset.UserStatus;
 import hanta.bbyuck.egoapiserver.exception.http.BadRequestException;
 import hanta.bbyuck.egoapiserver.response.lol.LolProcessedDuoProfileCard;
 import hanta.bbyuck.egoapiserver.response.lol.LolProcessedDuoProfileCardDeck;
@@ -40,7 +40,7 @@ public class LolDuoProfileCardService {
         User reqUser = userRepository.find(requestDto.getGeneratedId());
 
         if(lolDuoProfileCardRepository.isExist(reqUser)) {
-            throw new AlreadyOwnProfileCardException("이미 듀오 프로필 카드를 보유하고 있습니다.");
+            throw new AlreadyOwnProfileCardException();
         }
 
         if (lolDuoProfileCardRepository.isExistSummonerName(requestDto.getSummonerName())){

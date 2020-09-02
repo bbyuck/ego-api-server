@@ -1,6 +1,6 @@
 package hanta.bbyuck.egoapiserver.repository;
 
-import hanta.bbyuck.egoapiserver.domain.SnsVendor;
+import hanta.bbyuck.egoapiserver.domain.enumset.SnsVendor;
 import hanta.bbyuck.egoapiserver.domain.User;
 import hanta.bbyuck.egoapiserver.util.AES256Util;
 import hanta.bbyuck.egoapiserver.util.SHA256Util;
@@ -42,8 +42,4 @@ public class UserRepository {
     }
 
 
-    @Transactional
-    public void updateLoginTime(User user) {
-        user.updateLoginTime();
-    }
 }

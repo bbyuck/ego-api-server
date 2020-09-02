@@ -1,6 +1,7 @@
 package hanta.bbyuck.egoapiserver.domain.lol;
 
 import hanta.bbyuck.egoapiserver.domain.User;
+import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolPosition;
 import lombok.Getter;
 import org.hibernate.annotations.Type;
 

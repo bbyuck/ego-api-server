@@ -1,6 +1,6 @@
 package hanta.bbyuck.egoapiserver.request;
 
-import hanta.bbyuck.egoapiserver.domain.SnsVendor;
+import hanta.bbyuck.egoapiserver.domain.enumset.SnsVendor;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -14,5 +14,8 @@ public class UserAuthRequestDto {
     public String email;
     @ApiModelProperty(name = "clientVersion", example = "v1.99")
     public String clientVersion;
+
+    @ApiModelProperty(name = "fcmToken", example = "dsa2dd9dsjdoandoisnoidqw")
+    public String fcmToken;
 
 }

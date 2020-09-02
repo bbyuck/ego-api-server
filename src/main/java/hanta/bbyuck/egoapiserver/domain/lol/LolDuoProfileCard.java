@@ -2,6 +2,8 @@ package hanta.bbyuck.egoapiserver.domain.lol;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import hanta.bbyuck.egoapiserver.domain.User;
+import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolPosition;
+import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolTier;
 import lombok.Getter;
 import org.hibernate.annotations.Type;
 

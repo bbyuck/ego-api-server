@@ -1,7 +1,7 @@
 package hanta.bbyuck.egoapiserver.domain;
 
+import hanta.bbyuck.egoapiserver.domain.enumset.ESTIVersion;
 import lombok.Getter;
-import lombok.Setter;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;

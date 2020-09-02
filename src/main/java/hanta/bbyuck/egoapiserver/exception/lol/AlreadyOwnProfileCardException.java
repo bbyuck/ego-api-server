@@ -6,9 +6,10 @@ import org.springframework.http.HttpStatus;
 public class AlreadyOwnProfileCardException extends AbstractResponseException {
     private static final long serialVersionUID = 1L;
     private static final String ERR_CODE = "LOL-DP-500";
+    private static final String ERR_MESSAGE = "이미 듀오 프로필 카드를 보유하고 있습니다.";
 
     public AlreadyOwnProfileCardException() {
-        super();
+        super(ERR_MESSAGE);
     }
 
     public AlreadyOwnProfileCardException(Throwable e) {

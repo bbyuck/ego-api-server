@@ -1,9 +1,9 @@
 package hanta.bbyuck.egoapiserver.repository.lol;
 
 import hanta.bbyuck.egoapiserver.domain.User;
-import hanta.bbyuck.egoapiserver.domain.UserStatus;
+import hanta.bbyuck.egoapiserver.domain.enumset.UserStatus;
 import hanta.bbyuck.egoapiserver.domain.lol.LolDuoProfileCard;
-import hanta.bbyuck.egoapiserver.domain.lol.LolTier;
+import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolTier;
 import hanta.bbyuck.egoapiserver.request.lol.LolDuoProfileCardUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -12,8 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 @Repository

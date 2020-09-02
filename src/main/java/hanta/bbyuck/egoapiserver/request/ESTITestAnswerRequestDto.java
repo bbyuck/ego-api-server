@@ -1,6 +1,6 @@
 package hanta.bbyuck.egoapiserver.request;
 
-import hanta.bbyuck.egoapiserver.domain.ESTIVersion;
+import hanta.bbyuck.egoapiserver.domain.enumset.ESTIVersion;
 import lombok.Data;
 
 @Data

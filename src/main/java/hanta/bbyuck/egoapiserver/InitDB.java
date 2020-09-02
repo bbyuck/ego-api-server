@@ -1,25 +1,17 @@
 package hanta.bbyuck.egoapiserver;
 
-import hanta.bbyuck.egoapiserver.domain.SnsVendor;
-import hanta.bbyuck.egoapiserver.domain.User;
-import hanta.bbyuck.egoapiserver.domain.UserStatus;
-import hanta.bbyuck.egoapiserver.domain.lol.LolPosition;
-import hanta.bbyuck.egoapiserver.domain.lol.LolTier;
+import hanta.bbyuck.egoapiserver.domain.enumset.SnsVendor;
+import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolPosition;
+import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolTier;
 import hanta.bbyuck.egoapiserver.repository.UserRepository;
 import hanta.bbyuck.egoapiserver.request.UserAuthRequestDto;
 import hanta.bbyuck.egoapiserver.request.lol.LolDuoProfileCardMakeRequestDto;
-import hanta.bbyuck.egoapiserver.request.lol.LolDuoRequestDto;
 import hanta.bbyuck.egoapiserver.service.UserService;
 import hanta.bbyuck.egoapiserver.service.lol.LolDuoProfileCardService;
 import hanta.bbyuck.egoapiserver.service.lol.LolDuoRequestService;
 import hanta.bbyuck.egoapiserver.util.AES256Util;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.Transaction;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 
 

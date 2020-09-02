@@ -1,9 +1,6 @@
 package hanta.bbyuck.egoapiserver.service;
 
 import hanta.bbyuck.egoapiserver.domain.User;
-import hanta.bbyuck.egoapiserver.exception.UnauthorizedAppVersionException;
-import hanta.bbyuck.egoapiserver.exception.http.BadRequestException;
-import hanta.bbyuck.egoapiserver.exception.http.UnauthorizedException;
 import hanta.bbyuck.egoapiserver.repository.UserRepository;
 import hanta.bbyuck.egoapiserver.request.UserAuthRequestDto;
 import hanta.bbyuck.egoapiserver.response.LoginDto;
@@ -58,9 +55,10 @@ public class UserService implements UserDetailsService {
         user.assignId (userId);
         user.updateLoginTime();
         user.updateActiveTime();
+        user.updateFcmToken(requestDto.getFcmToken());
+        userRepository.save(user);
 
         LoginDto loginDto = new LoginDto();
-        userRepository.save(user);
 
         loginDto.setId(user.getGeneratedId());
         loginDto.setGeneratedId(user.getGeneratedId());
@@ -74,7 +72,9 @@ public class UserService implements UserDetailsService {
         clientVersionManager.checkClientVersion(requestDto.getClientVersion());
 
         User user = userRepository.findBySnsId(requestDto.getSnsVendor(), aes256Util.encode(requestDto.getSnsId()));
-        userRepository.updateLoginTime(user);
+        user.updateLoginTime();
+        user.updateFcmToken(requestDto.getFcmToken());
+
         LoginDto loginDto = new LoginDto();
 
         loginDto.setId(user.getGeneratedId());

@@ -18,7 +18,7 @@ public class ClientVersionManager {
 
     public static ClientVersionManager getInstance() {
         if (INSTANCE == null) {
-            synchronized (AES256Util.class) {
+            synchronized (ClientVersionManager.class) {
                 if (INSTANCE == null)
                     INSTANCE = new ClientVersionManager();
             }
