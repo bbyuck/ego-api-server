@@ -16,24 +16,11 @@ public class AES256Util {
     private static volatile AES256Util INSTANCE;
 
     private final static String secretKey = "10oeganhkylpphgyss1wjhyateog20bb"; //32bit
-    private static String IV = "cqoskfmwo1sxzspd"; //16bit
+    private final static String IV = "cqoskfmwo1sxzspd"; //16bit
 
-    public static AES256Util getInstance() {
-        if (INSTANCE == null) {
-            synchronized (AES256Util.class) {
-                if (INSTANCE == null)
-                    INSTANCE = new AES256Util();
-            }
-        }
-        return INSTANCE;
-    }
-
-    private AES256Util() {
-        IV = secretKey.substring(0, 16);
-    }
 
     //암호화
-    public String encode(String str)  {
+    public static String encode(String str)  {
         try {
             byte[] keyData = secretKey.getBytes();
 
@@ -52,7 +39,7 @@ public class AES256Util {
     }
 
     //복호화
-    public String decode(String str) {
+    public static String decode(String str) {
         try {
             byte[] keyData = secretKey.getBytes();
             SecretKey secureKey = new SecretKeySpec(keyData, "AES");

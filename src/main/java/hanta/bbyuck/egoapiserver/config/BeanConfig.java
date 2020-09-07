@@ -3,20 +3,11 @@ package hanta.bbyuck.egoapiserver.config;
 import hanta.bbyuck.egoapiserver.util.AES256Util;
 import hanta.bbyuck.egoapiserver.util.ClientVersionManager;
 import hanta.bbyuck.egoapiserver.util.SHA256Util;
+import hanta.bbyuck.egoapiserver.util.TimeCalculator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class BeanConfig {
 
-    @Bean
-    public AES256Util aes256Util() {
-        return AES256Util.getInstance();
-    }
-
-    @Bean
-    public SHA256Util sha256Util() { return SHA256Util.getInstance(); }
-
-    @Bean
-    public ClientVersionManager clientVersionManager() { return ClientVersionManager.getInstance(); }
 }

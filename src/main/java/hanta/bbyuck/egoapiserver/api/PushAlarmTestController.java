@@ -1,5 +1,6 @@
 package hanta.bbyuck.egoapiserver.api;
 
+import com.google.firebase.auth.FirebaseAuthException;
 import hanta.bbyuck.egoapiserver.firebase.FcmService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,7 +15,7 @@ import java.util.concurrent.ExecutionException;
 @RequestMapping(value = "/api/v0.0.1/")
 @RequiredArgsConstructor
 public class PushAlarmTestController {
-    private static final String TEST_TOKEN = "cXV79iqyh7k:APA91bEBuKmVIwOZnZbcnpGz9JM9_iXQpaKhak1kjkXHvAcCsXIPgmQczeFl3EvLTSoPfp7tkEIFLVZXc2KNFbJzAB4GreY6UgiHEx2c7V0dPv5OerSsoacIU58rdFfXxTYvEcKn4u89";
+    private static final String TEST_TOKEN = "czL3HnKHOUKxjaLT-tRtCk:APA91bGkTobZb6HUCfAghMMlDtO-4ReXp_1Mims4P82uE4jJs3dyEsxeuFT-JfLgA4KxGCTKw1o8arZ_0hD-R25azRTS0FHGGbuBMgDmJKuzKaw7TZzk5bw5jyQi4gl4ijMxmzlAfndY";
     private final FcmService fcmService;
 
     @PostMapping("alarm")
@@ -29,4 +30,16 @@ public class PushAlarmTestController {
         return "성공";
     }
 
+    @PostMapping("test")
+    public String testMethod2(){
+        try{
+            fcmService.cancelUserToken(TEST_TOKEN);
+        }
+        catch (FirebaseAuthException e) {
+            e.printStackTrace();
+            return "error";
+        }
+        return "성공";
+
+    }
 }

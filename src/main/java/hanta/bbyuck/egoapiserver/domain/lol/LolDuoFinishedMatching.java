@@ -1,5 +1,6 @@
 package hanta.bbyuck.egoapiserver.domain.lol;
 
+import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolDuoFinishedMatchingStatus;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -22,6 +23,10 @@ public class LolDuoFinishedMatching {
     )
     @Column(name = "LOL_DUO_FINISHED_MATCHING_ID")
     private Long id;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "finished_matching_status")
+    private LolDuoFinishedMatchingStatus status;
 
     @Column(name = "start_time")
     private LocalDateTime startTime;

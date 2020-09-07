@@ -5,6 +5,7 @@ import hanta.bbyuck.egoapiserver.domain.enumset.Game;
 import lombok.Getter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -17,6 +18,9 @@ public class UserType {
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private User user;
+
+    @Column(name = "update_time")
+    private LocalDateTime updateTime;
 
     @Column(name = "game", length = 45)
     @Enumerated(EnumType.STRING)

@@ -3,6 +3,9 @@ package hanta.bbyuck.egoapiserver.firebase;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.UserRecord;
 import lombok.RequiredArgsConstructor;
 import okhttp3.*;
 import org.springframework.core.io.ClassPathResource;
@@ -20,6 +23,16 @@ public class FcmService {
     private final String SCOPE = "https://www.googleapis.com/auth/cloud-platform";
     private final String API_URL = "https://fcm.googleapis.com/v1/projects/ego-fcm/messages:send";
     private final ObjectMapper objectMapper;
+
+    public void cancelUserToken(String targetToken) throws FirebaseAuthException{
+        FirebaseAuth.getInstance().revokeRefreshTokens(targetToken);
+        UserRecord user = FirebaseAuth.getInstance().getUser(targetToken);
+        // Convert to seconds as the auth_time in the token claims is in seconds too.
+        long revocationSecond = user.getTokensValidAfterTimestamp() / 1000;
+        System.out.println("Tokens revoked at: " + revocationSecond);
+
+
+    }
 
     public void sendMessageTo(String targetToken, String title, String body) throws IOException{
         String message = makeMessage(targetToken, title, body);

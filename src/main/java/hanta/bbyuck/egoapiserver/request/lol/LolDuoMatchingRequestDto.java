@@ -13,4 +13,7 @@ public class LolDuoMatchingRequestDto {
 
     @ApiModelProperty(name = "opponentProfileCardId", example = "12")
     private Long opponentProfileCardId;
+
+    @ApiModelProperty(name = "matchingId", example = "1223141241")
+    private Long matchId;
 }

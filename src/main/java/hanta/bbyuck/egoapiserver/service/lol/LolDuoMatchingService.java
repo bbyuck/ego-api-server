@@ -6,6 +6,8 @@ import hanta.bbyuck.egoapiserver.domain.lol.LolDuoMatching;
 import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolDuoMatchingStatus;
 import hanta.bbyuck.egoapiserver.domain.lol.LolDuoProfileCard;
 import hanta.bbyuck.egoapiserver.domain.lol.LolDuoRequest;
+import hanta.bbyuck.egoapiserver.exception.UserAuthenticationException;
+import hanta.bbyuck.egoapiserver.exception.UserAuthorizationException;
 import hanta.bbyuck.egoapiserver.exception.http.BadRequestException;
 import hanta.bbyuck.egoapiserver.repository.UserRepository;
 import hanta.bbyuck.egoapiserver.repository.lol.LolDuoMatchingRepository;
@@ -14,11 +16,15 @@ import hanta.bbyuck.egoapiserver.repository.lol.LolDuoRequestRepository;
 import hanta.bbyuck.egoapiserver.request.lol.LolDuoMatchingRequestDto;
 import hanta.bbyuck.egoapiserver.response.lol.LolDuoMatchingResponseDto;
 import hanta.bbyuck.egoapiserver.util.ClientVersionManager;
+import hanta.bbyuck.egoapiserver.util.TimeCalculator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.NoResultException;
 import java.time.LocalDateTime;
+
+import static hanta.bbyuck.egoapiserver.util.ClientVersionManager.*;
+import static hanta.bbyuck.egoapiserver.util.TimeCalculator.*;
 
 @Service
 @RequiredArgsConstructor
@@ -27,10 +33,9 @@ public class LolDuoMatchingService {
     private final LolDuoProfileCardRepository lolDuoProfileCardRepository;
     private final LolDuoRequestRepository lolDuoRequestRepository;
     private final UserRepository userRepository;
-    private final ClientVersionManager clientVersionManager;
 
     public void match(LolDuoMatchingRequestDto requestDto) {
-        clientVersionManager.checkClientVersion(requestDto.getClientVersion());
+        checkClientVersion(requestDto.getClientVersion());
 
         User reqUser = userRepository.find(requestDto.getGeneratedId());
         User opponent = lolDuoProfileCardRepository.findById(requestDto.getOpponentProfileCardId()).getOwner();
@@ -57,16 +62,49 @@ public class LolDuoMatchingService {
     }
 
     public void completeMatch(LolDuoMatchingRequestDto requestDto) {
-        clientVersionManager.checkClientVersion(requestDto.getClientVersion());
+        checkClientVersion(requestDto.getClientVersion());
 
-        User reqUser = userRepository.find(requestDto.getGeneratedId());
+        LolDuoMatching matching = lolDuoMatchingRepository.findById(requestDto.getMatchId());
+        User apiCaller = userRepository.find(requestDto.getGeneratedId());
+
+        // api 호출자가 다른 사람의 매칭에 대해 요청한 경우 권한 없음 예외 처리
+        if (matching.getRequester() != apiCaller && matching.getRespondent() != apiCaller) {
+            throw new UserAuthorizationException();
+        }
+/*
+ *                  1. 매칭상태 : MATCHING_ON -> 요청 수락한 유저(respondent)가 임의로 종료 -> 요청 보낸 유저(requester)상태 ACTIVE로 변경
+                    2. 매칭상태 : MATCHING -> 매칭에 참여한 유저 둘 중 아무나 종료 -> 유저 상태 둘다 변경필요
+                    3. 매칭상태 : MATCHING_OFF -> 매칭상태만 MATCHING_FINISH로 저장하고 평가 테이블로")
+ */
+
+        User requester = matching.getRequester();
+        User respondent = matching.getRespondent();
+
+        switch(matching.getMatchingStatus()) {
+            case MATCHING_ON:
+                userRepository.updateUserStatus(requester, UserStatus.ACTIVE);
+                userRepository.updateUserStatus(respondent, UserStatus.ACTIVE);
+                matching.setFinishTime();
+                matching.setMatchingStatus(LolDuoMatchingStatus.CANCEL);
+                break;
+            case MATCHING:
+                userRepository.updateUserStatus(apiCaller, UserStatus.LOL_DUO_MATCHING_FINISH);
+                if (isBeforeTenMinutes(matching.getStartTime(), LocalDateTime.now())) {
+
+                }
+                else {
+
+                }
+
+                break;
+            case MATCHING_OFF:
+                break;
+            default:
+                break;
+        }
 
 
         try {
-            LolDuoMatching matching = lolDuoMatchingRepository.find(reqUser);
-            matching.getRequester().updateUserStatus(UserStatus.ACTIVE);
-            matching.getRespondent().updateUserStatus(UserStatus.ACTIVE);
-
             lolDuoMatchingRepository.remove(matching);
         } catch (NoResultException e) {
             throw new BadRequestException("존재하지 않는 매치입니다.");
@@ -74,6 +112,8 @@ public class LolDuoMatchingService {
     }
 
     public LolDuoMatchingResponseDto findMatch(LolDuoMatchingRequestDto requestDto) {
+        checkClientVersion(requestDto.getClientVersion());
+
         try {
             User reqUser = userRepository.find(requestDto.getGeneratedId());
             LolDuoMatching matching = lolDuoMatchingRepository.find(reqUser);
@@ -87,7 +127,7 @@ public class LolDuoMatchingService {
                 opponentCard = lolDuoProfileCardRepository.find(matching.getRespondent());
             }
 
-            return makeResponse(reqUserCard, opponentCard);
+            return makeResponse(reqUserCard, opponentCard, matching.getId());
 
         } catch(NoResultException e) {
             throw new BadRequestException("존재하지 않는 매치입니다.");
@@ -95,9 +135,10 @@ public class LolDuoMatchingService {
     }
 
 
-    private LolDuoMatchingResponseDto makeResponse(LolDuoProfileCard reqCard, LolDuoProfileCard opponentCard) {
+    private LolDuoMatchingResponseDto makeResponse(LolDuoProfileCard reqCard, LolDuoProfileCard opponentCard, Long matchId) {
         LolDuoMatchingResponseDto responseDto = new LolDuoMatchingResponseDto();
 
+        responseDto.setMatchId(matchId);
 
         responseDto.setMyVoice(reqCard.getVoice());
         responseDto.setMySummonerName(reqCard.getSummonerName());

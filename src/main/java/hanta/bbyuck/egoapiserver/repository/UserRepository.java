@@ -1,7 +1,9 @@
 package hanta.bbyuck.egoapiserver.repository;
 
+import hanta.bbyuck.egoapiserver.domain.enumset.Game;
 import hanta.bbyuck.egoapiserver.domain.enumset.SnsVendor;
 import hanta.bbyuck.egoapiserver.domain.User;
+import hanta.bbyuck.egoapiserver.domain.enumset.UserStatus;
 import hanta.bbyuck.egoapiserver.util.AES256Util;
 import hanta.bbyuck.egoapiserver.util.SHA256Util;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +18,6 @@ import javax.persistence.NoResultException;
 @Transactional(readOnly = true, noRollbackFor = Exception.class)
 public class UserRepository {
     private final EntityManager em;
-    private final AES256Util aes256Util;
-    private final SHA256Util sha256Util;
 
 
     @Transactional
@@ -41,5 +41,13 @@ public class UserRepository {
                 .getSingleResult();
     }
 
+    @Transactional
+    public void updateGame(User user, Game game) {
+        user.updateGame(game);
+    }
 
+    @Transactional
+    public void updateUserStatus(User user, UserStatus userStatus) {
+        user.updateUserStatus(userStatus);
+    }
 }

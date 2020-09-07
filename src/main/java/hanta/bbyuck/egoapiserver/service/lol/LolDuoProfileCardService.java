@@ -25,6 +25,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static hanta.bbyuck.egoapiserver.util.ClientVersionManager.*;
 import static hanta.bbyuck.egoapiserver.util.ServiceUtil.addCardToProcessedDeck;
 
 @Service
@@ -32,10 +33,9 @@ import static hanta.bbyuck.egoapiserver.util.ServiceUtil.addCardToProcessedDeck;
 public class LolDuoProfileCardService {
     private final LolDuoProfileCardRepository lolDuoProfileCardRepository;
     private final UserRepository userRepository;
-    private final ClientVersionManager clientVersionManager;
 
     public void makeDuoProfileCard(LolDuoProfileCardMakeRequestDto requestDto) throws NoResultException{
-        clientVersionManager.checkClientVersion(requestDto.getClientVersion());
+        checkClientVersion(requestDto.getClientVersion());
 
         User reqUser = userRepository.find(requestDto.getGeneratedId());
 
@@ -68,7 +68,7 @@ public class LolDuoProfileCardService {
     }
 
     public LolDuoProfileCardResponseDto take(LolDuoProfileCardRequestDto requestDto) {
-        clientVersionManager.checkClientVersion(requestDto.getClientVersion());
+        checkClientVersion(requestDto.getClientVersion());
 
         try {
             User reqUser = userRepository.find(requestDto.getGeneratedId());
@@ -98,7 +98,7 @@ public class LolDuoProfileCardService {
     }
 
     public void updateMyCard(LolDuoProfileCardUpdateRequestDto requestDto) {
-        clientVersionManager.checkClientVersion(requestDto.getClientVersion());
+        checkClientVersion(requestDto.getClientVersion());
 
         // 수정시 authCheck 할 것
 
@@ -278,7 +278,7 @@ public class LolDuoProfileCardService {
 */
 
     public LolProcessedDuoProfileCardDeck takeDeck(LolDuoMatchDeckRequestDto requestDto) {
-        clientVersionManager.checkClientVersion(requestDto.getClientVersion());
+        checkClientVersion(requestDto.getClientVersion());
 
         LolProcessedDuoProfileCardDeck deck = new LolProcessedDuoProfileCardDeck();
         User owner = userRepository.find(requestDto.getGeneratedId());

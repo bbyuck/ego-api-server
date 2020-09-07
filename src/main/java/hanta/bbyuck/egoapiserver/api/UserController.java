@@ -1,9 +1,11 @@
 package hanta.bbyuck.egoapiserver.api;
 
 import hanta.bbyuck.egoapiserver.request.UserAuthRequestDto;
+import hanta.bbyuck.egoapiserver.request.UserGameSelectDto;
 import hanta.bbyuck.egoapiserver.response.LoginDto;
 import hanta.bbyuck.egoapiserver.response.ResponseMessage;
 import hanta.bbyuck.egoapiserver.response.UserAuthResponseDto;
+import hanta.bbyuck.egoapiserver.response.UserInfoResponseDto;
 import hanta.bbyuck.egoapiserver.security.JwtTokenProvider;
 import hanta.bbyuck.egoapiserver.service.ESTITestService;
 import hanta.bbyuck.egoapiserver.service.UserService;
@@ -13,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping(value = "/api/v0.0.1/")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
@@ -31,7 +32,7 @@ public class UserController {
             @ApiImplicitParam(name = "email", value = "SNS 벤더로부터 제공받은 유저 email", defaultValue = "kanghyuk@gmail.com"),
             @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00")
     })
-    @GetMapping("/auth")
+    @GetMapping("/api/v0.0.1/auth")
     public ResponseMessage login(@RequestBody UserAuthRequestDto requestDto) {
         LoginDto loginDto = userService.login(requestDto);
 
@@ -57,7 +58,7 @@ public class UserController {
             @ApiImplicitParam(name = "email", value = "SNS 벤더로부터 제공받은 유저 email", defaultValue = "kanghyuk@gmail.com"),
             @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00")
     })
-    @PostMapping("/auth")
+    @PostMapping("/api/v0.0.1/auth")
     public ResponseMessage join(@RequestBody UserAuthRequestDto requestDto) {
         LoginDto loginDto = userService.join(requestDto);
 
@@ -70,6 +71,27 @@ public class UserController {
 
         return new ResponseMessage("Auth API call success", userAuthResponseDto);
     }
+
+
+    @PutMapping("/user/api/v0.0.1/fcm-auth")
+    public ResponseMessage updateFcmAuth(@RequestBody UserAuthRequestDto requestDto) {
+        userService.refreshToken(requestDto);
+        return new ResponseMessage("FCM AUTH TOKEN UPDATE SUCCESS");
+    }
+
+    @PutMapping("/user/api/v0.0.1/game")
+    public ResponseMessage selectGame(@RequestBody UserGameSelectDto requestDto) {
+        userService.updateGame(requestDto);
+        return new ResponseMessage("YOU SIGN IN " + requestDto.getGame().toString());
+    }
+
+    @GetMapping("/user/api/v0.0.1/game")
+    public ResponseMessage findLastGame(@RequestBody UserGameSelectDto requestDto){
+        UserInfoResponseDto responseDto = userService.findLastPlayGame(requestDto);
+        if (responseDto.getGame() == null) return new ResponseMessage("마지막으로 게임을 한 기록이 없음");
+        else return new ResponseMessage("마지막으로 한 게임", responseDto);
+    }
+
 
 //    @PostMapping("/api/v0.0.1/user/esti-test")
 //    public ResponseMessage estiTest(@RequestBody ESTITestAnswerRequestDto requestDto) {

@@ -8,7 +8,8 @@ import java.time.LocalDateTime;
 
 @Data
 public class LolDuoMatchingResponseDto {
-    LocalDateTime matchStartTime;
+    private Long matchId;
+    private LocalDateTime matchStartTime;
 
     private Boolean myVoice;
     private String mySummonerName;

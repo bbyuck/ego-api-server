@@ -30,4 +30,8 @@ public class LolDuoMatchingRepository {
                 .setParameter("user", user)
                 .getSingleResult();
     }
+
+    public LolDuoMatching findById(Long id) {
+        return em.find(LolDuoMatching.class, id);
+    }
 }

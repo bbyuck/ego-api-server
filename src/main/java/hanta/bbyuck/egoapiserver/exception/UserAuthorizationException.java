@@ -3,25 +3,25 @@ package hanta.bbyuck.egoapiserver.exception;
 import hanta.bbyuck.egoapiserver.exception.AbstractResponseException;
 import org.springframework.http.HttpStatus;
 
-public class UserAuthenticationException extends AbstractResponseException {
+public class UserAuthorizationException extends AbstractResponseException {
 
     private static final long serialVersionUID = 1L;
-    private static final String ERR_CODE = "AUTH-100";
-    private static final String ERR_MSG = "인증 실패";
+    private static final String ERR_CODE = "AUTH-101";
+    private static final String ERR_MSG = "인증 실패 : 권한이 없습니다.";
 
-    public UserAuthenticationException() {
+    public UserAuthorizationException() {
         super();
     }
 
-    public UserAuthenticationException(Throwable e) {
+    public UserAuthorizationException(Throwable e) {
         super(e);
     }
 
-    public UserAuthenticationException(String errorMessage) {
+    public UserAuthorizationException(String errorMessage) {
         super(ERR_MSG + errorMessage);
     }
 
-    public UserAuthenticationException(String errorMessage, Throwable e) {
+    public UserAuthorizationException(String errorMessage, Throwable e) {
         super(errorMessage, e);
     }
 

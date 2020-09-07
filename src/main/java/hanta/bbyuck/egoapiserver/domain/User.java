@@ -1,5 +1,6 @@
 package hanta.bbyuck.egoapiserver.domain;
 
+import hanta.bbyuck.egoapiserver.domain.enumset.Game;
 import hanta.bbyuck.egoapiserver.domain.enumset.SnsVendor;
 import hanta.bbyuck.egoapiserver.domain.enumset.UserStatus;
 import lombok.Getter;
@@ -32,6 +33,7 @@ public class User implements UserDetails {
     @Column(name = "fcm_token", length = 250)
     private String fcmToken;
 
+    // Spring Security
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> privileges = new ArrayList<>();
 
@@ -45,7 +47,7 @@ public class User implements UserDetails {
     @Column(name = "email", length = 250)
     private String email;
 
-    @Column(name = "matching_status", length = 50)
+    @Column(name = "user_status", length = 50)
     @Enumerated(EnumType.STRING)
     private UserStatus status;
 
@@ -63,15 +65,19 @@ public class User implements UserDetails {
     @Column(name = "reg_time")
     private LocalDateTime regTime;
 
-
     @Column(name = "generated_id", length = 255)
     private String generatedId;
 
-    @Column
+    @Column(name = "salt", length = 255)
     private String salt;
 
     @Column(name = "generated_pw", length = 255)
     private String generatedPw;
+
+    @Column(name = "game", length = 45)
+    @Enumerated(EnumType.STRING)
+    private Game game;
+
     /*
      * X-AUTH-TOKEN 관련
      */
@@ -155,5 +161,6 @@ public class User implements UserDetails {
     }
     public void updateFcmToken(String fcmToken) { this.fcmToken = fcmToken; }
 
+    public void updateGame(Game game) { this.game = game; }
 
 }

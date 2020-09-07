@@ -9,25 +9,12 @@ import java.util.Random;
 
 @Slf4j
 public class SHA256Util {
-    private static volatile SHA256Util INSTANCE;
 
-    public static SHA256Util getInstance() {
-        if (INSTANCE == null) {
-            synchronized (SHA256Util.class) {
-                if (INSTANCE == null)
-                    INSTANCE = new SHA256Util();
-            }
-        }
-        return INSTANCE;
-    }
-
-    private SHA256Util() {}
-
-    public String encode(String input, String salt) {
+    public static String encode(String input, String salt) {
         return encode(input, salt.getBytes());
     }
 
-    public String encode(String input, byte[] salt) {
+    public static String encode(String input, byte[] salt) {
         try {
             String result = "";
             byte[] a = input.getBytes();
@@ -53,7 +40,7 @@ public class SHA256Util {
         }
     }
 
-    public String generateSalt() {
+    public static String generateSalt() {
         Random random = new Random();
 
         byte[] salt = new byte[8];

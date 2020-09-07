@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static hanta.bbyuck.egoapiserver.util.ClientVersionManager.*;
 import static hanta.bbyuck.egoapiserver.util.ServiceUtil.addCardToRequestDeck;
 
 @Service
@@ -28,11 +29,11 @@ public class LolDuoRequestService {
     private final LolDuoRequestRepository lolDuoRequestRepository;
     private final LolDuoProfileCardRepository lolDuoProfileCardRepository;
     private final UserRepository userRepository;
-    private final ClientVersionManager clientVersionManager;
+
     private static final int MAX_REQUEST_COUNT = 5;
 
     public void sendRequest(LolDuoRequestDto requestDto) {
-        clientVersionManager.checkClientVersion(requestDto.getClientVersion());
+        checkClientVersion(requestDto.getClientVersion());
 
         LolDuoRequest duoRequest = new LolDuoRequest();
 
@@ -45,9 +46,6 @@ public class LolDuoRequestService {
 
         if (lolDuoRequestRepository.findSend(sender).size() >= MAX_REQUEST_COUNT) {
             throw new BadRequestException("보낼 수 있는 요청 횟수를 모두 사용했습니다.");
-        }
-        if (lolDuoRequestRepository.findReceive(receiver).size() >= MAX_REQUEST_COUNT) {
-            throw new BadRequestException("상대방이 받을 수 있는 요청 횟수를 모두 사용했습니다.");
         }
 
 
@@ -73,7 +71,7 @@ public class LolDuoRequestService {
      * 내가 받은 요청 거절 (메서드 호출자가 receiver)
      */
     public void rejectRequest(LolDuoRequestDto requestDto) {
-        clientVersionManager.checkClientVersion(requestDto.getClientVersion());
+        checkClientVersion(requestDto.getClientVersion());
 
 
        User reqUser = userRepository.find(requestDto.getGeneratedId());
@@ -88,7 +86,7 @@ public class LolDuoRequestService {
      * 내가 보낸 요청 취소 (메서드 호출자가 sender)
      */
     public void cancelRequest(LolDuoRequestDto requestDto) {
-        clientVersionManager.checkClientVersion(requestDto.getClientVersion());
+        checkClientVersion(requestDto.getClientVersion());
 
         User reqUser = userRepository.find(requestDto.getGeneratedId());
         User opponent = lolDuoProfileCardRepository.findById(requestDto.getOpponentProfileCardId()).getOwner();
@@ -99,14 +97,14 @@ public class LolDuoRequestService {
     }
 
     public void rejectAllRequest(LolDuoRequestDto requestDto) {
-        clientVersionManager.checkClientVersion(requestDto.getClientVersion());
+        checkClientVersion(requestDto.getClientVersion());
 
         User reqUser = userRepository.find(requestDto.getGeneratedId());
         lolDuoRequestRepository.removeAllReceived(reqUser);
     }
 
     public void cancelAllRequest(LolDuoRequestDto requestDto) {
-        clientVersionManager.checkClientVersion(requestDto.getClientVersion());
+        checkClientVersion(requestDto.getClientVersion());
 
         User reqUser = userRepository.find(requestDto.getGeneratedId());
         lolDuoRequestRepository.removeAllSent(reqUser);
@@ -114,7 +112,7 @@ public class LolDuoRequestService {
 
     // 메소드 호출한 유저가 sender
     public LolRequestDuoProfileCardDeck getSendRequest(LolDuoRequestGetDto requestDto) {
-        clientVersionManager.checkClientVersion(requestDto.getClientVersion());
+        checkClientVersion(requestDto.getClientVersion());
 
         User reqUser = userRepository.find(requestDto.getUserAuth());
         List<LolDuoRequest> sentRequestList = lolDuoRequestRepository.findSend(reqUser);
@@ -136,7 +134,7 @@ public class LolDuoRequestService {
 
     // method 호출한 유저가 receiver
     public LolRequestDuoProfileCardDeck getReceiveRequest(LolDuoRequestGetDto requestDto) {
-        clientVersionManager.checkClientVersion(requestDto.getClientVersion());
+        checkClientVersion(requestDto.getClientVersion());
 
 
         User reqUser = userRepository.find(requestDto.getUserAuth());

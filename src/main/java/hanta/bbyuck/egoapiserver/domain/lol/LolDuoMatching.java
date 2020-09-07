@@ -38,11 +38,11 @@ public class LolDuoMatching {
     @Column(name = "matching_status", length = 45)
     private LolDuoMatchingStatus matchingStatus;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "requester_id", referencedColumnName = "USER_ID")
     private User requester;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "respondent_id", referencedColumnName = "USER_ID")
     private User respondent;
 
