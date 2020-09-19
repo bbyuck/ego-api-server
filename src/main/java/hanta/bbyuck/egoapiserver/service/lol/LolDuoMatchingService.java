@@ -1,6 +1,10 @@
 package hanta.bbyuck.egoapiserver.service.lol;
 
+import hanta.bbyuck.egoapiserver.domain.Experience;
 import hanta.bbyuck.egoapiserver.domain.User;
+import hanta.bbyuck.egoapiserver.domain.enumset.ExpStatus;
+import hanta.bbyuck.egoapiserver.domain.enumset.Game;
+import hanta.bbyuck.egoapiserver.domain.enumset.GameType;
 import hanta.bbyuck.egoapiserver.domain.enumset.UserStatus;
 import hanta.bbyuck.egoapiserver.domain.lol.LolDuoMatching;
 import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolDuoMatchingStatus;
@@ -9,6 +13,7 @@ import hanta.bbyuck.egoapiserver.domain.lol.LolDuoRequest;
 import hanta.bbyuck.egoapiserver.exception.UserAuthenticationException;
 import hanta.bbyuck.egoapiserver.exception.UserAuthorizationException;
 import hanta.bbyuck.egoapiserver.exception.http.BadRequestException;
+import hanta.bbyuck.egoapiserver.repository.ExperienceRepository;
 import hanta.bbyuck.egoapiserver.repository.UserRepository;
 import hanta.bbyuck.egoapiserver.repository.lol.LolDuoMatchingRepository;
 import hanta.bbyuck.egoapiserver.repository.lol.LolDuoProfileCardRepository;
@@ -33,6 +38,7 @@ public class LolDuoMatchingService {
     private final LolDuoProfileCardRepository lolDuoProfileCardRepository;
     private final LolDuoRequestRepository lolDuoRequestRepository;
     private final UserRepository userRepository;
+    private final ExperienceRepository experienceRepository;
 
     public void match(LolDuoMatchingRequestDto requestDto) {
         checkClientVersion(requestDto.getClientVersion());
@@ -71,11 +77,6 @@ public class LolDuoMatchingService {
         if (matching.getRequester() != apiCaller && matching.getRespondent() != apiCaller) {
             throw new UserAuthorizationException();
         }
-/*
- *                  1. 매칭상태 : MATCHING_ON -> 요청 수락한 유저(respondent)가 임의로 종료 -> 요청 보낸 유저(requester)상태 ACTIVE로 변경
-                    2. 매칭상태 : MATCHING -> 매칭에 참여한 유저 둘 중 아무나 종료 -> 유저 상태 둘다 변경필요
-                    3. 매칭상태 : MATCHING_OFF -> 매칭상태만 MATCHING_FINISH로 저장하고 평가 테이블로")
- */
 
         User requester = matching.getRequester();
         User respondent = matching.getRespondent();
@@ -84,30 +85,42 @@ public class LolDuoMatchingService {
             case MATCHING_ON:
                 userRepository.updateUserStatus(requester, UserStatus.ACTIVE);
                 userRepository.updateUserStatus(respondent, UserStatus.ACTIVE);
-                matching.setFinishTime();
-                matching.setMatchingStatus(LolDuoMatchingStatus.CANCEL);
+                // 매칭 삭제 -> cancel
+                lolDuoMatchingRepository.setFinishTime(matching);
+                lolDuoMatchingRepository.setMatchingStatus(matching, LolDuoMatchingStatus.CANCEL);
+
                 break;
             case MATCHING:
+                // 먼저 api 호출한 유저 매칭 상태-> LOL_DUO_MATCHING_FINISH로 보내서 평가창 무조건 뜨도록 고정
+                // 아직 방을 안나온 유저는 MATCHING 상태
+
                 userRepository.updateUserStatus(apiCaller, UserStatus.LOL_DUO_MATCHING_FINISH);
-                if (isBeforeTenMinutes(matching.getStartTime(), LocalDateTime.now())) {
+                lolDuoMatchingRepository.setFinishTime(matching);
+                lolDuoMatchingRepository.setMatchingStatus(matching, LolDuoMatchingStatus.MATCHING_OFF);
 
-                }
-                else {
-
+                if (!isBeforeTenMinutes(matching.getStartTime(), LocalDateTime.now())) {
+                    // 10분 이후라면 경험치 제공 -> 경험치 테이블에 저장
+                    Experience experience = new Experience();
+                    experience.makeExp(apiCaller, Game.LOL, GameType.DUO, ExpStatus.COMPLETE);
+                    experienceRepository.save(experience);
                 }
 
                 break;
             case MATCHING_OFF:
+                // 나중에 나오는 유저도 10분 이전에 나오면 경험치 안줌
+                userRepository.updateUserStatus(apiCaller, UserStatus.LOL_DUO_MATCHING_FINISH);
+                lolDuoMatchingRepository.setMatchingStatus(matching, LolDuoMatchingStatus.FINISHED);
+
+                if (!isBeforeTenMinutes(matching.getStartTime(), LocalDateTime.now())) {
+                    // 10분 이후라면 경험치 제공 -> 경험치 테이블에 저장
+
+                    Experience experience = new Experience();
+                    experience.makeExp(apiCaller, Game.LOL, GameType.DUO, ExpStatus.COMPLETE);
+                    experienceRepository.save(experience);
+                }
                 break;
             default:
-                break;
-        }
-
-
-        try {
-            lolDuoMatchingRepository.remove(matching);
-        } catch (NoResultException e) {
-            throw new BadRequestException("존재하지 않는 매치입니다.");
+                throw new BadRequestException("존재하지 않는 매칭입니다.");
         }
     }
 
@@ -115,19 +128,24 @@ public class LolDuoMatchingService {
         checkClientVersion(requestDto.getClientVersion());
 
         try {
-            User reqUser = userRepository.find(requestDto.getGeneratedId());
-            LolDuoMatching matching = lolDuoMatchingRepository.find(reqUser);
+            User apiCaller = userRepository.find(requestDto.getGeneratedId());
 
-            LolDuoProfileCard reqUserCard = lolDuoProfileCardRepository.find(reqUser);
+            if (!apiCaller.getStatus().equals(UserStatus.LOL_DUO_MATCHING) && !apiCaller.getStatus().equals(UserStatus.LOL_DUO_MATCHING_READY) && !apiCaller.getStatus().equals(UserStatus.LOL_DUO_MATCHING_FINISH)) {
+                throw new BadRequestException("현재 롤 듀오 매칭중이 아닙니다.");
+            }
+
+            LolDuoMatching matching = lolDuoMatchingRepository.find(apiCaller);
+
+            LolDuoProfileCard apiCallerCard = lolDuoProfileCardRepository.find(apiCaller);
             LolDuoProfileCard opponentCard = null;
 
-            if (matching.getRespondent() == reqUser) {
+            if (matching.getRespondent() == apiCaller) {
                 opponentCard = lolDuoProfileCardRepository.find(matching.getRequester());
-            } else if (matching.getRequester() == reqUser) {
+            } else if (matching.getRequester() == apiCaller) {
                 opponentCard = lolDuoProfileCardRepository.find(matching.getRespondent());
             }
 
-            return makeResponse(reqUserCard, opponentCard, matching.getId());
+            return makeResponse(apiCallerCard, opponentCard, matching.getId());
 
         } catch(NoResultException e) {
             throw new BadRequestException("존재하지 않는 매치입니다.");

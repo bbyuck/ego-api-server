@@ -2,6 +2,7 @@ package hanta.bbyuck.egoapiserver.repository.lol;
 
 import hanta.bbyuck.egoapiserver.domain.User;
 import hanta.bbyuck.egoapiserver.domain.lol.LolDuoMatching;
+import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolDuoMatchingStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,12 @@ public class LolDuoMatchingRepository {
     public void remove(LolDuoMatching matching) {
         em.remove(matching);
     }
+
+    @Transactional
+    public void setFinishTime(LolDuoMatching matching) { matching.setFinishTime(); }
+
+    @Transactional
+    public void setMatchingStatus(LolDuoMatching matching, LolDuoMatchingStatus status) { matching.setMatchingStatus(status);}
 
     public LolDuoMatching find(User user) {
         String query = "select ldipm from LolDuoMatching ldipm where ldipm.requester = :user or ldipm.respondent = :user";
