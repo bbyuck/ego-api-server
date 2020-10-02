@@ -11,7 +11,10 @@ import hanta.bbyuck.egoapiserver.service.lol.LolDuoProfileCardService;
 import hanta.bbyuck.egoapiserver.service.lol.LolDuoRequestService;
 import hanta.bbyuck.egoapiserver.util.AES256Util;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 
 
@@ -37,10 +40,9 @@ public class InitDB {
         private final LolDuoRequestService lolDuoRequestService;
 
         private final LolDuoProfileCardService lolDuoProfileCardService;
-        private final AES256Util aes256Util;
         private final EntityManager em;
 
-        private static final int TEST_USER_COUNT = 3000;
+        private static final int TEST_USER_COUNT = 40;
         private static final int TEST_REQUEST_COUNT = 100;
 
         public void dbInit1() {
@@ -58,10 +60,7 @@ public class InitDB {
                 user.setClientVersion("v1.00");
                 userService.join(user);
 
-//                if(i % 7 == 0 || i % 4 == 0) {
-//                    User userEntity = userRepository.findBySnsId(user.getSnsVendor(), aes256Util.encode(user.getSnsId()));
-//                    userEntity.updateUserStatus(UserStatus.LOL_DUO_MATHCING);
-//                }
+
                 em.flush();
             }
 
@@ -76,7 +75,7 @@ public class InitDB {
 
 
 
-                profileCardDto.setGeneratedId(aes256Util.encode(snsVendor + " - " + snsId));
+                profileCardDto.setGeneratedId(AES256Util.encode(snsVendor + " - " + snsId));
 
                 Boolean voice;
                 String summonerName = "소환사명" + i;

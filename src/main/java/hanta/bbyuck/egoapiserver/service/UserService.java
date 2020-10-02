@@ -4,8 +4,10 @@ import hanta.bbyuck.egoapiserver.domain.User;
 import hanta.bbyuck.egoapiserver.repository.UserRepository;
 import hanta.bbyuck.egoapiserver.request.UserAuthRequestDto;
 import hanta.bbyuck.egoapiserver.request.UserGameSelectDto;
+import hanta.bbyuck.egoapiserver.request.UserStatusRequestDto;
 import hanta.bbyuck.egoapiserver.response.LoginDto;
 import hanta.bbyuck.egoapiserver.response.UserInfoResponseDto;
+import hanta.bbyuck.egoapiserver.response.UserStatusResponseDto;
 import hanta.bbyuck.egoapiserver.util.AES256Util;
 import hanta.bbyuck.egoapiserver.util.ClientVersionManager;
 import hanta.bbyuck.egoapiserver.util.SHA256Util;
@@ -16,6 +18,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.NoResultException;
+
+import java.time.LocalDateTime;
 
 import static hanta.bbyuck.egoapiserver.util.ClientVersionManager.*;
 
@@ -104,5 +108,16 @@ public class UserService implements UserDetailsService {
         checkClientVersion(requestDto.getClientVersion());
         User user = userRepository.find(requestDto.getGeneratedId());
         userRepository.updateGame(user, requestDto.getGame());
+    }
+
+    public UserStatusResponseDto findStatus(UserStatusRequestDto requestDto) {
+        checkClientVersion(requestDto.getClientVersion());
+        User apiCaller = userRepository.find(requestDto.getGeneratedId());
+        userRepository.updateLastActiveTime(apiCaller);
+        UserStatusResponseDto responseDto = new UserStatusResponseDto();
+        responseDto.setLastActiveTime(LocalDateTime.now());
+        responseDto.setStatus(apiCaller.getStatus());
+
+        return responseDto;
     }
 }

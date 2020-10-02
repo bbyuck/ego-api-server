@@ -4,6 +4,8 @@ import hanta.bbyuck.egoapiserver.domain.User;
 import hanta.bbyuck.egoapiserver.domain.enumset.UserStatus;
 import hanta.bbyuck.egoapiserver.domain.lol.LolDuoProfileCard;
 import hanta.bbyuck.egoapiserver.domain.lol.LolDuoRequest;
+import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolRequestStatus;
+import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolRequestType;
 import hanta.bbyuck.egoapiserver.exception.http.BadRequestException;
 import hanta.bbyuck.egoapiserver.repository.UserRepository;
 import hanta.bbyuck.egoapiserver.repository.lol.LolDuoProfileCardRepository;
@@ -63,6 +65,8 @@ public class LolDuoRequestService {
         duoRequest.assignSender(sender);
         duoRequest.assignReceiver(receiver);
         duoRequest.updateRequestTime();
+        duoRequest.setStatus(LolRequestStatus.ACTIVE);
+        duoRequest.setType(LolRequestType.NORMAL);
 
         lolDuoRequestRepository.save(duoRequest);
     }
@@ -79,7 +83,7 @@ public class LolDuoRequestService {
        
        LolDuoRequest request = lolDuoRequestRepository.findRequest(opponent, reqUser);
        
-       lolDuoRequestRepository.remove(request);
+       lolDuoRequestRepository.updateRequestStatus(request, LolRequestStatus.DELETED);
     }
 
     /*
@@ -93,21 +97,21 @@ public class LolDuoRequestService {
 
         LolDuoRequest request = lolDuoRequestRepository.findRequest(reqUser, opponent);
 
-        lolDuoRequestRepository.remove(request);
+        lolDuoRequestRepository.updateRequestStatus(request, LolRequestStatus.DELETED);
     }
 
     public void rejectAllRequest(LolDuoRequestDto requestDto) {
         checkClientVersion(requestDto.getClientVersion());
 
         User reqUser = userRepository.find(requestDto.getGeneratedId());
-        lolDuoRequestRepository.removeAllReceived(reqUser);
+        lolDuoRequestRepository.updateAllReceivedRequest(reqUser, LolRequestStatus.DELETED);
     }
 
     public void cancelAllRequest(LolDuoRequestDto requestDto) {
         checkClientVersion(requestDto.getClientVersion());
 
         User reqUser = userRepository.find(requestDto.getGeneratedId());
-        lolDuoRequestRepository.removeAllSent(reqUser);
+        lolDuoRequestRepository.updateAllSentRequest(reqUser, LolRequestStatus.DELETED);
     }
 
     // 메소드 호출한 유저가 sender

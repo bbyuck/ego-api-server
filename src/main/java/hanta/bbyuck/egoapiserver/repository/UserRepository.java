@@ -50,4 +50,9 @@ public class UserRepository {
     public void updateUserStatus(User user, UserStatus userStatus) {
         user.updateUserStatus(userStatus);
     }
+
+    @Transactional
+    public void updateLastActiveTime(User apiCaller) {
+        apiCaller.updateActiveTime();
+    }
 }

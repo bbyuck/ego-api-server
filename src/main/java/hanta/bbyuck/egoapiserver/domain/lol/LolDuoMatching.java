@@ -31,9 +31,6 @@ public class LolDuoMatching {
     @Column(name = "finish_time")
     private LocalDateTime finishTime;
 
-    @Column(name = "related_user_count")
-    private int relatedUserCount;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "matching_status", length = 45)
     private LolDuoMatchingStatus matchingStatus;

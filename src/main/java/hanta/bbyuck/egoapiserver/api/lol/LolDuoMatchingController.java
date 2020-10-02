@@ -1,5 +1,6 @@
 package hanta.bbyuck.egoapiserver.api.lol;
 
+import hanta.bbyuck.egoapiserver.domain.lol.LolDuoMatching;
 import hanta.bbyuck.egoapiserver.request.lol.LolDuoMatchingRequestDto;
 import hanta.bbyuck.egoapiserver.response.ResponseMessage;
 import hanta.bbyuck.egoapiserver.response.lol.LolDuoMatchingResponseDto;
@@ -11,9 +12,11 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.ws.Response;
+
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/user/lol/duo")
+@RequestMapping(value = "/user/api/v0.0.1/lol/duo")
 public class LolDuoMatchingController {
 
     private final LolDuoMatchingService lolDuoMatchingService;
@@ -31,7 +34,7 @@ public class LolDuoMatchingController {
     @GetMapping("/match")
     public ResponseMessage getMyInProgressMatching(@RequestBody LolDuoMatchingRequestDto requestDto) {
         LolDuoMatchingResponseDto responseDto = lolDuoMatchingService.findMatch(requestDto);
-        return new ResponseMessage("Get Duo Matching info API Call Success!", responseDto);
+        return new ResponseMessage("Get Duo Matching info API Call Success!","LDM-OBJ-001" ,responseDto);
     }
 
     @ApiOperation(value = "매칭 수락",
@@ -65,5 +68,22 @@ public class LolDuoMatchingController {
         return new ResponseMessage("Complete Duo Match API Call Success!");
     }
 
+    @PutMapping("/match")
+    public ResponseMessage enterMatch(@RequestBody LolDuoMatchingRequestDto requestDto) {
+        lolDuoMatchingService.enterMatch(requestDto);
+        return new ResponseMessage("매칭방 입장", "LDM-NONE-003");
+    }
+
+    @PostMapping("/match/evaluation")
+    public ResponseMessage evaluateOpponent(@RequestBody LolDuoMatchingRequestDto requestDto) {
+        lolDuoMatchingService.evaluateOpponent(requestDto);
+        return new ResponseMessage("평가 완료", "LDM-NONE-005");
+    }
+
+    @PostMapping("/match/report")
+    public ResponseMessage reportOpponent(@RequestBody LolDuoMatchingRequestDto requestDto) {
+        lolDuoMatchingService.reportOpponent(requestDto);
+        return new ResponseMessage("신고 완료", "LDM-NONE-006");
+    }
 }
 

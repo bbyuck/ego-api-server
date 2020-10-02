@@ -61,7 +61,7 @@ public class LolDuoProfileCardController {
     @GetMapping("/my-card")
     public ResponseMessage getDuoProfile(@RequestBody LolDuoProfileCardRequestDto requestDto) {
         LolDuoProfileCardResponseDto responseDto = lolDuoProfileCardService.take(requestDto);
-        return new ResponseMessage("Duo Profile Card Get API Call Success!", responseDto);
+        return new ResponseMessage("Duo Profile Card Get API Call Success!", "LDPC-OBJ-002", responseDto);
     }
 
 
@@ -105,6 +105,6 @@ public class LolDuoProfileCardController {
     @GetMapping("/match-deck")
     public ResponseMessage getMatchingDeck(@RequestBody LolDuoMatchDeckRequestDto requestDto) {
         LolProcessedDuoProfileCardDeck deck = lolDuoProfileCardService.takeDeck(requestDto);
-        return new ResponseMessage("Lol duo profile card deck return API Call Success!", deck);
+        return new ResponseMessage("Lol duo profile card deck return API Call Success!", "LDPC-OBJ-004", deck);
     }
 }

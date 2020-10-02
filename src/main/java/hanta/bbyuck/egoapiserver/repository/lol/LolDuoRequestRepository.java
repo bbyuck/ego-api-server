@@ -2,6 +2,7 @@ package hanta.bbyuck.egoapiserver.repository.lol;
 
 import hanta.bbyuck.egoapiserver.domain.User;
 import hanta.bbyuck.egoapiserver.domain.lol.LolDuoRequest;
+import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolRequestStatus;
 import hanta.bbyuck.egoapiserver.exception.http.NotFoundException;
 import hanta.bbyuck.egoapiserver.request.lol.LolDuoRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -43,35 +44,64 @@ public class LolDuoRequestRepository {
     }
 
     public LolDuoRequest findRequest(User sender, User receiver){
-        String query = "select ldr from LolDuoRequest ldr where ldr.sender =: sender and ldr.receiver =: receiver";
+        String query = "select ldr from LolDuoRequest ldr where (ldr.sender =: sender and ldr.receiver =: receiver) and ldr.status =: active";
         return em.createQuery(query, LolDuoRequest.class)
                 .setParameter("sender", sender)
                 .setParameter("receiver", receiver)
+                .setParameter("active", LolRequestStatus.ACTIVE)
                 .getSingleResult();
     }
 
     public Long isExistRequest(User sender, User receiver) {
-        String query = "select count(ldr) from LolDuoRequest ldr where ldr.sender =: sender and ldr.receiver =: receiver";
+        String query = "select count(ldr) from LolDuoRequest ldr where ldr.sender =: sender and ldr.receiver =: receiver and ldr.status =: active";
         return em.createQuery(query, Long.class)
                 .setParameter("sender", sender)
                 .setParameter("receiver", receiver)
+                .setParameter("active", LolRequestStatus.ACTIVE)
                 .getSingleResult();
     }
 
 
     public List<LolDuoRequest> findSend(User user) {
-        String query = "select ldr from LolDuoRequest ldr where ldr.sender = :user";
+        String query = "select ldr from LolDuoRequest ldr where ldr.sender = :user and ldr.status = :active";
 
         return em.createQuery(query, LolDuoRequest.class)
                 .setParameter("user", user)
+                .setParameter("active", LolRequestStatus.ACTIVE)
                 .getResultList();
     }
 
     public List<LolDuoRequest> findReceive(User user) {
-        String query = "select ldr from LolDuoRequest ldr where ldr.receiver = :user";
+        String query = "select ldr from LolDuoRequest ldr where ldr.receiver = :user and ldr.status = :active";
 
         return em.createQuery(query, LolDuoRequest.class)
                 .setParameter("user", user)
+                .setParameter("active", LolRequestStatus.ACTIVE)
                 .getResultList();
+    }
+
+    @Transactional
+    public void updateAllSentRequest(User apiCaller, LolRequestStatus status) {
+        String query = "update LolDuoRequest ldr set ldr.status =: status where ldr.sender = :user and ldr.status = : now";
+        em.createQuery(query)
+                .setParameter("status", status)
+                .setParameter("user", apiCaller)
+                .setParameter("now", LolRequestStatus.ACTIVE)
+                .executeUpdate();
+    }
+
+    @Transactional
+    public void updateRequestStatus(LolDuoRequest request, LolRequestStatus status) {
+        request.setStatus(status);
+    }
+
+    @Transactional
+    public void updateAllReceivedRequest(User apiCaller, LolRequestStatus status) {
+        String query = "update LolDuoRequest ldr set ldr.status =: status where ldr.receiver = :user and ldr.status = : now";
+        em.createQuery(query)
+                .setParameter("status", status)
+                .setParameter("user", apiCaller)
+                .setParameter("now", LolRequestStatus.ACTIVE)
+                .executeUpdate();
     }
 }

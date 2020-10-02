@@ -52,7 +52,7 @@ public class LolDuoRequestController {
     @GetMapping("/sent-request")
     public ResponseMessage getSentRequest(@RequestBody LolDuoRequestGetDto requestDto) {
         LolRequestDuoProfileCardDeck sentRequestDeck = lolDuoRequestService.getSendRequest(requestDto);
-        return new ResponseMessage("Sent Request List Get API Call Success", sentRequestDeck);
+        return new ResponseMessage("Sent Request List Get API Call Success", "LDR-OBJ-001", sentRequestDeck);
     }
 
     @ApiOperation(value = "롤 듀오 받은 신청 목록",
@@ -70,7 +70,7 @@ public class LolDuoRequestController {
     @GetMapping("/received-request")
     public ResponseMessage getReceivedRequest(@RequestBody LolDuoRequestGetDto requestDto) {
         LolRequestDuoProfileCardDeck receivedRequestDeck = lolDuoRequestService.getReceiveRequest(requestDto);
-        return new ResponseMessage("Sent Request List Get API Call Success", receivedRequestDeck);
+        return new ResponseMessage("Sent Request List Get API Call Success", "LDR-OBJ-002" ,receivedRequestDeck);
     }
 
     @ApiOperation(value = "롤 듀오 보낸 요청 취소",

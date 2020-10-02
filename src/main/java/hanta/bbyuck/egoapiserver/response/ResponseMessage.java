@@ -18,8 +18,17 @@ public class ResponseMessage {
     private String referedURL;
     private Object returnObj;
 
-    public ResponseMessage(String msg, Object returnObj) {
-        this.code = "success";
+    public ResponseMessage(String msg, String code ,Object returnObj) {
+        this.code = code;
+        this.status = true;
+        this.message = msg;
+        this.timestamp = LocalDateTime.now();
+        this.returnObj = returnObj;
+        this.referedURL = "";
+    }
+
+    public ResponseMessage(String msg, String code) {
+        this.code = code;
         this.status = true;
         this.message = msg;
         this.timestamp = LocalDateTime.now();

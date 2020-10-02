@@ -10,6 +10,7 @@ import hanta.bbyuck.egoapiserver.domain.lol.LolDuoMatching;
 import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolDuoMatchingStatus;
 import hanta.bbyuck.egoapiserver.domain.lol.LolDuoProfileCard;
 import hanta.bbyuck.egoapiserver.domain.lol.LolDuoRequest;
+import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolRequestStatus;
 import hanta.bbyuck.egoapiserver.exception.UserAuthenticationException;
 import hanta.bbyuck.egoapiserver.exception.UserAuthorizationException;
 import hanta.bbyuck.egoapiserver.exception.http.BadRequestException;
@@ -47,8 +48,9 @@ public class LolDuoMatchingService {
         User opponent = lolDuoProfileCardRepository.findById(requestDto.getOpponentProfileCardId()).getOwner();
 
         // 요청 보낸 사람과 요청 받은 사람 잘 체크할 것
-        LolDuoRequest request = lolDuoRequestRepository.findRequest(opponent, reqUser);
-        lolDuoRequestRepository.remove(request);
+        if(lolDuoMatchingRepository.isExist(opponent, reqUser)) {
+            throw new BadRequestException("이미 존재하는 매칭");
+        }
 
         LolDuoMatching matching = new LolDuoMatching();
         matching.assignRequester(opponent);
@@ -83,6 +85,10 @@ public class LolDuoMatchingService {
 
         switch(matching.getMatchingStatus()) {
             case MATCHING_ON:
+                if(isBeforeCancelTime(matching.getStartTime(), LocalDateTime.now())) {
+                    throw new BadRequestException("1분전 취소 불가능");
+                }
+
                 userRepository.updateUserStatus(requester, UserStatus.ACTIVE);
                 userRepository.updateUserStatus(respondent, UserStatus.ACTIVE);
                 // 매칭 삭제 -> cancel
@@ -95,7 +101,7 @@ public class LolDuoMatchingService {
                 // 아직 방을 안나온 유저는 MATCHING 상태
 
                 userRepository.updateUserStatus(apiCaller, UserStatus.LOL_DUO_MATCHING_FINISH);
-                lolDuoMatchingRepository.setFinishTime(matching);
+                lolDuoMatchingRepository.setOffTime(matching);
                 lolDuoMatchingRepository.setMatchingStatus(matching, LolDuoMatchingStatus.MATCHING_OFF);
 
                 if (!isBeforeTenMinutes(matching.getStartTime(), LocalDateTime.now())) {
@@ -110,6 +116,7 @@ public class LolDuoMatchingService {
                 // 나중에 나오는 유저도 10분 이전에 나오면 경험치 안줌
                 userRepository.updateUserStatus(apiCaller, UserStatus.LOL_DUO_MATCHING_FINISH);
                 lolDuoMatchingRepository.setMatchingStatus(matching, LolDuoMatchingStatus.FINISHED);
+                lolDuoMatchingRepository.setFinishTime(matching);
 
                 if (!isBeforeTenMinutes(matching.getStartTime(), LocalDateTime.now())) {
                     // 10분 이후라면 경험치 제공 -> 경험치 테이블에 저장
@@ -191,5 +198,35 @@ public class LolDuoMatchingService {
         responseDto.setMatchStartTime(LocalDateTime.now());
 
         return responseDto;
+    }
+
+    public void enterMatch(LolDuoMatchingRequestDto requestDto) {
+        checkClientVersion(requestDto.getClientVersion());
+
+
+        User apiCaller = userRepository.find(requestDto.getGeneratedId());
+        LolDuoMatching matching = lolDuoMatchingRepository.find(apiCaller);
+
+        if (matching.getMatchingStatus().equals(LolDuoMatchingStatus.MATCHING)){
+            throw new BadRequestException("이미 방에 입장");
+        }
+
+        LolDuoRequest request = lolDuoRequestRepository.findRequest(apiCaller, matching.getRespondent());
+        lolDuoRequestRepository.updateRequestStatus(request, LolRequestStatus.FINISHED);
+
+        lolDuoRequestRepository.updateAllSentRequest(matching.getRequester(), LolRequestStatus.CANCELED);
+        lolDuoRequestRepository.updateAllSentRequest(matching.getRespondent(), LolRequestStatus.CANCELED);
+
+        userRepository.updateUserStatus(apiCaller, UserStatus.LOL_DUO_MATCHING);
+        lolDuoMatchingRepository.setMatchingStatus(matching, LolDuoMatchingStatus.MATCHING);
+
+        // fcm 관련 로직
+    }
+
+    public void evaluateOpponent(LolDuoMatchingRequestDto requestDto) {
+
+    }
+
+    public void reportOpponent(LolDuoMatchingRequestDto requestDto) {
     }
 }

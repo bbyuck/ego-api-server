@@ -16,7 +16,6 @@ import hanta.bbyuck.egoapiserver.request.lol.LolDuoProfileCardMakeRequestDto;
 import hanta.bbyuck.egoapiserver.request.lol.LolDuoProfileCardRequestDto;
 import hanta.bbyuck.egoapiserver.request.lol.LolDuoProfileCardUpdateRequestDto;
 import hanta.bbyuck.egoapiserver.response.lol.LolDuoProfileCardResponseDto;
-import hanta.bbyuck.egoapiserver.util.ClientVersionManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
