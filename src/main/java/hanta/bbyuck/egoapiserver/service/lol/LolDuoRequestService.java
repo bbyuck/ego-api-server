@@ -6,6 +6,8 @@ import hanta.bbyuck.egoapiserver.domain.lol.LolDuoProfileCard;
 import hanta.bbyuck.egoapiserver.domain.lol.LolDuoRequest;
 import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolRequestStatus;
 import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolRequestType;
+import hanta.bbyuck.egoapiserver.exception.BadMatchRequestException;
+import hanta.bbyuck.egoapiserver.exception.SendRequestExhaustedException;
 import hanta.bbyuck.egoapiserver.exception.http.BadRequestException;
 import hanta.bbyuck.egoapiserver.repository.UserRepository;
 import hanta.bbyuck.egoapiserver.repository.lol.LolDuoProfileCardRepository;
@@ -14,7 +16,6 @@ import hanta.bbyuck.egoapiserver.request.lol.LolDuoRequestDto;
 import hanta.bbyuck.egoapiserver.request.lol.LolDuoRequestGetDto;
 import hanta.bbyuck.egoapiserver.response.lol.LolRequestDuoProfileCard;
 import hanta.bbyuck.egoapiserver.response.lol.LolRequestDuoProfileCardDeck;
-import hanta.bbyuck.egoapiserver.util.ClientVersionManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -43,24 +44,20 @@ public class LolDuoRequestService {
         User receiver = lolDuoProfileCardRepository.findById(requestDto.getOpponentProfileCardId()).getOwner();
 
         if(sender == receiver) {
-            throw new BadRequestException("본인에게는 요청을 보낼 수 없습니다.");
+            throw new BadMatchRequestException("본인에게는 요청을 보낼 수 없습니다.");
         }
 
-        if (lolDuoRequestRepository.findSend(sender).size() >= MAX_REQUEST_COUNT) {
-            throw new BadRequestException("보낼 수 있는 요청 횟수를 모두 사용했습니다.");
-        }
+        // 보낼 수 있는 요청횟수를 모두 사용
+        if (lolDuoRequestRepository.findSend(sender).size() >= MAX_REQUEST_COUNT) throw new SendRequestExhaustedException();
 
 
-        if (sender.getStatus() != UserStatus.ACTIVE) {
-            throw new BadRequestException("유저 상태가 맞지 않습니다.");
-        }
-        if (receiver.getStatus() != UserStatus.ACTIVE) {
-            throw new BadRequestException("유저 상태가 맞지 않습니다.");
-        }
+        // 유저 상태가 맞지 않음
+        if (sender.getStatus() != UserStatus.ACTIVE || receiver.getStatus() != UserStatus.ACTIVE) throw new BadMatchRequestException();
 
-        if(lolDuoRequestRepository.isExistRequest(sender, receiver) > 0) {
-            throw new BadRequestException("이미 요청을 보낸 소환사입니다.");
-        }
+
+        // 이미 둘 사이에 요청이 생성되어 있는 경우
+        if(lolDuoRequestRepository.isExistRequest(sender, receiver) ||
+                lolDuoRequestRepository.isExistRequest(receiver, sender)) throw new BadMatchRequestException();
 
         duoRequest.assignSender(sender);
         duoRequest.assignReceiver(receiver);

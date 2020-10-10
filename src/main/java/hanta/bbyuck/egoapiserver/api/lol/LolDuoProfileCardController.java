@@ -45,7 +45,7 @@ public class LolDuoProfileCardController {
     @PostMapping("/my-card")
     public ResponseMessage make(@RequestBody LolDuoProfileCardMakeRequestDto requestDto) {
         lolDuoProfileCardService.makeDuoProfileCard(requestDto);
-        return new ResponseMessage("Duo Profile Card Make API Call Success!");
+        return new ResponseMessage("Duo Profile Card Make API Call Success!", "LDPC-OBJ-001");
     }
 
 
@@ -90,7 +90,7 @@ public class LolDuoProfileCardController {
     @PutMapping("/my-card")
     public ResponseMessage updateDuoProfileCard(@RequestBody LolDuoProfileCardUpdateRequestDto requestDto) {
         lolDuoProfileCardService.updateMyCard(requestDto);
-        return new ResponseMessage("Duo Profile Card Update API Call Success!");
+        return new ResponseMessage("Duo Profile Card Update API Call Success!", "LDPC-OBJ-003");
     }
 
     @ApiOperation(value = "매치 기능 프로필 카드 열람",

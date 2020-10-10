@@ -5,9 +5,12 @@ import hanta.bbyuck.egoapiserver.request.lol.LolDuoMatchingRequestDto;
 import hanta.bbyuck.egoapiserver.response.ResponseMessage;
 import hanta.bbyuck.egoapiserver.response.lol.LolDuoMatchingResponseDto;
 import hanta.bbyuck.egoapiserver.response.lol.LolProcessedDuoProfileCardDeck;
+import hanta.bbyuck.egoapiserver.service.ESTIScoreService;
 import hanta.bbyuck.egoapiserver.service.lol.LolDuoMatchingService;
+import hanta.bbyuck.egoapiserver.service.lol.LolReportService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -20,12 +23,13 @@ import javax.xml.ws.Response;
 public class LolDuoMatchingController {
 
     private final LolDuoMatchingService lolDuoMatchingService;
+    private final LolReportService lolReportService;
+    private final ESTIScoreService estiScoreService;
 
     @ApiOperation(value = "현재 참여하고 있는 매칭 정보 조회",
             notes = "매칭이 끝날 때 까지는 세션 스토리지 저장 -> 만약 그 전에 매칭이 종료되지 않는다면 클라이언트에서 재요청\n" +
                     "1. 본인이 아닌 사람이 요청시(토큰이 없는 유저) 에러 발생 -> 로그인 필요\n" +
-                    "2. 만약 한 명이 삭제하고 다른 한 명은 매칭창을 유지하는 경우 예외처리 필요",
-            response = LolProcessedDuoProfileCardDeck.class)
+                    "2. 만약 한 명이 삭제하고 다른 한 명은 매칭창을 유지하는 경우 예외처리 필요")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "generatedId", value = "회원가입 및 로그인시 제공받은 Id", defaultValue = "sdsnadnsao21n3o1ni3o1"),
             @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00"),
@@ -49,7 +53,22 @@ public class LolDuoMatchingController {
     @PostMapping("/match")
     public ResponseMessage acceptMatch(@RequestBody LolDuoMatchingRequestDto requestDto) {
         lolDuoMatchingService.match(requestDto);
-        return new ResponseMessage("Duo Match API Call Success!");
+        return new ResponseMessage("Duo Match API Call Success!", "LDM-NONE-001");
+
+    }
+
+    @ApiOperation(value = "매칭방 입장",
+            notes = "requester 매칭방 입장")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "generatedId", value = "회원가입 및 로그인시 제공받은 Id", defaultValue = "sdsnadnsao21n3o1ni3o1"),
+            @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00"),
+            @ApiImplicitParam(name = "opponentProfileCardId", example = "12"),
+            @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
+    })
+    @PutMapping("/match")
+    public ResponseMessage enterMatch(@RequestBody LolDuoMatchingRequestDto requestDto) {
+        lolDuoMatchingService.enterMatch(requestDto);
+        return new ResponseMessage("매칭방 입장", "LDM-NONE-002");
     }
 
     @ApiOperation(value = "개별 매칭 종료",
@@ -65,24 +84,18 @@ public class LolDuoMatchingController {
     @DeleteMapping("/match")
     public ResponseMessage completeMatch(@RequestBody LolDuoMatchingRequestDto requestDto) {
         lolDuoMatchingService.completeMatch(requestDto);
-        return new ResponseMessage("Complete Duo Match API Call Success!");
-    }
-
-    @PutMapping("/match")
-    public ResponseMessage enterMatch(@RequestBody LolDuoMatchingRequestDto requestDto) {
-        lolDuoMatchingService.enterMatch(requestDto);
-        return new ResponseMessage("매칭방 입장", "LDM-NONE-003");
+        return new ResponseMessage("Complete Duo Match API Call Success!", "LDM-NONE-003");
     }
 
     @PostMapping("/match/evaluation")
     public ResponseMessage evaluateOpponent(@RequestBody LolDuoMatchingRequestDto requestDto) {
-        lolDuoMatchingService.evaluateOpponent(requestDto);
+        estiScoreService.evaluateOpponent(requestDto);
         return new ResponseMessage("평가 완료", "LDM-NONE-005");
     }
 
     @PostMapping("/match/report")
     public ResponseMessage reportOpponent(@RequestBody LolDuoMatchingRequestDto requestDto) {
-        lolDuoMatchingService.reportOpponent(requestDto);
+        lolReportService.reportOpponent(requestDto);
         return new ResponseMessage("신고 완료", "LDM-NONE-006");
     }
 }

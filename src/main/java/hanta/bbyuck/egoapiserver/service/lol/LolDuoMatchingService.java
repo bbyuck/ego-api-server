@@ -11,6 +11,7 @@ import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolDuoMatchingStatus;
 import hanta.bbyuck.egoapiserver.domain.lol.LolDuoProfileCard;
 import hanta.bbyuck.egoapiserver.domain.lol.LolDuoRequest;
 import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolRequestStatus;
+import hanta.bbyuck.egoapiserver.exception.MatchNotExistException;
 import hanta.bbyuck.egoapiserver.exception.UserAuthenticationException;
 import hanta.bbyuck.egoapiserver.exception.UserAuthorizationException;
 import hanta.bbyuck.egoapiserver.exception.http.BadRequestException;
@@ -138,7 +139,7 @@ public class LolDuoMatchingService {
             User apiCaller = userRepository.find(requestDto.getGeneratedId());
 
             if (!apiCaller.getStatus().equals(UserStatus.LOL_DUO_MATCHING) && !apiCaller.getStatus().equals(UserStatus.LOL_DUO_MATCHING_READY) && !apiCaller.getStatus().equals(UserStatus.LOL_DUO_MATCHING_FINISH)) {
-                throw new BadRequestException("현재 롤 듀오 매칭중이 아닙니다.");
+                throw new MatchNotExistException();
             }
 
             LolDuoMatching matching = lolDuoMatchingRepository.find(apiCaller);
@@ -223,10 +224,6 @@ public class LolDuoMatchingService {
         // fcm 관련 로직
     }
 
-    public void evaluateOpponent(LolDuoMatchingRequestDto requestDto) {
 
-    }
 
-    public void reportOpponent(LolDuoMatchingRequestDto requestDto) {
-    }
 }

@@ -5,10 +5,11 @@ import org.springframework.http.HttpStatus;
 
 public class DuplicateSummonerNameException extends AbstractResponseException {
     private static final long serialVersionUID = 1L;
-    private static final String ERR_CODE = "LOL-DP-200";
+    private static final String ERR_CODE = "ERR-LDPC-002";
+    private static final String ERR_MSG = "이미 등록된 소환사명";
 
     public DuplicateSummonerNameException() {
-        super();
+        super(ERR_MSG);
     }
 
     public DuplicateSummonerNameException(String msg) {

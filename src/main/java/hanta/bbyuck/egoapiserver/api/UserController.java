@@ -48,13 +48,13 @@ public class UserController {
     @PutMapping("/user/api/v0.0.1/fcm-auth")
     public ResponseMessage updateFcmAuth(@RequestBody UserAuthRequestDto requestDto) {
         userService.refreshToken(requestDto);
-        return new ResponseMessage("FCM AUTH TOKEN UPDATE SUCCESS");
+        return new ResponseMessage("FCM AUTH TOKEN UPDATE SUCCESS", "AUTH-NONE-002");
     }
 
     @PutMapping("/user/api/v0.0.1/game")
     public ResponseMessage selectGame(@RequestBody UserGameSelectDto requestDto) {
         userService.updateGame(requestDto);
-        return new ResponseMessage("YOU SIGN IN " + requestDto.getGame().toString());
+        return new ResponseMessage("YOU SIGN IN " + requestDto.getGame().toString(), "GAME-NONE-001");
     }
 
     @GetMapping("/user/api/v0.0.1/game")

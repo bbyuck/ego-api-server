@@ -1,6 +1,7 @@
 package hanta.bbyuck.egoapiserver.service.lol;
 
 import hanta.bbyuck.egoapiserver.domain.enumset.UserStatus;
+import hanta.bbyuck.egoapiserver.exception.BadMatchRequestException;
 import hanta.bbyuck.egoapiserver.exception.http.BadRequestException;
 import hanta.bbyuck.egoapiserver.response.lol.LolProcessedDuoProfileCard;
 import hanta.bbyuck.egoapiserver.response.lol.LolProcessedDuoProfileCardDeck;
@@ -43,7 +44,7 @@ public class LolDuoProfileCardService {
         }
 
         if (lolDuoProfileCardRepository.isExistSummonerName(requestDto.getSummonerName())){
-            throw new DuplicateSummonerNameException("이미 등록된 소환사명입니다.");
+            throw new DuplicateSummonerNameException();
         }
 
         LolDuoProfileCard lolDuoProfileCard = new LolDuoProfileCard();
@@ -92,7 +93,7 @@ public class LolDuoProfileCardService {
 
             return response;
         } catch (NoResultException e) {
-            throw new LolDuoProfileCardNotExistException("프로필 카드가 존재하지 않습니다.");
+            throw new LolDuoProfileCardNotExistException();
         }
     }
 
@@ -283,7 +284,7 @@ public class LolDuoProfileCardService {
         User owner = userRepository.find(requestDto.getGeneratedId());
 
         if (owner.getStatus() != UserStatus.ACTIVE) {
-            throw new BadRequestException("이미 매칭에 참여중인 유저입니다.");
+            throw new BadMatchRequestException();
         }
 
         List<LolDuoProfileCard> cardList = lolDuoProfileCardRepository.findCustomizedListV1(owner);

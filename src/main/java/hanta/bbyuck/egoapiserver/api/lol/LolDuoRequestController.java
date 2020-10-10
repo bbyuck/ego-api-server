@@ -33,7 +33,7 @@ public class LolDuoRequestController {
     @PostMapping("/match-request")
     public ResponseMessage sendRequest(@RequestBody LolDuoRequestDto lolDuoRequestDto) {
         lolDuoRequestService.sendRequest(lolDuoRequestDto);
-        return new ResponseMessage("Match Request Send API Call Success!");
+        return new ResponseMessage("Match Request Send API Call Success!", "LDR-NONE-001");
     }
 
 
@@ -73,7 +73,7 @@ public class LolDuoRequestController {
         return new ResponseMessage("Sent Request List Get API Call Success", "LDR-OBJ-002" ,receivedRequestDeck);
     }
 
-    @ApiOperation(value = "롤 듀오 보낸 요청 취소",
+    @ApiOperation(value = "롤 듀오 보낸 신청 취소",
             notes = "롤 듀오 보낸 요청 취소하기 API\n" +
                     "1. 단건 삭제")
     @ApiImplicitParams({
@@ -85,7 +85,7 @@ public class LolDuoRequestController {
     @DeleteMapping("/sent-request")
     public ResponseMessage cancelRequest(@RequestBody LolDuoRequestDto requestDto) {
         lolDuoRequestService.cancelRequest(requestDto);
-        return new ResponseMessage("Cancel Sent Request API Call Success");
+        return new ResponseMessage("Cancel Sent Request API Call Success", "LDR-NONE-002");
     }
 
     @ApiOperation(value = "롤 듀오 받은 요청 거절",
@@ -100,7 +100,7 @@ public class LolDuoRequestController {
     @DeleteMapping("/received-request")
     public ResponseMessage rejectRequest(@RequestBody LolDuoRequestDto requestDto) {
         lolDuoRequestService.rejectRequest(requestDto);
-        return new ResponseMessage("Reject Received Request API Call Success");
+        return new ResponseMessage("Reject Received Request API Call Success", "LDR-NONE-003");
     }
 
     @ApiOperation(value = "롤 듀오 보낸 요청 전체 삭제",
@@ -114,7 +114,7 @@ public class LolDuoRequestController {
     @DeleteMapping("/all-sent-request")
     public ResponseMessage cancelAllRequest(@RequestBody LolDuoRequestDto requestDto) {
         lolDuoRequestService.cancelAllRequest(requestDto);
-        return new ResponseMessage("Cancel All Sent Request API Call Success");
+        return new ResponseMessage("Cancel All Sent Request API Call Success", "LDR-NONE-004");
     }
 
     @ApiOperation(value = "롤 듀오 받은 요청 전체 거절",
@@ -128,6 +128,6 @@ public class LolDuoRequestController {
     @DeleteMapping("/all-received-request")
     public ResponseMessage rejectAllRequest(@RequestBody LolDuoRequestDto requestDto) {
         lolDuoRequestService.rejectAllRequest(requestDto);
-        return new ResponseMessage("Reject All Received Request API Call Success");
+        return new ResponseMessage("Reject All Received Request API Call Success", "LDR-NONE-005");
     }
 }

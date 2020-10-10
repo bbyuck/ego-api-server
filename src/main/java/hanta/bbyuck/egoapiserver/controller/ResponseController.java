@@ -153,4 +153,25 @@ public class ResponseController {
         return new ResponseMessage(new CAccessDeniedException(e.getMessage(), e), request.getRequestURL().toString());
     }
 
+    @ExceptionHandler(BadMatchRequestException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ResponseMessage BadMatchRequestException(HttpServletRequest request, final BadMatchRequestException exception) {
+        log.error("BadMatchRequestException : " + exception.getMessage());
+        return new ResponseMessage(new BadMatchRequestException(exception.getMessage(), exception), request.getRequestURL().toString());
+    }
+
+    @ExceptionHandler(SendRequestExhaustedException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ResponseMessage SendRequestExhaustedException(HttpServletRequest request, final SendRequestExhaustedException exception) {
+        log.error("SendRequestExhaustedException : " + exception.getMessage());
+        return new ResponseMessage(new SendRequestExhaustedException(exception.getMessage(), exception), request.getRequestURL().toString());
+    }
+
+    @ExceptionHandler(MatchNotExistException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ResponseMessage MatchNotExistException(HttpServletRequest request, final MatchNotExistException exception) {
+        log.error("MatchNotExistException : " + exception.getMessage());
+        return new ResponseMessage(new MatchNotExistException(exception.getMessage(), exception), request.getRequestURL().toString());
+    }
+
 }

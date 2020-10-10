@@ -1,5 +1,6 @@
 package hanta.bbyuck.egoapiserver.domain;
 
+import hanta.bbyuck.egoapiserver.domain.enumset.Game;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -30,7 +31,9 @@ public class ESTIScore {
     @JoinColumn(name = "RECEIVER_ID", referencedColumnName = "USER_ID")
     private User receiver;
 
+
+    private Game game;
     private Integer point;
-    private LocalDateTime evaluation_time;
+    private LocalDateTime evaluationTime;
 
 }

@@ -5,10 +5,11 @@ import org.springframework.http.HttpStatus;
 
 public class LolDuoProfileCardNotExistException extends AbstractResponseException {
     private static final long serialVersionUID = 1L;
-    private static final String ERR_CODE = "LOL-DP-100";
+    private static final String ERR_CODE = "ERR-LDPC-003";
+    private static final String ERR_MSG = "프로필카드가 없습니다.";
 
     public LolDuoProfileCardNotExistException() {
-        super();
+        super(ERR_MSG);
     }
 
     public LolDuoProfileCardNotExistException(String msg) {
