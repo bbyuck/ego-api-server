@@ -52,8 +52,7 @@ public class LolDuoRequestService {
 
 
         // 유저 상태가 맞지 않음
-        if (sender.getStatus() != UserStatus.ACTIVE || receiver.getStatus() != UserStatus.ACTIVE) throw new BadMatchRequestException();
-
+        if (sender.getStatus() != UserStatus.ACTIVE && receiver.getStatus() != UserStatus.ACTIVE) throw new BadMatchRequestException();
 
         // 이미 둘 사이에 요청이 생성되어 있는 경우
         if(lolDuoRequestRepository.isExistRequest(sender, receiver) ||

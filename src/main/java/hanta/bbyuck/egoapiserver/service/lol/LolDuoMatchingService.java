@@ -12,7 +12,6 @@ import hanta.bbyuck.egoapiserver.domain.lol.LolDuoProfileCard;
 import hanta.bbyuck.egoapiserver.domain.lol.LolDuoRequest;
 import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolRequestStatus;
 import hanta.bbyuck.egoapiserver.exception.MatchNotExistException;
-import hanta.bbyuck.egoapiserver.exception.UserAuthenticationException;
 import hanta.bbyuck.egoapiserver.exception.UserAuthorizationException;
 import hanta.bbyuck.egoapiserver.exception.http.BadRequestException;
 import hanta.bbyuck.egoapiserver.repository.ExperienceRepository;
@@ -22,8 +21,6 @@ import hanta.bbyuck.egoapiserver.repository.lol.LolDuoProfileCardRepository;
 import hanta.bbyuck.egoapiserver.repository.lol.LolDuoRequestRepository;
 import hanta.bbyuck.egoapiserver.request.lol.LolDuoMatchingRequestDto;
 import hanta.bbyuck.egoapiserver.response.lol.LolDuoMatchingResponseDto;
-import hanta.bbyuck.egoapiserver.util.ClientVersionManager;
-import hanta.bbyuck.egoapiserver.util.TimeCalculator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -51,6 +48,10 @@ public class LolDuoMatchingService {
         // 요청 보낸 사람과 요청 받은 사람 잘 체크할 것
         if(lolDuoMatchingRepository.isExist(opponent, reqUser)) {
             throw new BadRequestException("이미 존재하는 매칭");
+        }
+
+        if(!lolDuoRequestRepository.isExistRequest(opponent, reqUser)) {
+            throw new BadRequestException("잘못된 매칭 요청");
         }
 
         LolDuoMatching matching = new LolDuoMatching();

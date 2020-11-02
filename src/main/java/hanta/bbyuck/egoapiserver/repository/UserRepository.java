@@ -26,7 +26,7 @@ public class UserRepository {
     }
 
     // 성능 튜닝 필
-    public User find(String userGeneratedId) throws NoResultException{
+    public User find(String userGeneratedId) throws NoResultException {
         String query = "select u from User u where u.generatedId = :generatedId";
         return em.createQuery(query, User.class)
                 .setParameter("generatedId", userGeneratedId)

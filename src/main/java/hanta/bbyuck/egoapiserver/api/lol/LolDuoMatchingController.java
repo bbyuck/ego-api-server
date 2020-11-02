@@ -1,21 +1,18 @@
 package hanta.bbyuck.egoapiserver.api.lol;
 
-import hanta.bbyuck.egoapiserver.domain.lol.LolDuoMatching;
 import hanta.bbyuck.egoapiserver.request.lol.LolDuoMatchingRequestDto;
+import hanta.bbyuck.egoapiserver.request.lol.LolReportRequestDto;
 import hanta.bbyuck.egoapiserver.response.ResponseMessage;
 import hanta.bbyuck.egoapiserver.response.lol.LolDuoMatchingResponseDto;
 import hanta.bbyuck.egoapiserver.response.lol.LolProcessedDuoProfileCardDeck;
-import hanta.bbyuck.egoapiserver.service.ESTIScoreService;
+import hanta.bbyuck.egoapiserver.service.EgoScoreService;
 import hanta.bbyuck.egoapiserver.service.lol.LolDuoMatchingService;
 import hanta.bbyuck.egoapiserver.service.lol.LolReportService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import javax.xml.ws.Response;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,7 +21,7 @@ public class LolDuoMatchingController {
 
     private final LolDuoMatchingService lolDuoMatchingService;
     private final LolReportService lolReportService;
-    private final ESTIScoreService estiScoreService;
+    private final EgoScoreService egoScoreService;
 
     @ApiOperation(value = "현재 참여하고 있는 매칭 정보 조회",
             notes = "매칭이 끝날 때 까지는 세션 스토리지 저장 -> 만약 그 전에 매칭이 종료되지 않는다면 클라이언트에서 재요청\n" +
@@ -87,14 +84,9 @@ public class LolDuoMatchingController {
         return new ResponseMessage("Complete Duo Match API Call Success!", "LDM-NONE-003");
     }
 
-    @PostMapping("/match/evaluation")
-    public ResponseMessage evaluateOpponent(@RequestBody LolDuoMatchingRequestDto requestDto) {
-        estiScoreService.evaluateOpponent(requestDto);
-        return new ResponseMessage("평가 완료", "LDM-NONE-005");
-    }
 
     @PostMapping("/match/report")
-    public ResponseMessage reportOpponent(@RequestBody LolDuoMatchingRequestDto requestDto) {
+    public ResponseMessage reportOpponent(@RequestBody LolReportRequestDto requestDto) {
         lolReportService.reportOpponent(requestDto);
         return new ResponseMessage("신고 완료", "LDM-NONE-006");
     }

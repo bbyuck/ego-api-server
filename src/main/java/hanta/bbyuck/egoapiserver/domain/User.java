@@ -129,7 +129,7 @@ public class User implements UserDetails {
      */
 
     @OneToMany(mappedBy = "receiver")
-    private List<ESTIScore> receivedESTISocreList = new ArrayList<>();
+    private List<EgoScore> receivedESTISocreList = new ArrayList<>();
 
     /*
      * 편의 메서드

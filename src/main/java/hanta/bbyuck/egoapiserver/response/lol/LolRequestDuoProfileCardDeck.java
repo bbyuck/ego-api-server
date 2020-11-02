@@ -10,11 +10,11 @@ import java.util.List;
 public class LolRequestDuoProfileCardDeck {
     // 카드덱이 만들어진 시간
     @ApiModelProperty(name = "카드덱이 만들어진 시간",example = "2020-08-14T20:30:08.604")
-    LocalDateTime makeTime;
+    private LocalDateTime makeTime;
 
     @ApiModelProperty(name = "카드덱에 포함된 카드 수", example = "50")
-    Integer cardCount;
+    private Integer cardCount;
 
-    List<LolRequestDuoProfileCard> duoRequestProfileCards;
+    private List<LolRequestDuoProfileCard> duoRequestProfileCards;
 
 }

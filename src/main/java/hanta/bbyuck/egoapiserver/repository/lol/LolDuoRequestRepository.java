@@ -53,7 +53,7 @@ public class LolDuoRequestRepository {
     }
 
     public Boolean isExistRequest(User sender, User receiver) {
-        String query = "select count(ldr) from LolDuoRequest ldr where ldr.sender =: sender and ldr.receiver =: receiver and ldr.status =: active";
+        String query = "select ldr from LolDuoRequest ldr where ldr.sender =: sender and ldr.receiver =: receiver and ldr.status =: active";
         List<LolDuoRequest> resultList = em.createQuery(query, LolDuoRequest.class)
                 .setParameter("sender", sender)
                 .setParameter("receiver", receiver)

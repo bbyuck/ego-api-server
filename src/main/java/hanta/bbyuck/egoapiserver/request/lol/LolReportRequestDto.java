@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-public class LolDuoMatchingRequestDto {
+public class LolReportRequestDto {
     @ApiModelProperty(example = "v1.00")
     private String clientVersion;
 
@@ -14,6 +14,6 @@ public class LolDuoMatchingRequestDto {
     @ApiModelProperty(name = "opponentProfileCardId", example = "12")
     private Long opponentProfileCardId;
 
-    @ApiModelProperty(name = "matchingId", example = "1223141241")
-    private Long matchId;
+    @ApiModelProperty(name = "reportContent", example = "1223141241")
+    private String reportContent;
 }

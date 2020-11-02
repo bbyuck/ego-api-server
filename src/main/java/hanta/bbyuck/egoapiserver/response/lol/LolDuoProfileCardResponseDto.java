@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class LolDuoProfileCardResponseDto {
-    LocalDateTime lastUpdateTime;
+    private LocalDateTime lastUpdateTime;
     private Boolean voice;
     private String summonerName;
     private LolTier tier;

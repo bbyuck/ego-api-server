@@ -9,6 +9,6 @@ public class UserStatusRequestDto {
     private String generatedId;
 
     @ApiModelProperty(name = "clientVersion", example = "v1.99")
-    public String clientVersion;
+    private String clientVersion;
 
 }

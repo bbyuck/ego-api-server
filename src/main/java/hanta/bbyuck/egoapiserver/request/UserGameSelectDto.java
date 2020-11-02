@@ -10,7 +10,7 @@ public class UserGameSelectDto {
     private String generatedId;
 
     @ApiModelProperty(name = "clientVersion", example = "v1.99")
-    public String clientVersion;
+    private String clientVersion;
 
     @ApiModelProperty(name = "game", example = "LOL")
     private Game game;

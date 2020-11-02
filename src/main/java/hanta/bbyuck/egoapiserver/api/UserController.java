@@ -1,11 +1,10 @@
 package hanta.bbyuck.egoapiserver.api;
 
-import hanta.bbyuck.egoapiserver.request.UserAuthRequestDto;
-import hanta.bbyuck.egoapiserver.request.UserGameSelectDto;
-import hanta.bbyuck.egoapiserver.request.UserStatusRequestDto;
+import hanta.bbyuck.egoapiserver.request.*;
 import hanta.bbyuck.egoapiserver.response.*;
 import hanta.bbyuck.egoapiserver.security.JwtTokenProvider;
-import hanta.bbyuck.egoapiserver.service.ESTITestService;
+import hanta.bbyuck.egoapiserver.service.EgoScoreService;
+import hanta.bbyuck.egoapiserver.service.EgoTestService;
 import hanta.bbyuck.egoapiserver.service.UserService;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +16,8 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
-    private final ESTITestService estiTestService;
+    private final EgoTestService egoTestService;
+    private final EgoScoreService egoScoreService;
 
     @ApiOperation(value = "회원가입", notes = "SNS 인증을 통한 회원가입을 수행합니다.\n" +
             "1. SNS 제공자 대문자로 반드시 맞추어서 입력할 것 \n" +
@@ -70,9 +70,22 @@ public class UserController {
         return new ResponseMessage("유저 상태 리턴 및 최근 활동시각 업데이트", "USER-OBJ-102", responseDto);
     }
 
+    @PostMapping("/user/api/v0.0.1/match/evaluation")
+    public ResponseMessage evaluateOpponent(@RequestBody EgoScoreRequestDto requestDto) {
+        egoScoreService.evaluateOpponent(requestDto);
+        return new ResponseMessage("평가 완료", "ESTI-NONE-002");
+    }
 
-//    @PostMapping("/api/v0.0.1/user/esti-test")
-//    public ResponseMessage estiTest(@RequestBody ESTITestAnswerRequestDto requestDto) {
-//
-//    }
+    // 유저 정보 필요없
+    @GetMapping("/api/v0.0.1/user/ego-test")
+    public ResponseMessage egoWebTest(@RequestBody EgoTestAnswerRequestDto requestDto) {
+        EgoTestResponseDto responseDto = egoTestService.onlyTest(requestDto);
+        return new ResponseMessage("테스트 완료, 앱 다운로드 페이지로", "EGO-OBJ-002", responseDto);
+    }
+
+    @PostMapping("/user/api/v0.0.1/user/ego-test")
+    public ResponseMessage egoAppTest(@RequestBody EgoTestAnswerRequestDto requestDto) {
+        EgoTestResponseDto responseDto = egoTestService.saveAnswer(requestDto);
+        return new ResponseMessage("테스트 완료", "EGO-OBJ-001", responseDto);
+    }
 }

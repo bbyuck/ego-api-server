@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class LolDuoProfileCardUpdateRequestDto {
     @ApiModelProperty(example = "v1.00")
-    public String clientVersion;
+    private String clientVersion;
 
     @ApiModelProperty(name = "유저 인증 정보", example = "73bHwJ0Tw12KbrhDDyqJSUMgCVol5bfcLW+fZxBfPkY=  ::  localStorage 저장값")
     private String generatedId;

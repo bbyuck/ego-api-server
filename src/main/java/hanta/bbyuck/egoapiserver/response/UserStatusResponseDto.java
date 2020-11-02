@@ -7,6 +7,6 @@ import java.time.LocalDateTime;
 
 @Data
 public class UserStatusResponseDto {
-    UserStatus status;
-    LocalDateTime lastActiveTime;
+    private UserStatus status;
+    private LocalDateTime lastActiveTime;
 }

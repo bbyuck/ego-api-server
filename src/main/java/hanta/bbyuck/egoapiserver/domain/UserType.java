@@ -1,6 +1,6 @@
 package hanta.bbyuck.egoapiserver.domain;
 
-import hanta.bbyuck.egoapiserver.domain.enumset.ESTIType;
+import hanta.bbyuck.egoapiserver.domain.enumset.EgoTestVersion;
 import hanta.bbyuck.egoapiserver.domain.enumset.Game;
 import lombok.Getter;
 
@@ -26,7 +26,22 @@ public class UserType {
     @Enumerated(EnumType.STRING)
     private Game game;
 
-    @Column(name = "type", length = 45)
+    @Column(name = "ego_test_version")
     @Enumerated(EnumType.STRING)
-    private ESTIType type;
+    private EgoTestVersion version;
+
+    @Column(name = "type", length = 45)
+    private String type;
+
+    /*
+     * 편의 메서드
+     */
+
+    public void makeUserType(User user, Game game, EgoTestVersion version, String type) {
+        this.user = user;
+        this.game = game;
+        this.updateTime = LocalDateTime.now();
+        this.version = version;
+        this.type = type;
+    }
 }

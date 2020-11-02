@@ -1,6 +1,7 @@
 package hanta.bbyuck.egoapiserver.domain;
 
-import hanta.bbyuck.egoapiserver.domain.enumset.ESTIVersion;
+import hanta.bbyuck.egoapiserver.domain.enumset.EgoTestVersion;
+import hanta.bbyuck.egoapiserver.domain.enumset.Game;
 import lombok.Getter;
 import org.hibernate.annotations.Type;
 
@@ -9,18 +10,18 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Table(name = "esti_test_answer")
+@Table(name = "ego_test_answer")
 @SequenceGenerator(
-        name = "esti_test_answer_seq_generator",
-        sequenceName = "esti_data_sequence"
+        name = "ego_test_answer_seq_generator",
+        sequenceName = "ego_data_sequence"
 )
-public class ESTITestAnswer {
+public class EgoTestAnswer {
 
     @Id @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "esti_test_answer_seq_generator"
+            generator = "ego_test_answer_seq_generator"
     )
-    @Column(name = "ESTI_TEST_ANSWER_ID")
+    @Column(name = "EGO_TEST_ANSWER_ID")
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -29,10 +30,18 @@ public class ESTITestAnswer {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "version")
-    private ESTIVersion version;
+    private EgoTestVersion version;
 
-    @Column(name = "response_time")
-    private LocalDateTime responseTime;
+    @Column(columnDefinition = "TINYINT")
+    @Type(type = "org.hibernate.type.NumericBooleanType")
+    private Boolean isMain;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "game")
+    private Game game;
+
+    @Column(name = "test_time")
+    private LocalDateTime testTime;
 
     @Column(columnDefinition = "TINYINT")
     @Type(type = "org.hibernate.type.NumericBooleanType")
@@ -92,7 +101,8 @@ public class ESTITestAnswer {
      */
 
     public void fillAnswer(User respondent,
-                           ESTIVersion version,
+                           Game game,
+                           EgoTestVersion version,
                            Boolean answer_1,
                            Boolean answer_2,
                            Boolean answer_3,
@@ -107,8 +117,9 @@ public class ESTITestAnswer {
                            Boolean answer_12,
                            Boolean answer_13) {
         this.respondent = respondent;
+        this.game = game;
         this.version = version;
-        this.responseTime = LocalDateTime.now();
+        this.testTime = LocalDateTime.now();
         this.answer_1 = answer_1;
         this.answer_2 = answer_2;
         this.answer_3 = answer_3;
@@ -123,4 +134,6 @@ public class ESTITestAnswer {
         this.answer_12 = answer_12;
         this.answer_13 = answer_13;
     }
+
+    public void setIsMain(Boolean isMain) {this.isMain = isMain;}
 }

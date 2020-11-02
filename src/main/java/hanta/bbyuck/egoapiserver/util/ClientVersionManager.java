@@ -15,7 +15,6 @@ public class ClientVersionManager {
     });
 
     public static void checkClientVersion(String clientVersion) {
-
         if (AUTHORIZED_CLIENT_VERSION_INFO.get(clientVersion) == null) {
             throw new UnauthorizedAppVersionException();
         }
