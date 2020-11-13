@@ -1,16 +1,17 @@
 package hanta.bbyuck.egoapiserver.util;
 
-import hanta.bbyuck.egoapiserver.domain.lol.LolDuoProfileCard;
-import hanta.bbyuck.egoapiserver.response.lol.LolProcessedDuoProfileCard;
-import hanta.bbyuck.egoapiserver.response.lol.LolRequestDuoProfileCard;
+import hanta.bbyuck.egoapiserver.domain.UserType;
+import hanta.bbyuck.egoapiserver.domain.lol.LolProfileCard;
+import hanta.bbyuck.egoapiserver.response.lol.LolProcessedProfileCard;
+import hanta.bbyuck.egoapiserver.response.lol.LolRequestProfileCard;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 public class ServiceUtil {
 
-    public static void addCardToProcessedDeck(List<LolProcessedDuoProfileCard> cards, LolDuoProfileCard card) {
-        LolProcessedDuoProfileCard processedCard = new LolProcessedDuoProfileCard();
+    public static void addCardToProcessedDeck(List<LolProcessedProfileCard> cards, LolProfileCard card, UserType userType) {
+        LolProcessedProfileCard processedCard = new LolProcessedProfileCard();
         processedCard.setProfileCardId(card.getId());
         processedCard.setVoice(card.getVoice());
         processedCard.setLimitedSummonerName(card.getSummonerName().substring(0, 1) + "***");
@@ -27,11 +28,20 @@ public class ServiceUtil {
         processedCard.setSupport(card.getSupport());
         processedCard.setMainLolPosition(card.getMainLolPosition());
         processedCard.setLastActiveTime(card.getOwner().getLastActiveTime());
+        processedCard.setMatchType(card.getMatchType());
+        if (userType == null) {
+            processedCard.setUserType(null);
+            processedCard.setEgoTestVersion(null);
+        }
+        else {
+            processedCard.setUserType(userType.getType());
+            processedCard.setEgoTestVersion(userType.getVersion());
+        }
         cards.add(processedCard);
     }
 
-    public static void addCardToRequestDeck(List<LolRequestDuoProfileCard> cards, LolDuoProfileCard card, LocalDateTime requestTime) {
-        LolRequestDuoProfileCard processedCard = new LolRequestDuoProfileCard();
+    public static void addCardToRequestDeck(List<LolRequestProfileCard> cards, LolProfileCard card, LocalDateTime requestTime) {
+        LolRequestProfileCard processedCard = new LolRequestProfileCard();
         processedCard.setProfileCardId(card.getId());
         processedCard.setVoice(card.getVoice());
         processedCard.setLimitedSummonerName(card.getSummonerName().substring(0, 1) + "***");

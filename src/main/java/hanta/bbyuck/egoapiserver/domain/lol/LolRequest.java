@@ -1,6 +1,7 @@
 package hanta.bbyuck.egoapiserver.domain.lol;
 
 import hanta.bbyuck.egoapiserver.domain.User;
+import hanta.bbyuck.egoapiserver.domain.enumset.MatchType;
 import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolRequestStatus;
 import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolRequestType;
 import lombok.Getter;
@@ -11,18 +12,18 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Table(name = "lol_duo_request")
+@Table(name = "lol_request")
 @SequenceGenerator(
-        name = "lol_duo_request_seq_generator",
-        sequenceName = "lol_duo_request_sequence"
+        name = "lol_request_seq_generator",
+        sequenceName = "lol_request_sequence"
 )
-public class LolDuoRequest {
+public class LolRequest {
 
     @Id @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "lol_duo_request_seq_generator"
+            generator = "lol_request_seq_generator"
     )
-    @Column(name = "LOL_DUO_REQUEST_ID")
+    @Column(name = "LOL_REQUEST_ID")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -42,6 +43,8 @@ public class LolDuoRequest {
     @Enumerated(EnumType.STRING)
     @Column(name = "request_type")
     private LolRequestType type;
+
+
     /*
      * 편의 메서드
      */

@@ -1,5 +1,8 @@
 package hanta.bbyuck.egoapiserver.response.lol;
 
+import hanta.bbyuck.egoapiserver.domain.UserType;
+import hanta.bbyuck.egoapiserver.domain.enumset.EgoTestVersion;
+import hanta.bbyuck.egoapiserver.domain.enumset.MatchType;
 import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolPosition;
 import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolTier;
 import lombok.Data;
@@ -7,11 +10,10 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class LolRequestDuoProfileCard {
-    private Long profileCardId;
+public class LolProfileCardResponseDto {
+    private LocalDateTime lastUpdateTime;
     private Boolean voice;
-    private LocalDateTime requestTime;
-    private String limitedSummonerName;
+    private String summonerName;
     private LolTier tier;
     private Integer tierLev;
     private Integer lp;
@@ -24,4 +26,7 @@ public class LolRequestDuoProfileCard {
     private Boolean ad;
     private Boolean support;
     private LolPosition mainLolPosition;
+    private MatchType matchType;
+    private String userType;
+    private EgoTestVersion egoTestVersion;
 }

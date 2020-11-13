@@ -1,12 +1,13 @@
 package hanta.bbyuck.egoapiserver.request.lol;
 
+import hanta.bbyuck.egoapiserver.domain.enumset.GameType;
 import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolPosition;
 import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolTier;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-public class LolDuoProfileCardUpdateRequestDto {
+public class LolProfileCardUpdateRequestDto {
     @ApiModelProperty(example = "v1.00")
     private String clientVersion;
 
@@ -54,4 +55,7 @@ public class LolDuoProfileCardUpdateRequestDto {
 
     @ApiModelProperty(name = "메인 포지션", example = "JUNGLE")
     private LolPosition mainLolPosition;
+
+    @ApiModelProperty(name = "게임 타입", example = "RANK")
+    private GameType gameType;
 }

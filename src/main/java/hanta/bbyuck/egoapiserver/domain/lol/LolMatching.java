@@ -1,7 +1,8 @@
 package hanta.bbyuck.egoapiserver.domain.lol;
 
 import hanta.bbyuck.egoapiserver.domain.User;
-import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolDuoMatchingStatus;
+import hanta.bbyuck.egoapiserver.domain.enumset.MatchType;
+import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolMatchingStatus;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -9,17 +10,17 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Table(name = "lol_duo_matching")
+@Table(name = "lol_matching")
 @SequenceGenerator(
-        name = "lol_duo_matching_seq_generator",
-        sequenceName = "lol_duo_matching_sequence"
+        name = "lol_matching_seq_generator",
+        sequenceName = "lol_matching_sequence"
 )
-public class LolDuoMatching {
+public class LolMatching {
     @Id @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "lol_duo_matching_seq_generator"
+            generator = "lol_matching_seq_generator"
     )
-    @Column(name = "LOL_DUO_MATCHING_ID")
+    @Column(name = "LOL_MATCHING_ID")
     private Long id;
 
     @Column(name = "start_time")
@@ -33,7 +34,11 @@ public class LolDuoMatching {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "matching_status", length = 45)
-    private LolDuoMatchingStatus matchingStatus;
+    private LolMatchingStatus matchingStatus;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "match_type")
+    private MatchType matchType;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "requester_id", referencedColumnName = "USER_ID")
@@ -63,5 +68,5 @@ public class LolDuoMatching {
 
     public void setFinishTime() { this.finishTime = LocalDateTime.now(); }
 
-    public void setMatchingStatus(LolDuoMatchingStatus matchingStatus) { this.matchingStatus = matchingStatus; }
+    public void setMatchingStatus(LolMatchingStatus matchingStatus) { this.matchingStatus = matchingStatus; }
 }

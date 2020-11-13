@@ -1,5 +1,7 @@
 package hanta.bbyuck.egoapiserver.response.lol;
 
+import hanta.bbyuck.egoapiserver.domain.enumset.EgoTestVersion;
+import hanta.bbyuck.egoapiserver.domain.enumset.MatchType;
 import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolPosition;
 import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolTier;
 import lombok.Data;
@@ -7,7 +9,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class LolProcessedDuoProfileCard {
+public class LolProcessedProfileCard {
     private Long profileCardId;
     private Boolean voice;
     private LocalDateTime lastActiveTime;
@@ -24,4 +26,7 @@ public class LolProcessedDuoProfileCard {
     private Boolean ad;
     private Boolean support;
     private LolPosition mainLolPosition;
+    private MatchType matchType;
+    private String userType;
+    private EgoTestVersion egoTestVersion;
 }

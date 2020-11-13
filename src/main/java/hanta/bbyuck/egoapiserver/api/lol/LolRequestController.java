@@ -1,10 +1,10 @@
 package hanta.bbyuck.egoapiserver.api.lol;
 
-import hanta.bbyuck.egoapiserver.request.lol.LolDuoRequestDto;
-import hanta.bbyuck.egoapiserver.request.lol.LolDuoRequestGetDto;
+import hanta.bbyuck.egoapiserver.request.lol.LolRequestDto;
+import hanta.bbyuck.egoapiserver.request.lol.LolRequestGetDto;
 import hanta.bbyuck.egoapiserver.response.ResponseMessage;
-import hanta.bbyuck.egoapiserver.response.lol.LolRequestDuoProfileCardDeck;
-import hanta.bbyuck.egoapiserver.service.lol.LolDuoRequestService;
+import hanta.bbyuck.egoapiserver.response.lol.LolRequestProfileCardDeck;
+import hanta.bbyuck.egoapiserver.service.lol.LolRequestService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "/user/api/v0.0.1/lol/duo")
 @RequiredArgsConstructor
-public class LolDuoRequestController {
-    private final LolDuoRequestService lolDuoRequestService;
+public class LolRequestController {
+    private final LolRequestService lolRequestService;
 
     @ApiOperation(value = "롤 듀오 신청",
             notes = "롤 듀오 신청 보내기 API\n" +
@@ -31,8 +31,8 @@ public class LolDuoRequestController {
             @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
     })
     @PostMapping("/match-request")
-    public ResponseMessage sendRequest(@RequestBody LolDuoRequestDto lolDuoRequestDto) {
-        lolDuoRequestService.sendRequest(lolDuoRequestDto);
+    public ResponseMessage sendRequest(@RequestBody LolRequestDto lolRequestDto) {
+        lolRequestService.sendRequest(lolRequestDto);
         return new ResponseMessage("Match Request Send API Call Success!", "LDR-NONE-001");
     }
 
@@ -43,15 +43,15 @@ public class LolDuoRequestController {
                     "2. 현재 MAX_REQUEST_COUNT = 5\n" +
                     "3. 신청 받은 유저 정보 대신 유저의 프로필 카드 정보 리턴" +
                     "4. 가공 처리 된 프로필 카드 정보(아이디 가려짐)",
-            response = LolRequestDuoProfileCardDeck.class)
+            response = LolRequestProfileCardDeck.class)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "generatedId", value = "회원가입 및 로그인시 제공받은 Id", defaultValue = "sdsnadnsao21n3o1ni3o1"),
             @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00"),
             @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
     })
     @GetMapping("/sent-request")
-    public ResponseMessage getSentRequest(@RequestBody LolDuoRequestGetDto requestDto) {
-        LolRequestDuoProfileCardDeck sentRequestDeck = lolDuoRequestService.getSendRequest(requestDto);
+    public ResponseMessage getSentRequest(@RequestBody LolRequestGetDto requestDto) {
+        LolRequestProfileCardDeck sentRequestDeck = lolRequestService.getSendRequest(requestDto);
         return new ResponseMessage("Sent Request List Get API Call Success", "LDR-OBJ-001", sentRequestDeck);
     }
 
@@ -61,15 +61,15 @@ public class LolDuoRequestController {
                     "2. 현재 MAX_REQUEST_COUNT = 5\n" +
                     "3. 신청 보낸 유저 정보 대신 유저의 프로필 카드 정보 리턴" +
                     "4. 가공 처리 된 프로필 카드 정보(아이디 가려짐)",
-            response = LolRequestDuoProfileCardDeck.class)
+            response = LolRequestProfileCardDeck.class)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "generatedId", value = "회원가입 및 로그인시 제공받은 Id", defaultValue = "sdsnadnsao21n3o1ni3o1"),
             @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00"),
             @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
     })
     @GetMapping("/received-request")
-    public ResponseMessage getReceivedRequest(@RequestBody LolDuoRequestGetDto requestDto) {
-        LolRequestDuoProfileCardDeck receivedRequestDeck = lolDuoRequestService.getReceiveRequest(requestDto);
+    public ResponseMessage getReceivedRequest(@RequestBody LolRequestGetDto requestDto) {
+        LolRequestProfileCardDeck receivedRequestDeck = lolRequestService.getReceiveRequest(requestDto);
         return new ResponseMessage("Sent Request List Get API Call Success", "LDR-OBJ-002" ,receivedRequestDeck);
     }
 
@@ -83,8 +83,8 @@ public class LolDuoRequestController {
             @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
     })
     @DeleteMapping("/sent-request")
-    public ResponseMessage cancelRequest(@RequestBody LolDuoRequestDto requestDto) {
-        lolDuoRequestService.cancelRequest(requestDto);
+    public ResponseMessage cancelRequest(@RequestBody LolRequestDto requestDto) {
+        lolRequestService.cancelRequest(requestDto);
         return new ResponseMessage("Cancel Sent Request API Call Success", "LDR-NONE-002");
     }
 
@@ -98,8 +98,8 @@ public class LolDuoRequestController {
             @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
     })
     @DeleteMapping("/received-request")
-    public ResponseMessage rejectRequest(@RequestBody LolDuoRequestDto requestDto) {
-        lolDuoRequestService.rejectRequest(requestDto);
+    public ResponseMessage rejectRequest(@RequestBody LolRequestDto requestDto) {
+        lolRequestService.rejectRequest(requestDto);
         return new ResponseMessage("Reject Received Request API Call Success", "LDR-NONE-003");
     }
 
@@ -112,8 +112,8 @@ public class LolDuoRequestController {
             @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
     })
     @DeleteMapping("/all-sent-request")
-    public ResponseMessage cancelAllRequest(@RequestBody LolDuoRequestDto requestDto) {
-        lolDuoRequestService.cancelAllRequest(requestDto);
+    public ResponseMessage cancelAllRequest(@RequestBody LolRequestDto requestDto) {
+        lolRequestService.cancelAllRequest(requestDto);
         return new ResponseMessage("Cancel All Sent Request API Call Success", "LDR-NONE-004");
     }
 
@@ -126,8 +126,8 @@ public class LolDuoRequestController {
             @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
     })
     @DeleteMapping("/all-received-request")
-    public ResponseMessage rejectAllRequest(@RequestBody LolDuoRequestDto requestDto) {
-        lolDuoRequestService.rejectAllRequest(requestDto);
+    public ResponseMessage rejectAllRequest(@RequestBody LolRequestDto requestDto) {
+        lolRequestService.rejectAllRequest(requestDto);
         return new ResponseMessage("Reject All Received Request API Call Success", "LDR-NONE-005");
     }
 }

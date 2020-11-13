@@ -7,10 +7,11 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class LolDuoProfileCardResponseDto {
-    private LocalDateTime lastUpdateTime;
+public class LolRequestProfileCard {
+    private Long profileCardId;
     private Boolean voice;
-    private String summonerName;
+    private LocalDateTime requestTime;
+    private String limitedSummonerName;
     private LolTier tier;
     private Integer tierLev;
     private Integer lp;

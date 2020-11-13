@@ -2,6 +2,7 @@ package hanta.bbyuck.egoapiserver.request;
 
 import hanta.bbyuck.egoapiserver.domain.enumset.Game;
 import hanta.bbyuck.egoapiserver.domain.enumset.GameType;
+import hanta.bbyuck.egoapiserver.domain.enumset.MatchType;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -11,8 +12,9 @@ public class EgoScoreRequestDto {
     private String clientVersion;
 
     private Game game;
-    private GameType gameType;
+    private MatchType matchType;
     private String generatedId;
     private Boolean good;
     private Long opponentProfileCardId;
+
 }

@@ -4,6 +4,7 @@ package hanta.bbyuck.egoapiserver.domain;
 import hanta.bbyuck.egoapiserver.domain.enumset.ExpStatus;
 import hanta.bbyuck.egoapiserver.domain.enumset.Game;
 import hanta.bbyuck.egoapiserver.domain.enumset.GameType;
+import hanta.bbyuck.egoapiserver.domain.enumset.MatchType;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -33,9 +34,9 @@ public class Experience {
     @Enumerated(EnumType.STRING)
     private Game game;
 
-    @Column(name = "game_type")
+    @Column(name = "match_type")
     @Enumerated(EnumType.STRING)
-    private GameType gameType;
+    private MatchType matchType;
 
 
     @Column(name = "exp_status")
@@ -51,10 +52,10 @@ public class Experience {
      * 유저 편의 메서드
      */
 
-    public void makeExp(User user, Game game, GameType gameType, ExpStatus expStatus) {
+    public void makeExp(User user, Game game, MatchType matchType, ExpStatus expStatus) {
         this.owner = user;
         this.game = game;
-        this.gameType = gameType;
+        this.matchType = matchType;
         this.expStatus = expStatus;
         this.getDate = LocalDateTime.now();
     }

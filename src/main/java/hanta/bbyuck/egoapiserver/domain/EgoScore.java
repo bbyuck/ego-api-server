@@ -2,8 +2,8 @@ package hanta.bbyuck.egoapiserver.domain;
 
 import hanta.bbyuck.egoapiserver.domain.enumset.Game;
 import hanta.bbyuck.egoapiserver.domain.enumset.GameType;
+import hanta.bbyuck.egoapiserver.domain.enumset.MatchType;
 import lombok.Getter;
-import org.apache.tomcat.jni.Local;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -35,7 +35,7 @@ public class EgoScore {
 
 
     private Game game;
-    private GameType gameType;
+    private MatchType matchType;
     private Integer point;
     private LocalDateTime evaluationTime;
 
@@ -43,11 +43,11 @@ public class EgoScore {
      * 유저 편의 메서드
      */
 
-    public void makeScore(User giver, User receiver, Game game, GameType gameType, Integer point) {
+    public void makeScore(User giver, User receiver, Game game, MatchType matchType, Integer point) {
         this.giver = giver;
         this.receiver = receiver;
         this.game = game;
-        this.gameType = gameType;
+        this.matchType = matchType;
         this.point = point;
         this.evaluationTime = LocalDateTime.now();
     }

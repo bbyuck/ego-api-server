@@ -7,7 +7,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class LolDuoMatchingResponseDto {
+public class LolMatchingResponseDto {
     private Long matchId;
     private LocalDateTime matchStartTime;
 

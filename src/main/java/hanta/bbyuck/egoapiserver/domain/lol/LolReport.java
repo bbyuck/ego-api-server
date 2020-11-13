@@ -3,6 +3,7 @@ package hanta.bbyuck.egoapiserver.domain.lol;
 
 import hanta.bbyuck.egoapiserver.domain.User;
 import hanta.bbyuck.egoapiserver.domain.enumset.GameType;
+import hanta.bbyuck.egoapiserver.domain.enumset.MatchType;
 import hanta.bbyuck.egoapiserver.domain.enumset.ReportStatus;
 import lombok.Getter;
 
@@ -30,7 +31,7 @@ public class LolReport {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "game_type")
-    private GameType gameType;
+    private MatchType matchType;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "report_status")
@@ -43,10 +44,10 @@ public class LolReport {
      * 유저 편의 메서드
      */
 
-    public void makeReport(User reporter, User reported, GameType gameType, String reportContent) {
+    public void makeReport(User reporter, User reported, MatchType matchType, String reportContent) {
         this.reporter = reporter;
         this.reported = reported;
-        this.gameType = gameType;
+        this.matchType = matchType;
         this.status = ReportStatus.PROCESSING;
         this.reportContent = reportContent;
         this.reportTime = LocalDateTime.now();

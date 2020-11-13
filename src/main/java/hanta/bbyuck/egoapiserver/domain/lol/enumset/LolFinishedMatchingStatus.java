@@ -1,5 +1,5 @@
 package hanta.bbyuck.egoapiserver.domain.lol.enumset;
 
-public enum LolDuoFinishedMatchingStatus {
+public enum LolFinishedMatchingStatus {
     BEFORE_LIMIT, AFTER_LIMIT
 }

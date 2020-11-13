@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-public class LolDuoMatchingRequestDto {
+public class LolMatchingRequestDto {
     @ApiModelProperty(example = "v1.00")
     private String clientVersion;
 

@@ -1,14 +1,16 @@
 package hanta.bbyuck.egoapiserver;
 
+import hanta.bbyuck.egoapiserver.domain.enumset.GameType;
+import hanta.bbyuck.egoapiserver.domain.enumset.MatchType;
 import hanta.bbyuck.egoapiserver.domain.enumset.SnsVendor;
 import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolPosition;
 import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolTier;
 import hanta.bbyuck.egoapiserver.repository.UserRepository;
 import hanta.bbyuck.egoapiserver.request.UserAuthRequestDto;
-import hanta.bbyuck.egoapiserver.request.lol.LolDuoProfileCardMakeRequestDto;
+import hanta.bbyuck.egoapiserver.request.lol.LolProfileCardMakeRequestDto;
 import hanta.bbyuck.egoapiserver.service.UserService;
-import hanta.bbyuck.egoapiserver.service.lol.LolDuoProfileCardService;
-import hanta.bbyuck.egoapiserver.service.lol.LolDuoRequestService;
+import hanta.bbyuck.egoapiserver.service.lol.LolProfileCardService;
+import hanta.bbyuck.egoapiserver.service.lol.LolRequestService;
 import hanta.bbyuck.egoapiserver.util.AES256Util;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -16,6 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
+
+import static hanta.bbyuck.egoapiserver.domain.enumset.GameType.*;
+import static hanta.bbyuck.egoapiserver.domain.enumset.GameType.RANK;
+import static hanta.bbyuck.egoapiserver.domain.enumset.MatchType.*;
 
 
 //@Component
@@ -37,9 +43,9 @@ public class InitDB {
         private final UserService userService;
         private final UserRepository userRepository;
 
-        private final LolDuoRequestService lolDuoRequestService;
+        private final LolRequestService lolRequestService;
 
-        private final LolDuoProfileCardService lolDuoProfileCardService;
+        private final LolProfileCardService lolProfileCardService;
         private final EntityManager em;
 
         private static final int TEST_USER_COUNT = 40;
@@ -65,7 +71,7 @@ public class InitDB {
             }
 
             for (int i = 1; i <= TEST_USER_COUNT; i++) {
-                LolDuoProfileCardMakeRequestDto profileCardDto = new LolDuoProfileCardMakeRequestDto();
+                LolProfileCardMakeRequestDto profileCardDto = new LolProfileCardMakeRequestDto();
 
                 SnsVendor snsVendor;
                 String snsId = String.format("%019d", i);
@@ -163,8 +169,9 @@ public class InitDB {
                 profileCardDto.setSupport(support);
                 profileCardDto.setMainLolPosition(mainLolPosition);
                 profileCardDto.setClientVersion("v1.00");
-
-                lolDuoProfileCardService.makeDuoProfileCard(profileCardDto);
+                profileCardDto.setMatchType(DUO);
+                profileCardDto.setGameType((i % 2 ==0 ? NORMAL : RANK));
+                lolProfileCardService.makeDuoProfileCard(profileCardDto);
                 em.flush();
             }
         }

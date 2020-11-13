@@ -1,12 +1,12 @@
 package hanta.bbyuck.egoapiserver.api.lol;
 
-import hanta.bbyuck.egoapiserver.request.lol.LolDuoMatchingRequestDto;
+import hanta.bbyuck.egoapiserver.request.lol.LolMatchingRequestDto;
 import hanta.bbyuck.egoapiserver.request.lol.LolReportRequestDto;
 import hanta.bbyuck.egoapiserver.response.ResponseMessage;
-import hanta.bbyuck.egoapiserver.response.lol.LolDuoMatchingResponseDto;
-import hanta.bbyuck.egoapiserver.response.lol.LolProcessedDuoProfileCardDeck;
+import hanta.bbyuck.egoapiserver.response.lol.LolMatchingResponseDto;
+import hanta.bbyuck.egoapiserver.response.lol.LolProcessedProfileCardDeck;
 import hanta.bbyuck.egoapiserver.service.EgoScoreService;
-import hanta.bbyuck.egoapiserver.service.lol.LolDuoMatchingService;
+import hanta.bbyuck.egoapiserver.service.lol.LolMatchingService;
 import hanta.bbyuck.egoapiserver.service.lol.LolReportService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/user/api/v0.0.1/lol/duo")
-public class LolDuoMatchingController {
+public class LolMatchingController {
 
-    private final LolDuoMatchingService lolDuoMatchingService;
+    private final LolMatchingService lolMatchingService;
     private final LolReportService lolReportService;
     private final EgoScoreService egoScoreService;
 
@@ -33,23 +33,23 @@ public class LolDuoMatchingController {
             @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
     })
     @GetMapping("/match")
-    public ResponseMessage getMyInProgressMatching(@RequestBody LolDuoMatchingRequestDto requestDto) {
-        LolDuoMatchingResponseDto responseDto = lolDuoMatchingService.findMatch(requestDto);
+    public ResponseMessage getMyInProgressMatching(@RequestBody LolMatchingRequestDto requestDto) {
+        LolMatchingResponseDto responseDto = lolMatchingService.findMatch(requestDto);
         return new ResponseMessage("Get Duo Matching info API Call Success!","LDM-OBJ-001" ,responseDto);
     }
 
     @ApiOperation(value = "매칭 수락",
             notes = "매칭 수락시 이용할 API 요청을 보낸 유저와 요청을 받은 유저의 매칭이 생성\n" +
                     "1. 매칭시 유저 상태가 변경\n",
-            response = LolProcessedDuoProfileCardDeck.class)
+            response = LolProcessedProfileCardDeck.class)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "generatedId", value = "회원가입 및 로그인시 제공받은 Id", defaultValue = "sdsnadnsao21n3o1ni3o1"),
             @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00"),
             @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
     })
     @PostMapping("/match")
-    public ResponseMessage acceptMatch(@RequestBody LolDuoMatchingRequestDto requestDto) {
-        lolDuoMatchingService.match(requestDto);
+    public ResponseMessage acceptMatch(@RequestBody LolMatchingRequestDto requestDto) {
+        lolMatchingService.match(requestDto);
         return new ResponseMessage("Duo Match API Call Success!", "LDM-NONE-001");
 
     }
@@ -63,8 +63,8 @@ public class LolDuoMatchingController {
             @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
     })
     @PutMapping("/match")
-    public ResponseMessage enterMatch(@RequestBody LolDuoMatchingRequestDto requestDto) {
-        lolDuoMatchingService.enterMatch(requestDto);
+    public ResponseMessage enterMatch(@RequestBody LolMatchingRequestDto requestDto) {
+        lolMatchingService.enterMatch(requestDto);
         return new ResponseMessage("매칭방 입장", "LDM-NONE-002");
     }
 
@@ -79,8 +79,8 @@ public class LolDuoMatchingController {
             @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
     })
     @DeleteMapping("/match")
-    public ResponseMessage completeMatch(@RequestBody LolDuoMatchingRequestDto requestDto) {
-        lolDuoMatchingService.completeMatch(requestDto);
+    public ResponseMessage completeMatch(@RequestBody LolMatchingRequestDto requestDto) {
+        lolMatchingService.completeMatch(requestDto);
         return new ResponseMessage("Complete Duo Match API Call Success!", "LDM-NONE-003");
     }
 

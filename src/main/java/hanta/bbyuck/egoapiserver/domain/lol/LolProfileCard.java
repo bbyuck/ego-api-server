@@ -2,6 +2,8 @@ package hanta.bbyuck.egoapiserver.domain.lol;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import hanta.bbyuck.egoapiserver.domain.User;
+import hanta.bbyuck.egoapiserver.domain.enumset.GameType;
+import hanta.bbyuck.egoapiserver.domain.enumset.MatchType;
 import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolPosition;
 import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolTier;
 import lombok.Getter;
@@ -12,17 +14,17 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Table(name = "lol_duo_profile_card")
+@Table(name = "lol_profile_card")
 @SequenceGenerator(
-        name = "lol_duo_profile_card_seq_generator",
-        sequenceName = "lol_duo_profile_card_sequence"
+        name = "lol_profile_card_seq_generator",
+        sequenceName = "lol_profile_card_sequence"
 )
-public class LolDuoProfileCard {
+public class LolProfileCard {
     @Id @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "lol_duo_profile_card_seq_generator"
+            generator = "lol_profile_card_seq_generator"
     )
-    @Column(name = "LOL_DUO_PROFILE_CARD_ID")
+    @Column(name = "LOL_PROFILE_CARD_ID")
     private Long id;
 
     @JsonIgnore
@@ -83,6 +85,14 @@ public class LolDuoProfileCard {
     @Column(name = "main_position", length = 7, nullable = false)
     private LolPosition mainLolPosition;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "game_type")
+    private GameType gameType;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "match_type")
+    private MatchType matchType;
+
     /*
      * 편의 메서드
      */
@@ -100,7 +110,9 @@ public class LolDuoProfileCard {
                                 Boolean _mid,
                                 Boolean _ad,
                                 Boolean _support,
-                                LolPosition _mainLolPosition) {
+                                LolPosition _mainLolPosition,
+                                GameType _gameType,
+                                MatchType _matchType) {
         this.owner = _owner;
         this.lastUpdateTime = LocalDateTime.now();
         this.voice = _voice;
@@ -117,6 +129,8 @@ public class LolDuoProfileCard {
         this.ad = _ad;
         this.support = _support;
         this.mainLolPosition = _mainLolPosition;
+        this.gameType = _gameType;
+        this.matchType = _matchType;
     }
 
     public void updateProfileCard(Boolean _voice,
@@ -132,7 +146,8 @@ public class LolDuoProfileCard {
                                   Boolean _mid,
                                   Boolean _ad,
                                   Boolean _support,
-                                  LolPosition _mainLolPosition) {
+                                  LolPosition _mainLolPosition,
+                                  GameType _gameType) {
         this.lastUpdateTime = LocalDateTime.now();
         this.voice = _voice;
         this.summonerName = _summonerName;
@@ -148,6 +163,6 @@ public class LolDuoProfileCard {
         this.ad = _ad;
         this.support = _support;
         this.mainLolPosition = _mainLolPosition;
+        this.gameType = _gameType;
     }
-
 }
