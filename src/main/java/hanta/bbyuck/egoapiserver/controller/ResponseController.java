@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 @Slf4j
 @ControllerAdvice
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ResponseController {
 
     @ExceptionHandler(AbstractResponseException.class)

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserController {
     private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
@@ -33,6 +34,7 @@ public class UserController {
     @PostMapping("/api/v0.0.1/auth")
     public ResponseMessage join(@RequestBody UserAuthRequestDto requestDto) {
         LoginDto loginDto = userService.join(requestDto);
+
 
         String token = jwtTokenProvider.createToken(loginDto.getId(), loginDto.getPrivileges());
         UserAuthResponseDto userAuthResponseDto = new UserAuthResponseDto();
