@@ -154,10 +154,10 @@ public class EgoTestService {
         egoTestRepository.save(egoTestAnswer);
 
 
-        EgoTestResponseDto egoTestResponseDto = new EgoTestResponseDto();
-        egoTestResponseDto.setResult(type);
+        EgoTestResponseDto responseDto = new EgoTestResponseDto();
+        responseDto.setResult(type);
 
-        return egoTestResponseDto;
+        return responseDto;
     }
 
 

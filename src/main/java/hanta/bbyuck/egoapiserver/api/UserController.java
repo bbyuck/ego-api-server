@@ -1,5 +1,6 @@
 package hanta.bbyuck.egoapiserver.api;
 
+import hanta.bbyuck.egoapiserver.domain.enumset.Game;
 import hanta.bbyuck.egoapiserver.request.*;
 import hanta.bbyuck.egoapiserver.response.*;
 import hanta.bbyuck.egoapiserver.security.JwtTokenProvider;
@@ -60,14 +61,24 @@ public class UserController {
     }
 
     @GetMapping("/user/api/v0.0.1/game")
-    public ResponseMessage findLastGame(@RequestBody UserGameSelectDto requestDto){
+    public ResponseMessage findLastGame(@RequestParam String clientVersion,
+                                        @RequestParam String generatedId,
+                                        @RequestParam Game game){
+        UserGameSelectDto requestDto = new UserGameSelectDto();
+        requestDto.setClientVersion(clientVersion);
+        requestDto.setGeneratedId(generatedId);
+        requestDto.setGame(game);
         UserInfoResponseDto responseDto = userService.findLastPlayGame(requestDto);
         if (responseDto.getGame() == null) return new ResponseMessage("마지막으로 게임을 한 기록이 없음");
         else return new ResponseMessage("마지막으로 한 게임", "GAME-OBJ-001" ,responseDto);
     }
 
     @GetMapping("/user/api/v0.0.1/status")
-    public ResponseMessage myStatus(@RequestBody UserStatusRequestDto requestDto) {
+    public ResponseMessage myStatus(@RequestParam String clientVersion,
+                                    @RequestParam String generatedId) {
+        UserStatusRequestDto requestDto = new UserStatusRequestDto();
+        requestDto.setClientVersion(clientVersion);
+        requestDto.setGeneratedId(generatedId);
         UserStatusResponseDto responseDto = userService.findStatus(requestDto);
         return new ResponseMessage("유저 상태 리턴 및 최근 활동시각 업데이트", "USER-OBJ-102", responseDto);
     }
@@ -87,7 +98,19 @@ public class UserController {
 
     @PostMapping("/user/api/v0.0.1/user/ego-test")
     public ResponseMessage egoAppTest(@RequestBody EgoTestAnswerRequestDto requestDto) {
-        EgoTestResponseDto responseDto = egoTestService.saveAnswer(requestDto);
-        return new ResponseMessage("테스트 완료", "EGO-OBJ-001", responseDto);
+        EgoTestResponseDto responseDto = null;
+        String returnCode = null;
+        if (requestDto.getGeneratedId() == null) {
+            // 유저 정보 변경 없이 테스트만 수행 -> 웹버전 회원가입유도 필요
+            responseDto = egoTestService.saveAnswer(requestDto);
+            returnCode = "EGO-OBJ-002";
+        }
+        else {
+            // 유저 정보 포함 테스트 수행 -> 앱버전
+            responseDto = egoTestService.saveAnswer(requestDto);
+            returnCode = "EGO-OBJ-001";
+        }
+
+        return new ResponseMessage("테스트 완료", returnCode, responseDto);
     }
 }

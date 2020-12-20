@@ -8,6 +8,6 @@ public class LolRequestGetDto {
     @ApiModelProperty(example = "v1.00")
     private String clientVersion;
 
-    @ApiModelProperty(name = "userAuth", example = "21313dnsiadno123in432")
-    private String userAuth;
+    @ApiModelProperty(name = "generatedId", example = "21313dnsiadno123in432")
+    private String generatedId;
 }

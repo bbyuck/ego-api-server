@@ -58,12 +58,14 @@ public class LolProfileCardController {
             @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
     })
     @GetMapping("/my-card")
-    public ResponseMessage getDuoProfile(@RequestBody LolProfileCardRequestDto requestDto) {
+    public ResponseMessage getDuoProfile(@RequestParam String clientVersion,
+                                         @RequestParam String generatedId) {
+        LolProfileCardRequestDto requestDto = new LolProfileCardRequestDto();
+        requestDto.setClientVersion(clientVersion);
+        requestDto.setGeneratedId(generatedId);
         LolProfileCardResponseDto responseDto = lolProfileCardService.take(requestDto);
         return new ResponseMessage("Duo Profile Card Get API Call Success!", "LDPC-OBJ-002", responseDto);
     }
-
-
 
     @ApiOperation(value = "프로필카드 수정",
             notes = "유저 인증 정보와 새로운 프로필카드 데이터로 프로필카드 업데이트")
@@ -102,7 +104,11 @@ public class LolProfileCardController {
             @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
     })
     @GetMapping("/match-deck")
-    public ResponseMessage getMatchingDeck(@RequestBody LolMatchDeckRequestDto requestDto) {
+    public ResponseMessage getMatchingDeck(@RequestParam String clientVersion,
+                                           @RequestParam String generatedId) {
+        LolMatchDeckRequestDto requestDto = new LolMatchDeckRequestDto();
+        requestDto.setClientVersion(clientVersion);
+        requestDto.setGeneratedId(generatedId);
         LolProcessedProfileCardDeck deck = lolProfileCardService.takeDeck(requestDto);
         return new ResponseMessage("Lol duo profile card deck return API Call Success!", "LDPC-OBJ-004", deck);
     }

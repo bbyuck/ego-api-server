@@ -113,7 +113,7 @@ public class LolRequestService {
     public LolRequestProfileCardDeck getSendRequest(LolRequestGetDto requestDto) {
         checkClientVersion(requestDto.getClientVersion());
 
-        User reqUser = userRepository.find(requestDto.getUserAuth());
+        User reqUser = userRepository.find(requestDto.getGeneratedId());
         List<LolRequest> sentRequestList = lolRequestRepository.findSend(reqUser);
 
         LolRequestProfileCardDeck sentRequestDeck = new LolRequestProfileCardDeck();
@@ -136,7 +136,7 @@ public class LolRequestService {
         checkClientVersion(requestDto.getClientVersion());
 
 
-        User reqUser = userRepository.find(requestDto.getUserAuth());
+        User reqUser = userRepository.find(requestDto.getGeneratedId());
         List<LolRequest> receivedRequestList = lolRequestRepository.findReceive(reqUser);
 
         LolRequestProfileCardDeck receivedRequestDeck = new LolRequestProfileCardDeck();

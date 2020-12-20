@@ -50,7 +50,11 @@ public class LolRequestController {
             @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
     })
     @GetMapping("/sent-request")
-    public ResponseMessage getSentRequest(@RequestBody LolRequestGetDto requestDto) {
+    public ResponseMessage getSentRequest(@RequestParam String clientVersion,
+                                          @RequestParam String generatedId) {
+        LolRequestGetDto requestDto = new LolRequestGetDto();
+        requestDto.setClientVersion(clientVersion);
+        requestDto.setGeneratedId(generatedId);
         LolRequestProfileCardDeck sentRequestDeck = lolRequestService.getSendRequest(requestDto);
         return new ResponseMessage("Sent Request List Get API Call Success", "LDR-OBJ-001", sentRequestDeck);
     }
@@ -68,7 +72,11 @@ public class LolRequestController {
             @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
     })
     @GetMapping("/received-request")
-    public ResponseMessage getReceivedRequest(@RequestBody LolRequestGetDto requestDto) {
+    public ResponseMessage getReceivedRequest(@RequestParam String clientVersion,
+                                              @RequestParam String generatedId) {
+        LolRequestGetDto requestDto = new LolRequestGetDto();
+        requestDto.setClientVersion(clientVersion);
+        requestDto.setGeneratedId(generatedId);
         LolRequestProfileCardDeck receivedRequestDeck = lolRequestService.getReceiveRequest(requestDto);
         return new ResponseMessage("Sent Request List Get API Call Success", "LDR-OBJ-002" ,receivedRequestDeck);
     }

@@ -33,7 +33,15 @@ public class LolMatchingController {
             @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
     })
     @GetMapping("/match")
-    public ResponseMessage getMyInProgressMatching(@RequestBody LolMatchingRequestDto requestDto) {
+    public ResponseMessage getMyInProgressMatching(@RequestParam String clientVersion,
+                                                   @RequestParam String generatedId,
+                                                   @RequestParam Long opponentProfileId,
+                                                   @RequestParam Long matchId) {
+        LolMatchingRequestDto requestDto = new LolMatchingRequestDto();
+        requestDto.setClientVersion(clientVersion);
+        requestDto.setGeneratedId(generatedId);
+        requestDto.setOpponentProfileCardId(opponentProfileId);
+        requestDto.setMatchId(matchId);
         LolMatchingResponseDto responseDto = lolMatchingService.findMatch(requestDto);
         return new ResponseMessage("Get Duo Matching info API Call Success!","LDM-OBJ-001" ,responseDto);
     }
