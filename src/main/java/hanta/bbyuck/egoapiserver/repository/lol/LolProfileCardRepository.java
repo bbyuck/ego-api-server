@@ -88,6 +88,17 @@ public class LolProfileCardRepository {
                 .getResultList();
     }
 
+    @Transactional
+    public void updateFavorite(LolProfileCard lolProfileCard,
+                               LolTier favoriteTier,
+                               Boolean favoriteTop,
+                               Boolean favoriteJungle,
+                               Boolean favoriteMid,
+                               Boolean favoriteAd,
+                               Boolean favoriteSupport) {
+        lolProfileCard.updateFavorite(favoriteTier, favoriteTop, favoriteJungle, favoriteMid, favoriteAd, favoriteSupport);
+    }
+
     // 시즌 10 (2020시즌)
     public List<LolProfileCard> findCustomizedListV1(User owner) {
         LolProfileCard reqUserCard = find(owner);
@@ -324,4 +335,5 @@ public class LolProfileCardRepository {
 
         return deckList;
     }
+
 }

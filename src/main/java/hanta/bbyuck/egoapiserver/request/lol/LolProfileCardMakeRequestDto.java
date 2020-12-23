@@ -62,4 +62,22 @@ public class LolProfileCardMakeRequestDto {
 
     @ApiModelProperty(name = "매치 타입", example = "DUO")
     private MatchType matchType;
+
+    @ApiModelProperty(name = "선호하는 티어", example = "S")
+    private LolTier favoriteTier;
+
+    @ApiModelProperty(name = "선호하는 포지션 - 탑", example = "true")
+    private Boolean favoriteTop;
+
+    @ApiModelProperty(name = "선호하는 포지션 - 정글", example = "true")
+    private Boolean favoriteJungle;
+
+    @ApiModelProperty(name = "선호하는 포지션 - 미드", example = "true")
+    private Boolean favoriteMid;
+
+    @ApiModelProperty(name = "선호하는 포지션 - 원딜", example = "true")
+    private Boolean favoriteAd;
+
+    @ApiModelProperty(name = "선호하는 포지션 - 서포터", example = "true")
+    private Boolean favoriteSupport;
 }

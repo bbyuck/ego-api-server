@@ -93,6 +93,30 @@ public class LolProfileCard {
     @Column(name = "match_type")
     private MatchType matchType;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "favorite_tier", length = 4, nullable = false)
+    private LolTier favoriteTier;
+
+    @Column(name="favorite_top", columnDefinition = "TINYINT", nullable = false)
+    @Type(type = "org.hibernate.type.NumericBooleanType")
+    private Boolean favoriteTop;
+
+    @Column(name = "favorite_jungle", columnDefinition = "TINYINT", nullable = false)
+    @Type(type = "org.hibernate.type.NumericBooleanType")
+    private Boolean favoriteJungle;
+
+    @Column(name = "favorite_mid", columnDefinition = "TINYINT", nullable = false)
+    @Type(type = "org.hibernate.type.NumericBooleanType")
+    private Boolean favoriteMid;
+
+    @Column(name = "favorite_ad", columnDefinition = "TINYINT", nullable = false)
+    @Type(type = "org.hibernate.type.NumericBooleanType")
+    private Boolean favoriteAd;
+
+    @Column(name = "favorite_support", columnDefinition = "TINYINT", nullable = false)
+    @Type(type = "org.hibernate.type.NumericBooleanType")
+    private Boolean favoriteSupport;
+
     /*
      * 편의 메서드
      */
@@ -164,5 +188,19 @@ public class LolProfileCard {
         this.support = _support;
         this.mainLolPosition = _mainLolPosition;
         this.gameType = _gameType;
+    }
+
+    public void updateFavorite(LolTier _favoriteTier,
+                               Boolean _favoriteTop,
+                               Boolean _favoriteJungle,
+                               Boolean _favoriteMid,
+                               Boolean _favoriteAd,
+                               Boolean _favoriteSupport) {
+        favoriteTier = _favoriteTier;
+        favoriteTop = _favoriteTop;
+        favoriteJungle = _favoriteJungle;
+        favoriteMid = _favoriteMid;
+        favoriteAd = _favoriteAd;
+        favoriteSupport = _favoriteSupport;
     }
 }

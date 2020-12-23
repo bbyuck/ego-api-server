@@ -2,6 +2,7 @@ package hanta.bbyuck.egoapiserver.response.lol;
 
 import hanta.bbyuck.egoapiserver.domain.UserType;
 import hanta.bbyuck.egoapiserver.domain.enumset.EgoTestVersion;
+import hanta.bbyuck.egoapiserver.domain.enumset.GameType;
 import hanta.bbyuck.egoapiserver.domain.enumset.MatchType;
 import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolPosition;
 import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolTier;
@@ -27,6 +28,13 @@ public class LolProfileCardResponseDto {
     private Boolean support;
     private LolPosition mainLolPosition;
     private MatchType matchType;
+    private GameType gameType;
     private String userType;
     private EgoTestVersion egoTestVersion;
+    private LolTier favoriteTier;
+    private Boolean favoriteTop;
+    private Boolean favoriteJungle;
+    private Boolean favoriteMid;
+    private Boolean favoriteAd;
+    private Boolean favoriteSupport;
 }

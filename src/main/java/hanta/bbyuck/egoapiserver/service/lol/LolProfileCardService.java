@@ -2,7 +2,9 @@ package hanta.bbyuck.egoapiserver.service.lol;
 
 import hanta.bbyuck.egoapiserver.domain.UserType;
 import hanta.bbyuck.egoapiserver.domain.enumset.UserStatus;
+import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolTier;
 import hanta.bbyuck.egoapiserver.exception.BadMatchRequestException;
+import hanta.bbyuck.egoapiserver.exception.UpdateFailureException;
 import hanta.bbyuck.egoapiserver.repository.UserTypeRepository;
 import hanta.bbyuck.egoapiserver.response.lol.LolProcessedProfileCard;
 import hanta.bbyuck.egoapiserver.response.lol.LolProcessedProfileCardDeck;
@@ -36,6 +38,12 @@ public class LolProfileCardService {
     private final UserRepository userRepository;
     private final UserTypeRepository userTypeRepository;
 
+    private LolProfileCard makeNewDuoProfileCard(User apiCaller) throws  NoResultException {
+        LolProfileCard newProfileCard = new LolProfileCard();
+        newProfileCard.updateFavorite(LolTier.NONE, false, false, false, false, false);
+        return newProfileCard;
+    }
+
     public void makeDuoProfileCard(LolProfileCardMakeRequestDto requestDto) throws NoResultException{
         checkClientVersion(requestDto.getClientVersion());
 
@@ -49,7 +57,7 @@ public class LolProfileCardService {
             throw new DuplicateSummonerNameException();
         }
 
-        LolProfileCard lolProfileCard = new LolProfileCard();
+        LolProfileCard lolProfileCard = makeNewDuoProfileCard(apiCaller);
         lolProfileCard.makeProfileCard(
                 apiCaller,
                 requestDto.getVoice(),
@@ -297,8 +305,6 @@ public class LolProfileCardService {
     public LolProcessedProfileCardDeck takeDeck(LolMatchDeckRequestDto requestDto) {
         checkClientVersion(requestDto.getClientVersion());
 
-
-
         LolProcessedProfileCardDeck deck = new LolProcessedProfileCardDeck();
         User owner = userRepository.find(requestDto.getGeneratedId());
 
@@ -321,5 +327,46 @@ public class LolProfileCardService {
         deck.setDuoProfileCards(cardDeck);
         deck.setMakeTime(LocalDateTime.now());
         return deck;
+    }
+
+    public LolProfileCardResponseDto updateFavorites(LolProfileCardMakeRequestDto requestDto) throws UpdateFailureException {
+        checkClientVersion(requestDto.getClientVersion());
+
+        LolProfileCardResponseDto responseDto = new LolProfileCardResponseDto();
+        User owner = userRepository.find(requestDto.getGeneratedId());
+        LolProfileCard profileCard = lolProfileCardRepository.find(owner);
+
+        lolProfileCardRepository.updateFavorite(profileCard,
+                requestDto.getFavoriteTier(),
+                requestDto.getFavoriteTop(),
+                requestDto.getFavoriteJungle(),
+                requestDto.getFavoriteMid(),
+                requestDto.getFavoriteAd(),
+                requestDto.getFavoriteSupport());
+        
+        responseDto.setMatchType(profileCard.getMatchType());
+        responseDto.setGameType(profileCard.getGameType());
+        responseDto.setChampion1(profileCard.getChampion1());
+        responseDto.setChampion2(profileCard.getChampion2());
+        responseDto.setChampion3(profileCard.getChampion3());
+        responseDto.setTop(profileCard.getTop());
+        responseDto.setJungle(profileCard.getJungle());
+        responseDto.setMid(profileCard.getMid());
+        responseDto.setAd(profileCard.getAd());
+        responseDto.setSupport(profileCard.getSupport());
+        responseDto.setSummonerName(profileCard.getSummonerName());
+        responseDto.setTier(profileCard.getTier());
+        responseDto.setTierLev(profileCard.getTierLev());
+        responseDto.setLp(profileCard.getLp());
+        responseDto.setVoice(profileCard.getVoice());
+        responseDto.setMainLolPosition(profileCard.getMainLolPosition());
+        responseDto.setFavoriteTier(profileCard.getFavoriteTier());
+        responseDto.setFavoriteTop(profileCard.getFavoriteTop());
+        responseDto.setFavoriteJungle(profileCard.getFavoriteJungle());
+        responseDto.setFavoriteMid(profileCard.getFavoriteMid());
+        responseDto.setFavoriteAd(profileCard.getFavoriteAd());
+        responseDto.setFavoriteSupport(profileCard.getFavoriteSupport());
+
+        return responseDto;
     }
 }

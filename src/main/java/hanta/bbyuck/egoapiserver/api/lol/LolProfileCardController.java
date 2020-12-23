@@ -1,5 +1,6 @@
 package hanta.bbyuck.egoapiserver.api.lol;
 
+import hanta.bbyuck.egoapiserver.exception.UpdateFailureException;
 import hanta.bbyuck.egoapiserver.request.lol.LolMatchDeckRequestDto;
 import hanta.bbyuck.egoapiserver.request.lol.LolProfileCardRequestDto;
 import hanta.bbyuck.egoapiserver.request.lol.LolProfileCardMakeRequestDto;
@@ -111,5 +112,28 @@ public class LolProfileCardController {
         requestDto.setGeneratedId(generatedId);
         LolProcessedProfileCardDeck deck = lolProfileCardService.takeDeck(requestDto);
         return new ResponseMessage("Lol duo profile card deck return API Call Success!", "LDPC-OBJ-004", deck);
+    }
+
+
+    @ApiOperation(value = "프로필 카드 완성 - 선호하는 티어, 포지션 선택",
+            notes = "완성된 프로필카드 정보 리턴\n" +
+                    "프로필카드 정보 리턴",
+            response = LolProcessedProfileCardDeck.class)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "generatedId", value = "회원가입 및 로그인시 제공받은 Id", defaultValue = "sdsnadnsao21n3o1ni3o1"),
+            @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00"),
+            @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
+    })
+    @PutMapping("/my-card-favorite")
+    public ResponseMessage updateFavorite(@RequestBody LolProfileCardMakeRequestDto requestDto) {
+        try {
+            lolProfileCardService.updateFavorites(requestDto);
+            return new ResponseMessage("업데이트 완료", "LDPC-OBJ-005");
+        }
+        catch(UpdateFailureException e) {
+            e.printStackTrace();
+            return new ResponseMessage("업데이트 실패", e.getERR_CODE());
+        }
+
     }
 }
