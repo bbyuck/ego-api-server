@@ -15,6 +15,6 @@ public class EgoScoreRequestDto {
     private MatchType matchType;
     private String generatedId;
     private Boolean good;
-    private Long opponentProfileCardId;
+    private Long opponentProfileId;
 
 }

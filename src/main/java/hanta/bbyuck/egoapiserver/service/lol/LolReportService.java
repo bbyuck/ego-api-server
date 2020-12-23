@@ -35,7 +35,7 @@ public class LolReportService {
 
         if (!apiCaller.getStatus().equals(UserStatus.LOL_DUO_MATCHING_FINISH)) throw new BadRequestException();
 
-        User reported = lolProfileCardRepository.findById(requestDto.getOpponentProfileCardId()).getOwner();
+        User reported = lolProfileCardRepository.findById(requestDto.getOpponentProfileId()).getOwner();
 
         LolReport report = new LolReport();
         report.makeReport(apiCaller, reported, DUO, requestDto.getReportContent());

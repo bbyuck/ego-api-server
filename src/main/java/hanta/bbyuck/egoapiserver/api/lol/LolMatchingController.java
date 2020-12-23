@@ -40,7 +40,7 @@ public class LolMatchingController {
         LolMatchingRequestDto requestDto = new LolMatchingRequestDto();
         requestDto.setClientVersion(clientVersion);
         requestDto.setGeneratedId(generatedId);
-        requestDto.setOpponentProfileCardId(opponentProfileId);
+        requestDto.setOpponentProfileId(opponentProfileId);
         requestDto.setMatchId(matchId);
         LolMatchingResponseDto responseDto = lolMatchingService.findMatch(requestDto);
         return new ResponseMessage("Get Duo Matching info API Call Success!","LDM-OBJ-001" ,responseDto);
@@ -53,6 +53,7 @@ public class LolMatchingController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "generatedId", value = "회원가입 및 로그인시 제공받은 Id", defaultValue = "sdsnadnsao21n3o1ni3o1"),
             @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00"),
+            @ApiImplicitParam(name = "opponentProfileId", value = "상대방 프로필카드 id", defaultValue = "52"),
             @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
     })
     @PostMapping("/match")
@@ -67,7 +68,7 @@ public class LolMatchingController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "generatedId", value = "회원가입 및 로그인시 제공받은 Id", defaultValue = "sdsnadnsao21n3o1ni3o1"),
             @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00"),
-            @ApiImplicitParam(name = "opponentProfileCardId", example = "12"),
+            @ApiImplicitParam(name = "opponentProfileId", example = "12"),
             @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
     })
     @PutMapping("/match")

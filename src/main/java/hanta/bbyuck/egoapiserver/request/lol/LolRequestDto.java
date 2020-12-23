@@ -11,6 +11,6 @@ public class LolRequestDto {
     @ApiModelProperty(name = "generatedId", example = "dsaodakp1212141242oinoi3n42")
     private String generatedId;
 
-    @ApiModelProperty(name = "opponentProfileCardId", example = "12")
-    private Long opponentProfileCardId;
+    @ApiModelProperty(name = "opponentProfileId", example = "12")
+    private Long opponentProfileId;
 }

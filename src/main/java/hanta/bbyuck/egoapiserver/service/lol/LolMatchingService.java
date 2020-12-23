@@ -40,7 +40,7 @@ public class LolMatchingService {
         checkClientVersion(requestDto.getClientVersion());
 
         User reqUser = userRepository.find(requestDto.getGeneratedId());
-        User opponent = lolProfileCardRepository.findById(requestDto.getOpponentProfileCardId()).getOwner();
+        User opponent = lolProfileCardRepository.findById(requestDto.getOpponentProfileId()).getOwner();
 
         // 요청 보낸 사람과 요청 받은 사람 잘 체크할 것
         if(lolMatchingRepository.isExist(opponent, reqUser)) {

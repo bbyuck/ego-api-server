@@ -11,8 +11,8 @@ public class LolMatchingRequestDto {
     @ApiModelProperty(name = "generatedId", example = "dsaodakp1212141242oinoi3n42")
     private String generatedId;
 
-    @ApiModelProperty(name = "opponentProfileCardId", example = "12")
-    private Long opponentProfileCardId;
+    @ApiModelProperty(name = "opponentProfileId", example = "12")
+    private Long opponentProfileId;
 
     @ApiModelProperty(name = "matchingId", example = "1223141241")
     private Long matchId;

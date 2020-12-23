@@ -41,7 +41,7 @@ public class LolRequestService {
 
         // receiver card의 match type 따라서 (DUO OR TEAM) 요청 횟수 다르게
         User sender = userRepository.find(requestDto.getGeneratedId());
-        LolProfileCard receiverCard = lolProfileCardRepository.findById(requestDto.getOpponentProfileCardId());
+        LolProfileCard receiverCard = lolProfileCardRepository.findById(requestDto.getOpponentProfileId());
         User receiver = receiverCard.getOwner();
 
         if(sender == receiver) {
@@ -74,7 +74,7 @@ public class LolRequestService {
         checkClientVersion(requestDto.getClientVersion());
 
        User reqUser = userRepository.find(requestDto.getGeneratedId());
-       User opponent = lolProfileCardRepository.findById(requestDto.getOpponentProfileCardId()).getOwner();
+       User opponent = lolProfileCardRepository.findById(requestDto.getOpponentProfileId()).getOwner();
        
        LolRequest request = lolRequestRepository.findRequest(opponent, reqUser);
        
@@ -88,7 +88,7 @@ public class LolRequestService {
         checkClientVersion(requestDto.getClientVersion());
 
         User reqUser = userRepository.find(requestDto.getGeneratedId());
-        User opponent = lolProfileCardRepository.findById(requestDto.getOpponentProfileCardId()).getOwner();
+        User opponent = lolProfileCardRepository.findById(requestDto.getOpponentProfileId()).getOwner();
 
         LolRequest request = lolRequestRepository.findRequest(reqUser, opponent);
 

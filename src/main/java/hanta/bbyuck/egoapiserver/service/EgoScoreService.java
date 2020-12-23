@@ -35,7 +35,7 @@ public class EgoScoreService {
         User receiver = null;
         switch(game) {
             case LOL:
-                if(requestDto.getMatchType().equals(DUO)) receiver = lolProfileCardRepository.findById(requestDto.getOpponentProfileCardId()).getOwner();
+                if(requestDto.getMatchType().equals(DUO)) receiver = lolProfileCardRepository.findById(requestDto.getOpponentProfileId()).getOwner();
                 break;
             default:
                 break;
