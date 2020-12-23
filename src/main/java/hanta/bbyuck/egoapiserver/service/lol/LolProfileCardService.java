@@ -343,7 +343,7 @@ public class LolProfileCardService {
                 requestDto.getFavoriteMid(),
                 requestDto.getFavoriteAd(),
                 requestDto.getFavoriteSupport());
-        
+
         responseDto.setMatchType(profileCard.getMatchType());
         responseDto.setGameType(profileCard.getGameType());
         responseDto.setChampion1(profileCard.getChampion1());

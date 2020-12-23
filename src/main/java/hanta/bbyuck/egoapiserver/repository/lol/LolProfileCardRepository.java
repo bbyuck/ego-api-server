@@ -117,12 +117,14 @@ public class LolProfileCardRepository {
                         "from LolProfileCard lpc " +
                         "where (lpc.tier = :iron or lpc.tier = :bronze or lpc.tier = :silver) " +
                         "and (lpc.owner.status = :active) " +
+                        "and (lpc.owner <> :owner) " +
                         "order by lpc.owner.lastActiveTime";
                 deckList = em.createQuery(query, LolProfileCard.class)
                         .setParameter("iron", LolTier.I)
                         .setParameter("bronze", LolTier.B)
                         .setParameter("silver", LolTier.S)
                         .setParameter("active", UserStatus.ACTIVE)
+                        .setParameter("owner", owner)
                         .setFirstResult(0)
                         .setMaxResults(MAX_CARD_RETURN)
                         .getResultList();
@@ -133,6 +135,7 @@ public class LolProfileCardRepository {
                         "from LolProfileCard lpc " +
                         "where (lpc.tier = :iron or lpc.tier = :bronze or lpc.tier = :silver or lpc.tier = :gold) " +
                         "and (lpc.owner.status = :active) " +
+                        "and (lpc.owner <> :owner) " +
                         "order by lpc.owner.lastActiveTime";
                 deckList = em.createQuery(query, LolProfileCard.class)
                         .setParameter("iron", LolTier.I)
@@ -140,6 +143,7 @@ public class LolProfileCardRepository {
                         .setParameter("silver", LolTier.S)
                         .setParameter("gold", LolTier.G)
                         .setParameter("active", UserStatus.ACTIVE)
+                        .setParameter("owner", owner)
                         .setFirstResult(0)
                         .setMaxResults(MAX_CARD_RETURN)
                         .getResultList();
@@ -150,12 +154,14 @@ public class LolProfileCardRepository {
                         "from LolProfileCard lpc " +
                         "where (lpc.tier = :silver or lpc.tier = :gold or lpc.tier = :platinum) " +
                         "and (lpc.owner.status = :active) " +
+                        "and (lpc.owner <> :owner) " +
                         "order by lpc.owner.lastActiveTime";
                 deckList = em.createQuery(query, LolProfileCard.class)
                         .setParameter("silver", LolTier.S)
                         .setParameter("gold", LolTier.G)
                         .setParameter("platinum", LolTier.P)
                         .setParameter("active", UserStatus.ACTIVE)
+                        .setParameter("owner", owner)
                         .setFirstResult(0)
                         .setMaxResults(MAX_CARD_RETURN)
                         .getResultList();
@@ -170,12 +176,14 @@ public class LolProfileCardRepository {
                             "or lpc.tier = :platinum " +
                             "or (lpc.tier = :diamond and (lpc.tierLev = 3 or lpc.tierLev = 4))) " +
                             "and (lpc.owner.status = :active) " +
+                            "and (lpc.owner <> :owner) " +
                             "order by lpc.owner.lastActiveTime";
                     deckList = em.createQuery(query, LolProfileCard.class)
                             .setParameter("gold", LolTier.G)
                             .setParameter("platinum", LolTier.P)
                             .setParameter("diamond", LolTier.D)
                             .setParameter("active", UserStatus.ACTIVE)
+                            .setParameter("owner", owner)
                             .setFirstResult(0)
                             .setMaxResults(MAX_CARD_RETURN)
                             .getResultList();
@@ -185,12 +193,14 @@ public class LolProfileCardRepository {
                             "from LolProfileCard lpc " +
                             "where (lpc.tier = :gold or lpc.tier = :platinum or (lpc.tier = :diamond and lpc.tierLev = 4)) " +
                             "and (lpc.owner.status = :active) " +
+                            "and (lpc.owner <> :owner) " +
                             "order by lpc.owner.lastActiveTime";
                     deckList = em.createQuery(query, LolProfileCard.class)
                             .setParameter("gold", LolTier.G)
                             .setParameter("platinum", LolTier.P)
                             .setParameter("diamond", LolTier.D)
                             .setParameter("active", UserStatus.ACTIVE)
+                            .setParameter("owner", owner)
                             .setFirstResult(0)
                             .setMaxResults(MAX_CARD_RETURN)
                             .getResultList();
@@ -199,11 +209,13 @@ public class LolProfileCardRepository {
                             "from LolProfileCard lpc " +
                             "where (lpc.tier = :gold or lpc.tier = :platinum) " +
                             "and (lpc.owner.status = :active) " +
+                            "and (lpc.owner <> :owner) " +
                             "order by lpc.owner.lastActiveTime";
                     deckList = em.createQuery(query, LolProfileCard.class)
                             .setParameter("gold", LolTier.G)
                             .setParameter("platinum", LolTier.P)
                             .setParameter("active", UserStatus.ACTIVE)
+                            .setParameter("owner", owner)
                             .setFirstResult(0)
                             .setMaxResults(MAX_CARD_RETURN)
                             .getResultList();
@@ -217,11 +229,13 @@ public class LolProfileCardRepository {
                             "where ((lpc.tier = :platinum and (lpc.tierLev = 2 or lpc.tierLev = 1)) " +
                             "or (lpc.tier =: diamond and (lpc.tierLev = 4 or lpc.tierLev = 3 or lpc.tierLev = 2))) " +
                             "and (lpc.owner.status = :active) " +
+                            "and (lpc.owner <> :owner) " +
                             "order by lpc.owner.lastActiveTime";
                     deckList = em.createQuery(query, LolProfileCard.class)
                             .setParameter("platinum", LolTier.P)
                             .setParameter("diamond", LolTier.D)
                             .setParameter("active", UserStatus.ACTIVE)
+                            .setParameter("owner", owner)
                             .setFirstResult(0)
                             .setMaxResults(MAX_CARD_RETURN)
                             .getResultList();
@@ -232,11 +246,13 @@ public class LolProfileCardRepository {
                             "where ((lpc.tier = :platinum and lpc.tierLev = 1) " +
                             "or lpc.tier = :diamond) " +
                             "and (lpc.owner.status = :active) " +
+                            "and (lpc.owner <> :owner) " +
                             "order by lpc.owner.lastActiveTime";
                     deckList = em.createQuery(query, LolProfileCard.class)
                             .setParameter("platinum", LolTier.P)
                             .setParameter("diamond", LolTier.D)
                             .setParameter("active", UserStatus.ACTIVE)
+                            .setParameter("owner", owner)
                             .setFirstResult(0)
                             .setMaxResults(MAX_CARD_RETURN)
                             .getResultList();
@@ -246,11 +262,13 @@ public class LolProfileCardRepository {
                             "from LolProfileCard lpc " +
                             "where (lpc.tier = :diamond or lpc.tier = :master) " +
                             "and (lpc.owner.status = :active) " +
+                            "and (lpc.owner <> :owner) " +
                             "order by lpc.owner.lastActiveTime";
                     deckList = em.createQuery(query, LolProfileCard.class)
                             .setParameter("diamond", LolTier.D)
                             .setParameter("master", LolTier.M)
                             .setParameter("active", UserStatus.ACTIVE)
+                            .setParameter("owner", owner)
                             .setFirstResult(0)
                             .setMaxResults(MAX_CARD_RETURN)
                             .getResultList();
@@ -262,12 +280,14 @@ public class LolProfileCardRepository {
                             "or lpc.tier = :master " +
                             "or lpc.tier = :grandmaster) " +
                             "and (lpc.owner.status = :active) " +
+                            "and (lpc.owner <> :owner) " +
                             "order by lpc.owner.lastActiveTime";
                     deckList = em.createQuery(query, LolProfileCard.class)
                             .setParameter("diamond", LolTier.D)
                             .setParameter("master", LolTier.M)
                             .setParameter("grandmaster", LolTier.GM)
                             .setParameter("active", UserStatus.ACTIVE)
+                            .setParameter("owner", owner)
                             .setFirstResult(0)
                             .setMaxResults(MAX_CARD_RETURN)
                             .getResultList();
@@ -281,12 +301,14 @@ public class LolProfileCardRepository {
                         "or lpc.tier = :master " +
                         "or lpc.tier = :grandmaster) " +
                         "and (lpc.owner.status = :active) " +
+                        "and (lpc.owner <> :owner) " +
                         "order by lpc.owner.lastActiveTime";
                 deckList = em.createQuery(query, LolProfileCard.class)
                         .setParameter("diamond", LolTier.D)
                         .setParameter("master", LolTier.M)
                         .setParameter("grandmaster", LolTier.GM)
                         .setParameter("active", UserStatus.ACTIVE)
+                        .setParameter("owner", owner)
                         .setFirstResult(0)
                         .setMaxResults(MAX_CARD_RETURN)
                         .getResultList();
@@ -300,6 +322,7 @@ public class LolProfileCardRepository {
                         "or lpc.tier = :grandmaster " +
                         "or lpc.tier = :challenger) " +
                         "and (lpc.owner.status = :active) " +
+                        "and (lpc.owner <> :owner) " +
                         "order by lpc.owner.lastActiveTime";
 
                 deckList = em.createQuery(query, LolProfileCard.class)
@@ -308,6 +331,7 @@ public class LolProfileCardRepository {
                         .setParameter("grandmaster", LolTier.GM)
                         .setParameter("challenger", LolTier.C)
                         .setParameter("active", UserStatus.ACTIVE)
+                        .setParameter("owner", owner)
                         .setFirstResult(0)
                         .setMaxResults(MAX_CARD_RETURN)
                         .getResultList();
@@ -319,12 +343,14 @@ public class LolProfileCardRepository {
                         "where (lpc.tier = :grandmaster " +
                         "or lpc.tier = :challenger) " +
                         "and (lpc.owner.status = :active) " +
+                        "and (lpc.owner <> :owner) " +
                         "order by lpc.owner.lastActiveTime";
 
                 deckList = em.createQuery(query, LolProfileCard.class)
                         .setParameter("grandmaster", LolTier.GM)
                         .setParameter("challenger", LolTier.C)
                         .setParameter("active", UserStatus.ACTIVE)
+                        .setParameter("owner", owner)
                         .setFirstResult(0)
                         .setMaxResults(MAX_CARD_RETURN)
                         .getResultList();
