@@ -56,7 +56,7 @@ public class LolMatchingService {
         matching.assignRespondent(reqUser);
         matching.setStartTime();
         matching.setMatchingStatus(LolMatchingStatus.MATCHING_ON);
-
+        matching.setMatchType(requestDto.getMatchType());
         /*
          * reqUser는 서버로 요청을 보낸 유저 -> respondent
          * opponent는 카드를 보고 매치 요청을 보낸 유저 -> requester
@@ -221,7 +221,4 @@ public class LolMatchingService {
 
         // fcm 관련 로직
     }
-
-
-
 }

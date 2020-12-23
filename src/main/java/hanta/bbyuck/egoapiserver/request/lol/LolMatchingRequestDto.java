@@ -1,5 +1,6 @@
 package hanta.bbyuck.egoapiserver.request.lol;
 
+import hanta.bbyuck.egoapiserver.domain.enumset.MatchType;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -16,4 +17,7 @@ public class LolMatchingRequestDto {
 
     @ApiModelProperty(name = "matchingId", example = "1223141241")
     private Long matchId;
+
+    @ApiModelProperty(name = "matchType", example = "DUO")
+    private MatchType matchType;
 }

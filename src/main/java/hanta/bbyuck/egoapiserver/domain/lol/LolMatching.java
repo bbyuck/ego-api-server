@@ -69,4 +69,6 @@ public class LolMatching {
     public void setFinishTime() { this.finishTime = LocalDateTime.now(); }
 
     public void setMatchingStatus(LolMatchingStatus matchingStatus) { this.matchingStatus = matchingStatus; }
+
+    public void setMatchType(MatchType matchType) { this.matchType = matchType; }
 }
