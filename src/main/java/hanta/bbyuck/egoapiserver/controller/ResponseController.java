@@ -175,4 +175,24 @@ public class ResponseController {
         return new ResponseMessage(new MatchNotExistException(exception.getMessage(), exception), request.getRequestURL().toString());
     }
 
+    @ExceptionHandler(RecommendRequestOverException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ResponseMessage RecommendRequestOverException(HttpServletRequest request, final RecommendRequestOverException exception) {
+        log.error("RecommendRequestOverException : " + exception.getMessage());
+        return new ResponseMessage(new RecommendRequestOverException(exception.getMessage(), exception), request.getRequestURL().toString());
+    }
+
+    @ExceptionHandler(RecommendRefreshOverException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ResponseMessage RecommendRefreshOverException(HttpServletRequest request, final RecommendRefreshOverException exception) {
+        log.error("RecommendRefreshOverException : " + exception.getMessage());
+        return new ResponseMessage(new RecommendRefreshOverException(exception.getMessage(), exception), request.getRequestURL().toString());
+    }
+
+    @ExceptionHandler(NoUserException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ResponseMessage NoUserException(HttpServletRequest request, final NoUserException exception) {
+        log.error("NoUserException : " + exception.getMessage());
+        return new ResponseMessage(new NoUserException(exception.getMessage(), exception), request.getRequestURL().toString());
+    }
 }

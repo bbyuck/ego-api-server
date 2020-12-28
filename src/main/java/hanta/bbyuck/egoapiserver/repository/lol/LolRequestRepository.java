@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -105,4 +106,16 @@ public class LolRequestRepository {
     }
 
 
+    // 현재 유효한 매치 신청들 중 오늘 들어온 매치 신청
+    public Boolean isExistActiveRecommendedRequest(LocalDateTime today) {
+        String query = "select lr " +
+                "from LolRequest lr " +
+                "where lr.request_time >= : today " +
+                "and lr.status =: active " +
+                "and lr.type =: recommended";
+
+        return !em.createQuery(query, LolRequest.class)
+                .setParameter("today", today)
+                .getResultList().isEmpty();
+    }
 }

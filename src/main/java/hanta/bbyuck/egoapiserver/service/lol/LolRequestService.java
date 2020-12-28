@@ -5,8 +5,9 @@ import hanta.bbyuck.egoapiserver.domain.enumset.UserStatus;
 import hanta.bbyuck.egoapiserver.domain.lol.LolProfileCard;
 import hanta.bbyuck.egoapiserver.domain.lol.LolRequest;
 import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolRequestStatus;
-import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolRequestType;
+import hanta.bbyuck.egoapiserver.domain.enumset.RequestType;
 import hanta.bbyuck.egoapiserver.exception.BadMatchRequestException;
+import hanta.bbyuck.egoapiserver.exception.RecommendRequestOverException;
 import hanta.bbyuck.egoapiserver.exception.SendRequestExhaustedException;
 import hanta.bbyuck.egoapiserver.repository.UserRepository;
 import hanta.bbyuck.egoapiserver.repository.lol.LolProfileCardRepository;
@@ -58,11 +59,16 @@ public class LolRequestService {
         if(lolRequestRepository.isExistRequest(sender, receiver) ||
                 lolRequestRepository.isExistRequest(receiver, sender)) throw new BadMatchRequestException();
 
+        // 추천을 받은 유저에 요청을 보낼 때 이미 추천 유저에게 보낸 요청이 남아 있는지 확인
+        LocalDateTime today = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
+        if (requestDto.getRequestType() == RequestType.RECOMMENDED && lolRequestRepository.isExistActiveRecommendedRequest(today)) throw new RecommendRequestOverException();
+
+
         duoRequest.assignSender(sender);
         duoRequest.assignReceiver(receiver);
         duoRequest.updateRequestTime();
         duoRequest.setStatus(LolRequestStatus.ACTIVE);
-        duoRequest.setType(LolRequestType.NORMAL);
+        duoRequest.setType(requestDto.getRequestType());
 
         lolRequestRepository.save(duoRequest);
     }

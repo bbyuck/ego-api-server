@@ -3,6 +3,7 @@ package hanta.bbyuck.egoapiserver.service.lol;
 import hanta.bbyuck.egoapiserver.domain.UserType;
 import hanta.bbyuck.egoapiserver.domain.enumset.UserStatus;
 import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolTier;
+import hanta.bbyuck.egoapiserver.dto.ReferralConditions;
 import hanta.bbyuck.egoapiserver.exception.BadMatchRequestException;
 import hanta.bbyuck.egoapiserver.exception.UpdateFailureException;
 import hanta.bbyuck.egoapiserver.repository.UserTypeRepository;
@@ -21,6 +22,7 @@ import hanta.bbyuck.egoapiserver.request.lol.LolProfileCardRequestDto;
 import hanta.bbyuck.egoapiserver.request.lol.LolProfileCardUpdateRequestDto;
 import hanta.bbyuck.egoapiserver.response.lol.LolProfileCardResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.NoResultException;
@@ -86,37 +88,9 @@ public class LolProfileCardService {
             User apiCaller = userRepository.find(requestDto.getGeneratedId());
             LolProfileCard findCard = lolProfileCardRepository.find(apiCaller);
 
-            LolProfileCardResponseDto response = new LolProfileCardResponseDto();
+            LolProfileCardResponseDto responseDto = new LolProfileCardResponseDto();
 
-            UserType userType = null;
-            if (userTypeRepository.exist(apiCaller)) userType = userTypeRepository.find(apiCaller);
-
-            response.setVoice(findCard.getVoice());
-            response.setSummonerName(findCard.getSummonerName());
-            response.setTier(findCard.getTier());
-            response.setTierLev(findCard.getTierLev());
-            response.setLp(findCard.getLp());
-            response.setChampion1(findCard.getChampion1());
-            response.setChampion2(findCard.getChampion2());
-            response.setChampion3(findCard.getChampion3());
-            response.setTop(findCard.getTop());
-            response.setJungle(findCard.getJungle());
-            response.setMid(findCard.getMid());
-            response.setAd(findCard.getAd());
-            response.setSupport(findCard.getSupport());
-            response.setMainLolPosition(findCard.getMainLolPosition());
-            response.setMatchType(findCard.getMatchType());
-            if (userType == null) {
-                response.setUserType(null);
-                response.setEgoTestVersion(null);
-            }
-            else {
-                response.setUserType(userType.getType());
-                response.setEgoTestVersion(userType.getVersion());
-            }
-
-
-            return response;
+            return fillLolProfileCardResponseDto(responseDto, apiCaller, findCard);
         } catch (NoResultException e) {
             throw new LolDuoProfileCardNotExistException();
         }
@@ -366,6 +340,59 @@ public class LolProfileCardService {
         responseDto.setFavoriteMid(profileCard.getFavoriteMid());
         responseDto.setFavoriteAd(profileCard.getFavoriteAd());
         responseDto.setFavoriteSupport(profileCard.getFavoriteSupport());
+
+        return responseDto;
+    }
+
+    public LolProfileCardResponseDto getReferral(LolProfileCardRequestDto requestDto) {
+        LolProfileCardResponseDto responseDto = new LolProfileCardResponseDto();
+        ReferralConditions conditions = new ReferralConditions();
+
+        User apiCaller = userRepository.find(requestDto.getGeneratedId());
+        conditions.setApiCaller(apiCaller);
+
+        // 추가적인 추천조건 구현 영역
+
+        LolProfileCard findCard = lolProfileCardRepository.findReferralCard(conditions);
+
+        return fillLolProfileCardResponseDto(responseDto, apiCaller, findCard);
+    }
+
+    @NotNull
+    private LolProfileCardResponseDto fillLolProfileCardResponseDto(LolProfileCardResponseDto responseDto, User apiCaller, LolProfileCard findCard) {
+        UserType userType = null;
+        if (userTypeRepository.exist(apiCaller)) userType = userTypeRepository.find(apiCaller);
+
+        responseDto.setVoice(findCard.getVoice());
+        responseDto.setSummonerName(findCard.getSummonerName());
+        responseDto.setTier(findCard.getTier());
+        responseDto.setTierLev(findCard.getTierLev());
+        responseDto.setLp(findCard.getLp());
+        responseDto.setChampion1(findCard.getChampion1());
+        responseDto.setChampion2(findCard.getChampion2());
+        responseDto.setChampion3(findCard.getChampion3());
+        responseDto.setTop(findCard.getTop());
+        responseDto.setJungle(findCard.getJungle());
+        responseDto.setMid(findCard.getMid());
+        responseDto.setAd(findCard.getAd());
+        responseDto.setSupport(findCard.getSupport());
+        responseDto.setMainLolPosition(findCard.getMainLolPosition());
+        responseDto.setMatchType(findCard.getMatchType());
+        responseDto.setFavoriteTier(findCard.getFavoriteTier());
+        responseDto.setFavoriteTop(findCard.getFavoriteTop());
+        responseDto.setFavoriteJungle(findCard.getFavoriteJungle());
+        responseDto.setFavoriteMid(findCard.getFavoriteMid());
+        responseDto.setFavoriteAd(findCard.getFavoriteAd());
+        responseDto.setFavoriteSupport(findCard.getFavoriteSupport());
+
+        if (userType == null) {
+            responseDto.setUserType(null);
+            responseDto.setEgoTestVersion(null);
+        }
+        else {
+            responseDto.setUserType(userType.getType());
+            responseDto.setEgoTestVersion(userType.getVersion());
+        }
 
         return responseDto;
     }

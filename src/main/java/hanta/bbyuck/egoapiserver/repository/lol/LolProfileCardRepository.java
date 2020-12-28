@@ -4,6 +4,9 @@ import hanta.bbyuck.egoapiserver.domain.User;
 import hanta.bbyuck.egoapiserver.domain.enumset.UserStatus;
 import hanta.bbyuck.egoapiserver.domain.lol.LolProfileCard;
 import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolTier;
+import hanta.bbyuck.egoapiserver.dto.ReferralConditions;
+import hanta.bbyuck.egoapiserver.exception.NoUserException;
+import hanta.bbyuck.egoapiserver.exception.http.BadRequestException;
 import hanta.bbyuck.egoapiserver.request.lol.LolProfileCardUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -360,6 +363,22 @@ public class LolProfileCardRepository {
         }
 
         return deckList;
+    }
+
+    public LolProfileCard findReferralCard(ReferralConditions conditions) {
+        String query = "select lpc " +
+                "from LolProfileCard lpc " +
+                "where lpc.owner <> : apiCaller " +
+                "order by lpc.owner.lastActiveTime";
+
+        List<LolProfileCard> referrals = em.createQuery(query, LolProfileCard.class)
+                .setParameter("apiCaller", conditions.getApiCaller())
+                .getResultList();
+
+        // 추천 유저가 존재하지 않음
+        if (referrals.isEmpty()) throw new NoUserException();
+
+        return referrals.get(0);
     }
 
 }

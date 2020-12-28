@@ -1,5 +1,6 @@
 package hanta.bbyuck.egoapiserver.api.lol;
 
+import hanta.bbyuck.egoapiserver.exception.RecommendRefreshOverException;
 import hanta.bbyuck.egoapiserver.exception.UpdateFailureException;
 import hanta.bbyuck.egoapiserver.request.lol.LolMatchDeckRequestDto;
 import hanta.bbyuck.egoapiserver.request.lol.LolProfileCardRequestDto;
@@ -9,6 +10,7 @@ import hanta.bbyuck.egoapiserver.response.lol.LolProcessedProfileCardDeck;
 import hanta.bbyuck.egoapiserver.response.ResponseMessage;
 import hanta.bbyuck.egoapiserver.response.lol.LolProfileCardResponseDto;
 import hanta.bbyuck.egoapiserver.service.lol.LolProfileCardService;
+import hanta.bbyuck.egoapiserver.service.lol.LolRecommendationRefreshService;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +20,8 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class LolProfileCardController {
     private final LolProfileCardService lolProfileCardService;
-
+    private final LolRecommendationRefreshService lolRecommendationRefreshService;
+    private final Integer MAX_RECOMMEND_COUNT_PER_DAY = 3;
 
     @ApiOperation(value = "프로필 카드 제작", notes = "유저 인증 정보와 프로필 카드 제작 입력값을 이용해 프로필 카드를 제작합니다.\n" +
             "1. 이미 듀오 프로필 카드를 보유하고 있는 유저가 API 호출시 에러가 발생합니다.(프로필카드 중복생성 방지)\n" +
@@ -117,8 +120,7 @@ public class LolProfileCardController {
 
     @ApiOperation(value = "프로필 카드 완성 - 선호하는 티어, 포지션 선택",
             notes = "완성된 프로필카드 정보 리턴\n" +
-                    "프로필카드 정보 리턴",
-            response = LolProcessedProfileCardDeck.class)
+                    "프로필카드 정보 리턴")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "generatedId", value = "회원가입 및 로그인시 제공받은 Id", defaultValue = "sdsnadnsao21n3o1ni3o1"),
             @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00"),
@@ -134,6 +136,55 @@ public class LolProfileCardController {
             e.printStackTrace();
             return new ResponseMessage("업데이트 실패", e.getERR_CODE());
         }
+    }
 
+
+    @ApiOperation(value = "오늘 하루 추천 받은 카운트",
+            notes = "추천 받은 카운트\n" +
+                    "1. 0일경우 무조건 new-referral api 호출할 것",
+            response = LolProcessedProfileCardDeck.class)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "generatedId", value = "회원가입 및 로그인시 제공받은 Id", defaultValue = "sdsnadnsao21n3o1ni3o1"),
+            @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00"),
+            @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
+    })
+    @GetMapping("/today-referral-count")
+    public ResponseMessage getTodayRecommendationCount(@RequestParam String clientVersion,
+                                                       @RequestParam String generatedId) {
+        LolProfileCardRequestDto requestDto = new LolProfileCardRequestDto();
+        requestDto.setClientVersion(clientVersion);
+        requestDto.setGeneratedId(generatedId);
+
+        Integer todayRefreshCount = lolRecommendationRefreshService.todayRefreshCount(requestDto);
+
+        return new ResponseMessage("오늘 추천 받은 수", "LREC-OBJ-001", todayRefreshCount);
+    }
+
+
+    @ApiOperation(value = "메인페이지 새로고침 버튼 기능 / 오늘 새로고침한 카운트가 0이라면(날짜가 바뀜) 자동으로 호출해줄 것",
+            notes = "새로고침 기능\n" +
+                    "1. 새로고침 기회를 모두 사용하면 에러발생",
+            response = LolProcessedProfileCardDeck.class)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "generatedId", value = "회원가입 및 로그인시 제공받은 Id", defaultValue = "sdsnadnsao21n3o1ni3o1"),
+            @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00"),
+            @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
+    })
+    @GetMapping("/new-referral")
+    public ResponseMessage refreshRecommendation(@RequestParam String clientVersion,
+                                                 @RequestParam String generatedId) {
+        LolProfileCardRequestDto requestDto = new LolProfileCardRequestDto();
+        requestDto.setClientVersion(clientVersion);
+        requestDto.setGeneratedId(generatedId);
+
+        Integer todayRefreshCount = lolRecommendationRefreshService.todayRefreshCount(requestDto);
+
+        // 이미 오늘 새로고침 기회를 다썼으면 예외발생
+        if (todayRefreshCount.equals(MAX_RECOMMEND_COUNT_PER_DAY)) throw new RecommendRefreshOverException();
+
+        LolProfileCardResponseDto responseDto = lolProfileCardService.getReferral(requestDto);
+        lolRecommendationRefreshService.refresh(requestDto);
+
+        return new ResponseMessage("새로고침 완료", "LREC-OBJ-002", responseDto);
     }
 }

@@ -1,11 +1,9 @@
 package hanta.bbyuck.egoapiserver.domain.lol;
 
 import hanta.bbyuck.egoapiserver.domain.User;
-import hanta.bbyuck.egoapiserver.domain.enumset.MatchType;
 import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolRequestStatus;
-import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolRequestType;
+import hanta.bbyuck.egoapiserver.domain.enumset.RequestType;
 import lombok.Getter;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -42,7 +40,7 @@ public class LolRequest {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "request_type")
-    private LolRequestType type;
+    private RequestType type;
 
 
     /*
@@ -53,5 +51,5 @@ public class LolRequest {
     public void assignSender(User user) { this.sender = user; }
     public void assignReceiver(User user) { this.receiver = user; }
     public void setStatus(LolRequestStatus status) { this.status = status; }
-    public void setType(LolRequestType type) { this.type = type; }
+    public void setType(RequestType type) { this.type = type; }
 }

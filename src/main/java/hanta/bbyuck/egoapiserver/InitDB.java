@@ -30,14 +30,14 @@ public class InitDB {
 
     private final InitService initService;
 
-    //    @PostConstruct
+//  @PostConstruct
     public void init() {
         initService.dbInit1();
 //        initService.dbInit2();
     }
 
-    //    @Component
-    @Transactional
+//    @Component
+//    @Transactional
     @RequiredArgsConstructor
     static class InitService {
         private final UserService userService;

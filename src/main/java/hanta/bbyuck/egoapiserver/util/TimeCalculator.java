@@ -1,8 +1,10 @@
 package hanta.bbyuck.egoapiserver.util;
 
+import hanta.bbyuck.egoapiserver.domain.lol.LolRecommendationRefresh;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.*;
+import java.util.List;
 
 @Slf4j
 public class TimeCalculator {
@@ -79,4 +81,16 @@ public class TimeCalculator {
         }
         else return false;
     }
+
+    // 오늘의 추천 새로고침 오늘 누른 횟수
+    public static Integer todayRefreshCount(List<LolRecommendationRefresh> latelyRefreshes) {
+        Integer answer = 0;
+
+        for (LolRecommendationRefresh refresh : latelyRefreshes) {
+            if (refresh.getRefreshDatetime().getDayOfYear() == LocalDateTime.now().getDayOfYear()) answer++;
+        }
+        
+        return answer;
+    }
+
 }
