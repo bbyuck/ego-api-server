@@ -2,11 +2,13 @@ package hanta.bbyuck.egoapiserver.service.lol;
 
 import hanta.bbyuck.egoapiserver.domain.UserType;
 import hanta.bbyuck.egoapiserver.domain.enumset.UserStatus;
+import hanta.bbyuck.egoapiserver.domain.lol.LolRequest;
 import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolTier;
 import hanta.bbyuck.egoapiserver.dto.ReferralConditions;
 import hanta.bbyuck.egoapiserver.exception.BadMatchRequestException;
 import hanta.bbyuck.egoapiserver.exception.UpdateFailureException;
 import hanta.bbyuck.egoapiserver.repository.UserTypeRepository;
+import hanta.bbyuck.egoapiserver.repository.lol.LolRequestRepository;
 import hanta.bbyuck.egoapiserver.response.lol.LolProcessedProfileCard;
 import hanta.bbyuck.egoapiserver.response.lol.LolProcessedProfileCardDeck;
 import hanta.bbyuck.egoapiserver.domain.lol.LolProfileCard;
@@ -39,6 +41,7 @@ public class LolProfileCardService {
     private final LolProfileCardRepository lolProfileCardRepository;
     private final UserRepository userRepository;
     private final UserTypeRepository userTypeRepository;
+    private final LolRequestRepository lolRequestRepository;
 
     private LolProfileCard makeNewDuoProfileCard(User apiCaller) throws  NoResultException {
         LolProfileCard newProfileCard = new LolProfileCard();
@@ -345,6 +348,8 @@ public class LolProfileCardService {
     }
 
     public LolProfileCardResponseDto getReferral(LolProfileCardRequestDto requestDto) {
+        checkClientVersion(requestDto.getClientVersion());
+
         LolProfileCardResponseDto responseDto = new LolProfileCardResponseDto();
         ReferralConditions conditions = new ReferralConditions();
 
@@ -357,6 +362,33 @@ public class LolProfileCardService {
 
         return fillLolProfileCardResponseDto(responseDto, apiCaller, findCard);
     }
+
+    public LolProcessedProfileCardDeck getMissedDeck(LolProfileCardRequestDto requestDto) {
+        checkClientVersion(requestDto.getClientVersion());
+
+        LolProcessedProfileCardDeck responseDto = new LolProcessedProfileCardDeck();
+        User apiCaller = userRepository.find(requestDto.getGeneratedId());
+        List<LolRequest> missedRequests = lolRequestRepository.findMissedRequest(apiCaller);
+        List<LolProcessedProfileCard> processedProfileCards = new ArrayList<>();
+
+
+        for (LolRequest request : missedRequests) {
+            // 나에게 매치 신청을 보냈던 유저들의 프로필카드
+            User sender = request.getSender();
+            UserType userType = null;
+            if (userTypeRepository.exist(sender)) userType = userTypeRepository.find(sender);
+
+            LolProfileCard missedProfile = lolProfileCardRepository.findById(sender.getId());
+            addCardToProcessedDeck(processedProfileCards, missedProfile, userType);
+        }
+
+        responseDto.setDuoProfileCards(processedProfileCards);
+        responseDto.setCardCount(processedProfileCards.size());
+        responseDto.setMakeTime(LocalDateTime.now());
+
+        return responseDto;
+    }
+
 
     @NotNull
     private LolProfileCardResponseDto fillLolProfileCardResponseDto(LolProfileCardResponseDto responseDto, User apiCaller, LolProfileCard findCard) {

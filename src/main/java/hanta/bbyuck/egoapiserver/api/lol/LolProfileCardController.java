@@ -187,4 +187,25 @@ public class LolProfileCardController {
 
         return new ResponseMessage("새로고침 완료", "LREC-OBJ-002", responseDto);
     }
+
+    @ApiOperation(value = "메인페이지 놓친 카드 기능",
+            notes = "메인 페이지 세션에 새로 접속할 때 마다 호출해줄 것",
+            response = LolProcessedProfileCardDeck.class)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "generatedId", value = "회원가입 및 로그인시 제공받은 Id", defaultValue = "sdsnadnsao21n3o1ni3o1"),
+            @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00"),
+            @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
+    })
+    @GetMapping("/missed-profiles")
+    public ResponseMessage getMissedProfileCards(@RequestParam String clientVersion,
+                                                 @RequestParam String generatedId) {
+        LolProfileCardRequestDto requestDto = new LolProfileCardRequestDto();
+        requestDto.setClientVersion(clientVersion);
+        requestDto.setGeneratedId(generatedId);
+
+        LolProcessedProfileCardDeck responseDto = lolProfileCardService.getMissedDeck(requestDto);
+
+        return new ResponseMessage("놓친 카드 덱", "LDPC-OBJ-006", responseDto);
+    }
+
 }

@@ -380,5 +380,4 @@ public class LolProfileCardRepository {
 
         return referrals.get(0);
     }
-
 }

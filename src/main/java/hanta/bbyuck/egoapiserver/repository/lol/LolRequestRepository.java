@@ -16,6 +16,7 @@ import java.util.List;
 @Transactional(readOnly = true, noRollbackFor = Exception.class)
 public class LolRequestRepository {
     private final EntityManager em;
+    private final Integer MAX_MISSED_PROFILE_COUNT = 5;
 
     @Transactional
     public void save(LolRequest request) {
@@ -117,5 +118,20 @@ public class LolRequestRepository {
         return !em.createQuery(query, LolRequest.class)
                 .setParameter("today", today)
                 .getResultList().isEmpty();
+    }
+
+    public List<LolRequest> findMissedRequest(User apiCaller) {
+        String query = "select lr " +
+                "from LolRequest lr " +
+                "where lr.receiver =: apiCaller " +
+                "and lr.status =: canceled " +
+                "order by lr.request_time";
+
+        return em.createQuery(query, LolRequest.class)
+                .setParameter("apiCaller", apiCaller)
+                .setParameter("canceled", LolRequestStatus.CANCELED)
+                .setFirstResult(0)
+                .setMaxResults(MAX_MISSED_PROFILE_COUNT)
+                .getResultList();
     }
 }
