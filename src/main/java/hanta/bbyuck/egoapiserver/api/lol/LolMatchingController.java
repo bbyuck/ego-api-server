@@ -56,7 +56,7 @@ public class LolMatchingController {
             @ApiImplicitParam(name = "opponentProfileId", value = "상대방 프로필카드 id", defaultValue = "52"),
             @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
     })
-    @PostMapping("/match")
+    @PostMapping("/new-match")
     public ResponseMessage acceptMatch(@RequestBody LolMatchingRequestDto requestDto) {
         lolMatchingService.match(requestDto);
         return new ResponseMessage("Duo Match API Call Success!", "LDM-NONE-001");
@@ -87,7 +87,7 @@ public class LolMatchingController {
             @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00"),
             @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
     })
-    @DeleteMapping("/match")
+    @PostMapping("/match")
     public ResponseMessage completeMatch(@RequestBody LolMatchingRequestDto requestDto) {
         lolMatchingService.completeMatch(requestDto);
         return new ResponseMessage("Complete Duo Match API Call Success!", "LDM-NONE-003");

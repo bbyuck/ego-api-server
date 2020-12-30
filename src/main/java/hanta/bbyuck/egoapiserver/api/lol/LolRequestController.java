@@ -49,7 +49,7 @@ public class LolRequestController {
             @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00"),
             @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
     })
-    @GetMapping("/sent-request")
+    @GetMapping("/sent-requests")
     public ResponseMessage getSentRequest(@RequestParam String clientVersion,
                                           @RequestParam String generatedId) {
         LolRequestGetDto requestDto = new LolRequestGetDto();
@@ -71,7 +71,7 @@ public class LolRequestController {
             @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00"),
             @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
     })
-    @GetMapping("/received-request")
+    @GetMapping("/received-requests")
     public ResponseMessage getReceivedRequest(@RequestParam String clientVersion,
                                               @RequestParam String generatedId) {
         LolRequestGetDto requestDto = new LolRequestGetDto();
@@ -90,7 +90,7 @@ public class LolRequestController {
             @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00"),
             @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
     })
-    @DeleteMapping("/sent-request")
+    @PostMapping("/sent-request")
     public ResponseMessage cancelRequest(@RequestBody LolRequestDto requestDto) {
         lolRequestService.cancelRequest(requestDto);
         return new ResponseMessage("Cancel Sent Request API Call Success", "LDR-NONE-002");
@@ -105,7 +105,7 @@ public class LolRequestController {
             @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00"),
             @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
     })
-    @DeleteMapping("/received-request")
+    @PostMapping("/received-request")
     public ResponseMessage rejectRequest(@RequestBody LolRequestDto requestDto) {
         lolRequestService.rejectRequest(requestDto);
         return new ResponseMessage("Reject Received Request API Call Success", "LDR-NONE-003");
@@ -119,7 +119,7 @@ public class LolRequestController {
             @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00"),
             @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
     })
-    @DeleteMapping("/all-sent-request")
+    @PostMapping("/all-sent-request")
     public ResponseMessage cancelAllRequest(@RequestBody LolRequestDto requestDto) {
         lolRequestService.cancelAllRequest(requestDto);
         return new ResponseMessage("Cancel All Sent Request API Call Success", "LDR-NONE-004");
@@ -133,7 +133,7 @@ public class LolRequestController {
             @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00"),
             @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
     })
-    @DeleteMapping("/all-received-request")
+    @PostMapping("/all-received-request")
     public ResponseMessage rejectAllRequest(@RequestBody LolRequestDto requestDto) {
         lolRequestService.rejectAllRequest(requestDto);
         return new ResponseMessage("Reject All Received Request API Call Success", "LDR-NONE-005");
