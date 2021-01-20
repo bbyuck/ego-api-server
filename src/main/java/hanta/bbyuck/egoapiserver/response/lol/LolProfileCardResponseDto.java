@@ -12,6 +12,8 @@ import java.time.LocalDateTime;
 
 @Data
 public class LolProfileCardResponseDto {
+    private Long id;
+    private LocalDateTime lastActiveTime;
     private LocalDateTime lastUpdateTime;
     private Boolean voice;
     private String summonerName;

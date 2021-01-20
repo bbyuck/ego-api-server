@@ -26,6 +26,10 @@ public class LolRecommendationRefresh {
     @JoinColumn(name = "caller_id", referencedColumnName = "USER_ID")
     private User apiCaller;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "opponent_id", referencedColumnName = "USER_ID")
+    private User opponent;
+
     @Column(name = "refresh_datetime")
     private LocalDateTime refreshDatetime;
 
@@ -33,8 +37,9 @@ public class LolRecommendationRefresh {
      * 유저 편의 메서드
      */
 
-    public void makeRefresh(User apiCaller) {
+    public void makeRefresh(User apiCaller, User opponent) {
         this.apiCaller = apiCaller;
+        this.opponent = opponent;
         refreshDatetime = LocalDateTime.now();
     }
 }

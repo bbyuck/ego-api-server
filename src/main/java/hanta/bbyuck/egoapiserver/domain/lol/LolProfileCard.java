@@ -42,8 +42,9 @@ public class LolProfileCard {
     @Column(name = "summoner_name", length = 20, nullable = false)
     private String summonerName;
 
+
     @Enumerated(EnumType.STRING)
-    @Column(name = "tier", length = 2, nullable = false)
+    @Column(name = "tier", length = 12, nullable = false)
     private LolTier tier;
 
     @Column(name = "tier_lev", nullable = false)
@@ -94,7 +95,7 @@ public class LolProfileCard {
     private MatchType matchType;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "favorite_tier", length = 4, nullable = false)
+    @Column(name = "favorite_tier", length = 12, nullable = false)
     private LolTier favoriteTier;
 
     @Column(name="favorite_top", columnDefinition = "TINYINT", nullable = false)

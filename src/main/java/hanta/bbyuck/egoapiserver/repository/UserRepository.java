@@ -4,6 +4,7 @@ import hanta.bbyuck.egoapiserver.domain.enumset.Game;
 import hanta.bbyuck.egoapiserver.domain.enumset.SnsVendor;
 import hanta.bbyuck.egoapiserver.domain.User;
 import hanta.bbyuck.egoapiserver.domain.enumset.UserStatus;
+import hanta.bbyuck.egoapiserver.exception.NoUserException;
 import hanta.bbyuck.egoapiserver.util.AES256Util;
 import hanta.bbyuck.egoapiserver.util.SHA256Util;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
@@ -28,9 +30,12 @@ public class UserRepository {
     // 성능 튜닝 필
     public User find(String userGeneratedId) throws NoResultException {
         String query = "select u from User u where u.generatedId = :generatedId";
-        return em.createQuery(query, User.class)
+        List<User> user = em.createQuery(query, User.class)
                 .setParameter("generatedId", userGeneratedId)
-                .getSingleResult();
+                .getResultList();
+        if (user.isEmpty()) throw new NoUserException();
+
+        return user.get(0);
     }
 
     public User findBySnsId(SnsVendor snsVendor, String snsId) throws NoResultException {

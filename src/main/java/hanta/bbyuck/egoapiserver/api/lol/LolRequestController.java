@@ -3,6 +3,7 @@ package hanta.bbyuck.egoapiserver.api.lol;
 import hanta.bbyuck.egoapiserver.request.lol.LolRequestDto;
 import hanta.bbyuck.egoapiserver.request.lol.LolRequestGetDto;
 import hanta.bbyuck.egoapiserver.response.ResponseMessage;
+import hanta.bbyuck.egoapiserver.response.lol.LolProcessedProfileCardDeck;
 import hanta.bbyuck.egoapiserver.response.lol.LolRequestProfileCardDeck;
 import hanta.bbyuck.egoapiserver.service.lol.LolRequestService;
 import io.swagger.annotations.ApiImplicitParam;
@@ -55,7 +56,7 @@ public class LolRequestController {
         LolRequestGetDto requestDto = new LolRequestGetDto();
         requestDto.setClientVersion(clientVersion);
         requestDto.setGeneratedId(generatedId);
-        LolRequestProfileCardDeck sentRequestDeck = lolRequestService.getSendRequest(requestDto);
+        LolProcessedProfileCardDeck sentRequestDeck = lolRequestService.getSendRequest(requestDto);
         return new ResponseMessage("Sent Request List Get API Call Success", "LDR-OBJ-001", sentRequestDeck);
     }
 
@@ -77,7 +78,7 @@ public class LolRequestController {
         LolRequestGetDto requestDto = new LolRequestGetDto();
         requestDto.setClientVersion(clientVersion);
         requestDto.setGeneratedId(generatedId);
-        LolRequestProfileCardDeck receivedRequestDeck = lolRequestService.getReceiveRequest(requestDto);
+        LolProcessedProfileCardDeck receivedRequestDeck = lolRequestService.getReceiveRequest(requestDto);
         return new ResponseMessage("Sent Request List Get API Call Success", "LDR-OBJ-002" ,receivedRequestDeck);
     }
 
@@ -137,5 +138,26 @@ public class LolRequestController {
     public ResponseMessage rejectAllRequest(@RequestBody LolRequestDto requestDto) {
         lolRequestService.rejectAllRequest(requestDto);
         return new ResponseMessage("Reject All Received Request API Call Success", "LDR-NONE-005");
+    }
+
+
+    @ApiOperation(value = "롤 듀오 받은 요청 전체 거절",
+            notes = "롤 듀오 받은 요청 전체 거절하기 API\n" +
+                    "1. 전체 삭제")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "generatedId", value = "회원가입 및 로그인시 제공받은 Id", defaultValue = "sdsnadnsao21n3o1ni3o1"),
+            @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00"),
+            @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
+    })
+    @GetMapping("/sent-request-count")
+    public ResponseMessage sentRequestCount(@RequestParam String generatedId,
+                                            @RequestParam String clientVersion) {
+        LolRequestGetDto requestDto = new LolRequestGetDto();
+        requestDto.setClientVersion(clientVersion);
+        requestDto.setGeneratedId(generatedId);
+
+        Integer sentRequestCount = lolRequestService.getSentRequestCount(requestDto);
+
+        return new ResponseMessage("롤 듀오 보낸 신청 갯수", "LDR-OBJ-003", sentRequestCount);
     }
 }

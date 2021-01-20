@@ -1,7 +1,5 @@
 package hanta.bbyuck.egoapiserver;
 
-import hanta.bbyuck.egoapiserver.domain.enumset.GameType;
-import hanta.bbyuck.egoapiserver.domain.enumset.MatchType;
 import hanta.bbyuck.egoapiserver.domain.enumset.SnsVendor;
 import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolPosition;
 import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolTier;
@@ -48,7 +46,7 @@ public class InitDB {
         private final LolProfileCardService lolProfileCardService;
         private final EntityManager em;
 
-        private static final int TEST_USER_COUNT = 40;
+        private static final int TEST_USER_COUNT = 2000;
         private static final int TEST_REQUEST_COUNT = 100;
 
         public void dbInit1() {
@@ -101,22 +99,22 @@ public class InitDB {
                 if (i % 7 == 0) voice = true;
                 else voice = false;
 
-                if(i % 100 <= 10) tier = LolTier.I;
-                else if (i % 100 <= 20) tier = LolTier.B;
-                else if (i % 100 <= 50) tier = LolTier.S;
-                else if (i % 100 <= 80) tier = LolTier.G;
-                else if (i % 100 <= 90) tier = LolTier.P;
-                else if (i % 100 <= 95) tier = LolTier.D;
-                else if (i % 100 <= 97) tier = LolTier.M;
-                else if (i % 100 <= 98) tier = LolTier.GM;
-                else tier = LolTier.C;
+                if(i % 100 <= 10) tier = LolTier.iron;
+                else if (i % 100 <= 20) tier = LolTier.bronze;
+                else if (i % 100 <= 50) tier = LolTier.silver;
+                else if (i % 100 <= 80) tier = LolTier.gold;
+                else if (i % 100 <= 90) tier = LolTier.platinum;
+                else if (i % 100 <= 95) tier = LolTier.diamond;
+                else if (i % 100 <= 97) tier = LolTier.master;
+                else if (i % 100 <= 98) tier = LolTier.grandmaster;
+                else tier = LolTier.challenger;
 
-                if (tier.equals(LolTier.M) || tier.equals(LolTier.GM) || tier.equals(LolTier.C)) {
+                if (tier.equals(LolTier.master) || tier.equals(LolTier.grandmaster) || tier.equals(LolTier.challenger)) {
                     tierLev = 1;
-                    if(tier.equals(LolTier.M)) {
+                    if(tier.equals(LolTier.master)) {
                         lp = 100;
                     }
-                    else if (tier.equals(LolTier.GM)) {
+                    else if (tier.equals(LolTier.grandmaster)) {
                         lp = 450;
                     }
                     else {
@@ -128,9 +126,9 @@ public class InitDB {
                     lp = 0;
                 }
 
-                champion1 = "GAREN";
-                champion2 = "Lee Sin";
-                champion3 = "LUX";
+                champion1 = "Garen";
+                champion2 = "LeeSin";
+                champion3 = "Lux";
 
                 top = i % 6 == 0;
                 jungle = i % 5 == 0;

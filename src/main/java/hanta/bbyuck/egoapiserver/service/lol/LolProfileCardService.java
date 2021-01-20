@@ -2,12 +2,14 @@ package hanta.bbyuck.egoapiserver.service.lol;
 
 import hanta.bbyuck.egoapiserver.domain.UserType;
 import hanta.bbyuck.egoapiserver.domain.enumset.UserStatus;
+import hanta.bbyuck.egoapiserver.domain.lol.LolRecommendationRefresh;
 import hanta.bbyuck.egoapiserver.domain.lol.LolRequest;
 import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolTier;
 import hanta.bbyuck.egoapiserver.dto.ReferralConditions;
 import hanta.bbyuck.egoapiserver.exception.BadMatchRequestException;
 import hanta.bbyuck.egoapiserver.exception.UpdateFailureException;
 import hanta.bbyuck.egoapiserver.repository.UserTypeRepository;
+import hanta.bbyuck.egoapiserver.repository.lol.LolRecommendationRefreshRepository;
 import hanta.bbyuck.egoapiserver.repository.lol.LolRequestRepository;
 import hanta.bbyuck.egoapiserver.response.lol.LolProcessedProfileCard;
 import hanta.bbyuck.egoapiserver.response.lol.LolProcessedProfileCardDeck;
@@ -34,6 +36,7 @@ import java.util.List;
 
 import static hanta.bbyuck.egoapiserver.util.ClientVersionManager.*;
 import static hanta.bbyuck.egoapiserver.util.ServiceUtil.addCardToProcessedDeck;
+import static hanta.bbyuck.egoapiserver.util.ServiceUtil.checkRecommendation;
 
 @Service
 @RequiredArgsConstructor
@@ -42,6 +45,11 @@ public class LolProfileCardService {
     private final UserRepository userRepository;
     private final UserTypeRepository userTypeRepository;
     private final LolRequestRepository lolRequestRepository;
+    private final LolRecommendationRefreshRepository lolRecommendationRefreshRepository;
+
+
+    private final Integer PROCESSED = 1;
+    private final Integer ORIGINAL = 2;
 
     private LolProfileCard makeNewDuoProfileCard(User apiCaller) throws  NoResultException {
         LolProfileCard newProfileCard = new LolProfileCard();
@@ -93,10 +101,53 @@ public class LolProfileCardService {
 
             LolProfileCardResponseDto responseDto = new LolProfileCardResponseDto();
 
-            return fillLolProfileCardResponseDto(responseDto, apiCaller, findCard);
+            return fillLolProfileCardResponseDto(responseDto, apiCaller, findCard, ORIGINAL);
         } catch (NoResultException e) {
             throw new LolDuoProfileCardNotExistException();
         }
+    }
+
+    private LolProfileCardResponseDto fillLolProfileCardResponseDto(LolProfileCardResponseDto responseDto, User apiCaller, LolProfileCard findCard, Integer flag
+    ) {
+        UserType userType = null;
+        if (userTypeRepository.exist(apiCaller)) userType = userTypeRepository.find(apiCaller);
+
+        responseDto.setId(findCard.getId());
+        responseDto.setVoice(findCard.getVoice());
+        if (flag.equals(ORIGINAL)) responseDto.setSummonerName(findCard.getSummonerName());
+        else if (flag.equals(PROCESSED)) responseDto.setSummonerName(findCard.getSummonerName().charAt(0) + "***");
+        responseDto.setTier(findCard.getTier());
+        responseDto.setLastActiveTime(findCard.getOwner().getLastActiveTime());
+        responseDto.setTierLev(findCard.getTierLev());
+        responseDto.setLp(findCard.getLp());
+        responseDto.setChampion1(findCard.getChampion1());
+        responseDto.setChampion2(findCard.getChampion2());
+        responseDto.setChampion3(findCard.getChampion3());
+        responseDto.setTop(findCard.getTop());
+        responseDto.setJungle(findCard.getJungle());
+        responseDto.setMid(findCard.getMid());
+        responseDto.setAd(findCard.getAd());
+        responseDto.setSupport(findCard.getSupport());
+        responseDto.setMainLolPosition(findCard.getMainLolPosition());
+        responseDto.setMatchType(findCard.getMatchType());
+        responseDto.setFavoriteTier(findCard.getFavoriteTier());
+        responseDto.setFavoriteTop(findCard.getFavoriteTop());
+        responseDto.setFavoriteJungle(findCard.getFavoriteJungle());
+        responseDto.setFavoriteMid(findCard.getFavoriteMid());
+        responseDto.setFavoriteAd(findCard.getFavoriteAd());
+        responseDto.setFavoriteSupport(findCard.getFavoriteSupport());
+        responseDto.setGameType(findCard.getGameType());
+
+        if (userType == null) {
+            responseDto.setUserType(null);
+            responseDto.setEgoTestVersion(null);
+        }
+        else {
+            responseDto.setUserType(userType.getType());
+            responseDto.setEgoTestVersion(userType.getVersion());
+        }
+
+        return responseDto;
     }
 
     public void updateMyCard(LolProfileCardUpdateRequestDto requestDto) {
@@ -347,20 +398,25 @@ public class LolProfileCardService {
         return responseDto;
     }
 
-    public LolProfileCardResponseDto getReferral(LolProfileCardRequestDto requestDto) {
+    public LolProcessedProfileCard getReferral(LolProfileCardRequestDto requestDto) {
         checkClientVersion(requestDto.getClientVersion());
 
-        LolProfileCardResponseDto responseDto = new LolProfileCardResponseDto();
+        LolProcessedProfileCard processedProfileCard = new LolProcessedProfileCard();
         ReferralConditions conditions = new ReferralConditions();
 
         User apiCaller = userRepository.find(requestDto.getGeneratedId());
+        LolProfileCard profileCard = lolProfileCardRepository.find(apiCaller);
         conditions.setApiCaller(apiCaller);
+        conditions.setTier(profileCard.getTier());
 
         // 추가적인 추천조건 구현 영역
 
-        LolProfileCard findCard = lolProfileCardRepository.findReferralCard(conditions);
+        List<LolProfileCard> findCards = lolProfileCardRepository.findReferralCard(conditions);
+        List<LolRecommendationRefresh> refreshes = lolRecommendationRefreshRepository.find(apiCaller);
 
-        return fillLolProfileCardResponseDto(responseDto, apiCaller, findCard);
+        LolProfileCard findCard = checkRecommendation(findCards, refreshes);
+
+        return fillLolProcessedCard(processedProfileCard, apiCaller, findCard, PROCESSED);
     }
 
     public LolProcessedProfileCardDeck getMissedDeck(LolProfileCardRequestDto requestDto) {
@@ -391,41 +447,47 @@ public class LolProfileCardService {
 
 
     @NotNull
-    private LolProfileCardResponseDto fillLolProfileCardResponseDto(LolProfileCardResponseDto responseDto, User apiCaller, LolProfileCard findCard) {
+    private LolProcessedProfileCard fillLolProcessedCard(LolProcessedProfileCard lolProcessedProfileCard, User apiCaller, LolProfileCard findCard, Integer flag) {
         UserType userType = null;
         if (userTypeRepository.exist(apiCaller)) userType = userTypeRepository.find(apiCaller);
 
-        responseDto.setVoice(findCard.getVoice());
-        responseDto.setSummonerName(findCard.getSummonerName());
-        responseDto.setTier(findCard.getTier());
-        responseDto.setTierLev(findCard.getTierLev());
-        responseDto.setLp(findCard.getLp());
-        responseDto.setChampion1(findCard.getChampion1());
-        responseDto.setChampion2(findCard.getChampion2());
-        responseDto.setChampion3(findCard.getChampion3());
-        responseDto.setTop(findCard.getTop());
-        responseDto.setJungle(findCard.getJungle());
-        responseDto.setMid(findCard.getMid());
-        responseDto.setAd(findCard.getAd());
-        responseDto.setSupport(findCard.getSupport());
-        responseDto.setMainLolPosition(findCard.getMainLolPosition());
-        responseDto.setMatchType(findCard.getMatchType());
-        responseDto.setFavoriteTier(findCard.getFavoriteTier());
-        responseDto.setFavoriteTop(findCard.getFavoriteTop());
-        responseDto.setFavoriteJungle(findCard.getFavoriteJungle());
-        responseDto.setFavoriteMid(findCard.getFavoriteMid());
-        responseDto.setFavoriteAd(findCard.getFavoriteAd());
-        responseDto.setFavoriteSupport(findCard.getFavoriteSupport());
+        lolProcessedProfileCard.setProfileCardId(findCard.getId());
+        lolProcessedProfileCard.setVoice(findCard.getVoice());
+        if (flag.equals(ORIGINAL)) lolProcessedProfileCard.setLimitedSummonerName(findCard.getSummonerName());
+        else if (flag.equals(PROCESSED)) lolProcessedProfileCard.setLimitedSummonerName(findCard.getSummonerName().charAt(0) + "***");
+        lolProcessedProfileCard.setTier(findCard.getTier());
+        lolProcessedProfileCard.setLastActiveTime(findCard.getOwner().getLastActiveTime());
+        lolProcessedProfileCard.setTierLev(findCard.getTierLev());
+        lolProcessedProfileCard.setLp(findCard.getLp());
+        lolProcessedProfileCard.setChampion1(findCard.getChampion1());
+        lolProcessedProfileCard.setChampion2(findCard.getChampion2());
+        lolProcessedProfileCard.setChampion3(findCard.getChampion3());
+        lolProcessedProfileCard.setTop(findCard.getTop());
+        lolProcessedProfileCard.setJungle(findCard.getJungle());
+        lolProcessedProfileCard.setMid(findCard.getMid());
+        lolProcessedProfileCard.setAd(findCard.getAd());
+        lolProcessedProfileCard.setSupport(findCard.getSupport());
+        lolProcessedProfileCard.setMainLolPosition(findCard.getMainLolPosition());
+        lolProcessedProfileCard.setMatchType(findCard.getMatchType());
+        lolProcessedProfileCard.setFavoriteTier(findCard.getFavoriteTier());
+        lolProcessedProfileCard.setFavoriteTop(findCard.getFavoriteTop());
+        lolProcessedProfileCard.setFavoriteJungle(findCard.getFavoriteJungle());
+        lolProcessedProfileCard.setFavoriteMid(findCard.getFavoriteMid());
+        lolProcessedProfileCard.setFavoriteAd(findCard.getFavoriteAd());
+        lolProcessedProfileCard.setFavoriteSupport(findCard.getFavoriteSupport());
+        lolProcessedProfileCard.setGameType(findCard.getGameType());
 
         if (userType == null) {
-            responseDto.setUserType(null);
-            responseDto.setEgoTestVersion(null);
+            lolProcessedProfileCard.setUserType(null);
+            lolProcessedProfileCard.setEgoTestVersion(null);
         }
         else {
-            responseDto.setUserType(userType.getType());
-            responseDto.setEgoTestVersion(userType.getVersion());
+            lolProcessedProfileCard.setUserType(userType.getType());
+            lolProcessedProfileCard.setEgoTestVersion(userType.getVersion());
         }
 
-        return responseDto;
+        return lolProcessedProfileCard;
     }
+
+
 }

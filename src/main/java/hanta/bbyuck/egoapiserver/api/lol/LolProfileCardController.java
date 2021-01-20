@@ -6,6 +6,7 @@ import hanta.bbyuck.egoapiserver.request.lol.LolMatchDeckRequestDto;
 import hanta.bbyuck.egoapiserver.request.lol.LolProfileCardRequestDto;
 import hanta.bbyuck.egoapiserver.request.lol.LolProfileCardMakeRequestDto;
 import hanta.bbyuck.egoapiserver.request.lol.LolProfileCardUpdateRequestDto;
+import hanta.bbyuck.egoapiserver.response.lol.LolProcessedProfileCard;
 import hanta.bbyuck.egoapiserver.response.lol.LolProcessedProfileCardDeck;
 import hanta.bbyuck.egoapiserver.response.ResponseMessage;
 import hanta.bbyuck.egoapiserver.response.lol.LolProfileCardResponseDto;
@@ -50,8 +51,6 @@ public class LolProfileCardController {
         lolProfileCardService.makeDuoProfileCard(requestDto);
         return new ResponseMessage("Duo Profile Card Make API Call Success!", "LDPC-OBJ-001");
     }
-
-
 
     @ApiOperation(value = "단일 유저 프로필 카드 데이터 요청", notes = "유저 인증 정보로 프로필카드 데이터 리턴.\n" +
             "1. 프로필 카드가 없을 경우 404 Not Found와 함께 에러 메세지 response 리턴",
@@ -179,11 +178,13 @@ public class LolProfileCardController {
 
         Integer todayRefreshCount = lolRecommendationRefreshService.todayRefreshCount(requestDto);
 
+        System.out.println("오늘 리프레쉬 사용한 횟수 : " + todayRefreshCount);
+
         // 이미 오늘 새로고침 기회를 다썼으면 예외발생
         if (todayRefreshCount.equals(MAX_RECOMMEND_COUNT_PER_DAY)) throw new RecommendRefreshOverException();
 
-        LolProfileCardResponseDto responseDto = lolProfileCardService.getReferral(requestDto);
-        lolRecommendationRefreshService.refresh(requestDto);
+        LolProcessedProfileCard responseDto = lolProfileCardService.getReferral(requestDto);
+        lolRecommendationRefreshService.refresh(requestDto, responseDto);
 
         return new ResponseMessage("새로고침 완료", "LREC-OBJ-002", responseDto);
     }

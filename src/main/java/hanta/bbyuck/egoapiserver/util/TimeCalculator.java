@@ -87,10 +87,10 @@ public class TimeCalculator {
         Integer answer = 0;
 
         for (LolRecommendationRefresh refresh : latelyRefreshes) {
+            System.out.println(refresh.getRefreshDatetime().getDayOfYear() + " / " + LocalDateTime.now().getDayOfYear());
             if (refresh.getRefreshDatetime().getDayOfYear() == LocalDateTime.now().getDayOfYear()) answer++;
         }
-        
+        System.out.println(answer);
         return answer;
     }
-
 }

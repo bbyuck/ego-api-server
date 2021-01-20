@@ -24,11 +24,11 @@ public class LolRecommendationRefreshRepository {
         String query = "select lrr " +
                 "from LolRecommendationRefresh lrr " +
                 "where lrr.apiCaller =: apiCaller " +
-                "order by lrr.refreshDatetime";
+                "order by lrr.refreshDatetime desc";
 
         return em.createQuery(query, LolRecommendationRefresh.class)
                 .setFirstResult(0)
-                .setMaxResults(MAX_RECOMMEND_COUNT_PER_DAY)
+                .setMaxResults(MAX_RECOMMEND_COUNT_PER_DAY + 1)
                 .setParameter("apiCaller", apiCaller)
                 .getResultList();
     }

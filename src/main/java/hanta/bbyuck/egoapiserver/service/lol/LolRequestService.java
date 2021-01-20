@@ -14,6 +14,8 @@ import hanta.bbyuck.egoapiserver.repository.lol.LolProfileCardRepository;
 import hanta.bbyuck.egoapiserver.repository.lol.LolRequestRepository;
 import hanta.bbyuck.egoapiserver.request.lol.LolRequestDto;
 import hanta.bbyuck.egoapiserver.request.lol.LolRequestGetDto;
+import hanta.bbyuck.egoapiserver.response.lol.LolProcessedProfileCard;
+import hanta.bbyuck.egoapiserver.response.lol.LolProcessedProfileCardDeck;
 import hanta.bbyuck.egoapiserver.response.lol.LolRequestProfileCard;
 import hanta.bbyuck.egoapiserver.response.lol.LolRequestProfileCardDeck;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static hanta.bbyuck.egoapiserver.util.ClientVersionManager.*;
+import static hanta.bbyuck.egoapiserver.util.ServiceUtil.addCardToProcessedDeck;
 import static hanta.bbyuck.egoapiserver.util.ServiceUtil.addCardToRequestDeck;
 
 @Service
@@ -116,46 +119,53 @@ public class LolRequestService {
     }
 
     // 메소드 호출한 유저가 sender
-    public LolRequestProfileCardDeck getSendRequest(LolRequestGetDto requestDto) {
+    public LolProcessedProfileCardDeck getSendRequest(LolRequestGetDto requestDto) {
         checkClientVersion(requestDto.getClientVersion());
 
         User reqUser = userRepository.find(requestDto.getGeneratedId());
         List<LolRequest> sentRequestList = lolRequestRepository.findSend(reqUser);
 
-        LolRequestProfileCardDeck sentRequestDeck = new LolRequestProfileCardDeck();
-        List<LolRequestProfileCard> cards = new ArrayList<>();
+        LolProcessedProfileCardDeck sentRequestDeck = new LolProcessedProfileCardDeck();
+        List<LolProcessedProfileCard> cards = new ArrayList<>();
 
         for (LolRequest sentRequest : sentRequestList) {
             User receiver = sentRequest.getReceiver();
             LolProfileCard receiverProfile = lolProfileCardRepository.find(receiver);
-            addCardToRequestDeck(cards, receiverProfile, sentRequest.getRequest_time());
+            addCardToProcessedDeck(cards, receiverProfile, null);
         }
         sentRequestDeck.setMakeTime(LocalDateTime.now());
         sentRequestDeck.setCardCount(cards.size());
-        sentRequestDeck.setDuoRequestProfileCards(cards);
+        sentRequestDeck.setDuoProfileCards(cards);
 
         return sentRequestDeck;
     }
 
+    public Integer getSentRequestCount(LolRequestGetDto requestDto) {
+        User apiCaller = userRepository.find(requestDto.getGeneratedId());
+        List<LolRequest> sentRequests = lolRequestRepository.findSend(apiCaller);
+
+        return sentRequests.size();
+    }
+
     // method 호출한 유저가 receiver
-    public LolRequestProfileCardDeck getReceiveRequest(LolRequestGetDto requestDto) {
+    public LolProcessedProfileCardDeck getReceiveRequest(LolRequestGetDto requestDto) {
         checkClientVersion(requestDto.getClientVersion());
 
 
         User reqUser = userRepository.find(requestDto.getGeneratedId());
         List<LolRequest> receivedRequestList = lolRequestRepository.findReceive(reqUser);
 
-        LolRequestProfileCardDeck receivedRequestDeck = new LolRequestProfileCardDeck();
-        List<LolRequestProfileCard> cards = new ArrayList<>();
+        LolProcessedProfileCardDeck receivedRequestDeck = new LolProcessedProfileCardDeck();
+        List<LolProcessedProfileCard> cards = new ArrayList<>();
 
         for (LolRequest receivedRequest : receivedRequestList) {
             User sender = receivedRequest.getSender();
             LolProfileCard receiverProfile = lolProfileCardRepository.find(sender);
-            addCardToRequestDeck(cards, receiverProfile, receivedRequest.getRequest_time());
+            addCardToProcessedDeck(cards, receiverProfile, null);
         }
         receivedRequestDeck.setMakeTime(LocalDateTime.now());
         receivedRequestDeck.setCardCount(cards.size());
-        receivedRequestDeck.setDuoRequestProfileCards(cards);
+        receivedRequestDeck.setDuoProfileCards(cards);
 
         return receivedRequestDeck;
     }

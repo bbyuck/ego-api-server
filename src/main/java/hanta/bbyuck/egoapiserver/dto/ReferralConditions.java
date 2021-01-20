@@ -9,7 +9,7 @@ import lombok.Data;
 public class ReferralConditions {
     private User apiCaller;
     // 가능한 티어대
-    private LolTier[] tiers;
+    private LolTier tier;
     // 유저에 맞는 포지션
     private LolPosition[] positions;
 }

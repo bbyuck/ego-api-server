@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 public class NoUserException extends AbstractResponseException {
     private static final long serialVersionUID = 1L;
     private static final String ERR_CODE = "ERR-USER-987";
-    private static final String ERR_MSG = "유저풀에 맞는 유저가 존재하지 않음";
+    private static final String ERR_MSG = "유저가 존재하지 않음";
 
     public NoUserException() {
         super(ERR_MSG);
