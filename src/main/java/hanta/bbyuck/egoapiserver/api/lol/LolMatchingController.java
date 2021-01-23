@@ -94,10 +94,35 @@ public class LolMatchingController {
     }
 
 
+
+    @ApiOperation(value = "참여중인 매칭 아이디",
+            notes = "화이팅!")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "generatedId", value = "회원가입 및 로그인시 제공받은 Id", defaultValue = "sdsnadnsao21n3o1ni3o1"),
+            @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00"),
+            @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
+    })
     @PostMapping("/match/report")
     public ResponseMessage reportOpponent(@RequestBody LolReportRequestDto requestDto) {
         lolReportService.reportOpponent(requestDto);
         return new ResponseMessage("신고 완료", "LDM-NONE-006");
+    }
+
+    @GetMapping("/match/match-id")
+    public ResponseMessage getMatchId(@RequestParam String generatedId,
+                                      @RequestParam String clientVersion) {
+
+        System.out.println("아이디: " + generatedId);
+        System.out.println("클라 버전: " + clientVersion);
+
+        LolMatchingRequestDto requestDto =  new LolMatchingRequestDto();
+        requestDto.setGeneratedId(generatedId);
+        requestDto.setClientVersion(clientVersion);
+        Long id = lolMatchingService.matchId(requestDto);
+
+
+
+        return new ResponseMessage("매치 아이디", "LDM-OBJ-002", id);
     }
 }
 

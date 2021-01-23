@@ -4,6 +4,7 @@ import hanta.bbyuck.egoapiserver.domain.User;
 import hanta.bbyuck.egoapiserver.domain.enumset.MatchType;
 import hanta.bbyuck.egoapiserver.domain.lol.LolMatching;
 import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolMatchingStatus;
+import hanta.bbyuck.egoapiserver.exception.http.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,5 +67,15 @@ public class LolMatchingRepository {
 
     public LolMatching findById(Long id) {
         return em.find(LolMatching.class, id);
+    }
+
+    public Long findMyMatching(User apiCaller) {
+        String query = "select lm from LolMatching lm where (lm.requester = : me or lm.respondent = : me)";
+        List<LolMatching> me = em.createQuery(query, LolMatching.class)
+                .setParameter("me", apiCaller)
+                .getResultList();
+
+        if (me.isEmpty()) throw new BadRequestException("매치 존재하지 않음");
+        return me.get(0).getId();
     }
 }

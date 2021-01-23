@@ -221,4 +221,13 @@ public class LolMatchingService {
 
         // fcm 관련 로직
     }
+
+    public Long matchId(LolMatchingRequestDto requestDto) {
+        checkClientVersion(requestDto.getClientVersion());
+        User apiCaller = userRepository.find(requestDto.getGeneratedId());
+        Long answer = lolMatchingRepository.findMyMatching(apiCaller);
+
+
+        return answer;
+    }
 }
