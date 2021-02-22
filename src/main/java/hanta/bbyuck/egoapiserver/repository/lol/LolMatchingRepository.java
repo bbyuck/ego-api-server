@@ -70,12 +70,15 @@ public class LolMatchingRepository {
     }
 
     public Long findMyMatching(User apiCaller) {
-        String query = "select lm from LolMatching lm where (lm.requester = : me or lm.respondent = : me)";
-        List<LolMatching> me = em.createQuery(query, LolMatching.class)
+        String query = "select lm from LolMatching lm where (lm.requester = : me or lm.respondent = : me) and (lm.matchingStatus <> : finish and lm.matchingStatus <> : cancel) ";
+        List<LolMatching> match = em.createQuery(query, LolMatching.class)
                 .setParameter("me", apiCaller)
+                .setParameter("finish", LolMatchingStatus.FINISHED)
+                .setParameter("cancel", LolMatchingStatus.CANCEL)
                 .getResultList();
 
-        if (me.isEmpty()) throw new BadRequestException("매치 존재하지 않음");
-        return me.get(0).getId();
+        if (match.isEmpty()) throw new BadRequestException("매치 존재하지 않음");
+
+        return match.get(0).getId();
     }
 }

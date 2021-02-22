@@ -2,6 +2,8 @@ package hanta.bbyuck.egoapiserver.exception;
 
 import org.springframework.http.HttpStatus;
 
+
+
 public abstract class AbstractResponseException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 

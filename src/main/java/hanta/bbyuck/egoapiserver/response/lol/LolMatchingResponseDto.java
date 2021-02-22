@@ -1,5 +1,6 @@
 package hanta.bbyuck.egoapiserver.response.lol;
 
+import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolMatchingStatus;
 import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolPosition;
 import hanta.bbyuck.egoapiserver.domain.lol.enumset.LolTier;
 import lombok.Data;
@@ -11,20 +12,7 @@ public class LolMatchingResponseDto {
     private Long matchId;
     private LocalDateTime matchStartTime;
 
-    private Boolean myVoice;
-    private String mySummonerName;
-    private LolTier myTier;
-    private Integer myTierLev;
-    private Integer myLp;
-    private String myChampion1;
-    private String myChampion2;
-    private String myChampion3;
-    private Boolean myTop;
-    private Boolean myJungle;
-    private Boolean myMid;
-    private Boolean myAd;
-    private Boolean mySupport;
-    private LolPosition myMainLolPosition;
+    private LolMatchingStatus matchingStatus;
 
     private Boolean opponentVoice;
     private String opponentSummonerName;
@@ -40,4 +28,5 @@ public class LolMatchingResponseDto {
     private Boolean opponentAd;
     private Boolean opponentSupport;
     private LolPosition opponentMainLolPosition;
+    private LocalDateTime opponentLastActiveTime;
 }

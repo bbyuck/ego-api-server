@@ -11,6 +11,15 @@ import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+/*
+ * HANTA - User Controller class
+ *
+ * @      author : 강혁(bbyuck) (k941026h@naver.com)
+ * @       since : 2020. 01. 01
+ * @ last update : 2021. 02. 22
+ *
+ * <Copyright 2020. 한타. All rights reserved.>
+ */
 
 @RestController
 @RequiredArgsConstructor
@@ -35,16 +44,9 @@ public class UserController {
     @PostMapping("/api/v0.0.1/auth")
     public ResponseMessage join(@RequestBody UserAuthRequestDto requestDto) {
         LoginDto loginDto = userService.join(requestDto);
-
-
-        String token = jwtTokenProvider.createToken(loginDto.getId(), loginDto.getPrivileges());
-        UserAuthResponseDto userAuthResponseDto = new UserAuthResponseDto();
-        userAuthResponseDto.setUserAuthToken(token);
-
-        userAuthResponseDto.setGeneratedId(loginDto.getGeneratedId());
-        userAuthResponseDto.setGeneratedPw(loginDto.getGeneratedPw());
-
-        return new ResponseMessage("Auth API call success", "AUTH-OBJ-001" ,userAuthResponseDto);
+        String token = jwtTokenProvider.createToken(loginDto.getGeneratedId(), loginDto.getPrivileges());
+        loginDto.setUserAuthToken(token);
+        return new ResponseMessage("Auth API call success", "AUTH-OBJ-001" ,loginDto);
     }
 
 
@@ -112,5 +114,6 @@ public class UserController {
         }
 
         return new ResponseMessage("테스트 완료", returnCode, responseDto);
+
     }
 }

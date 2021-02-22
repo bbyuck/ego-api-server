@@ -1,76 +1,22 @@
 package hanta.bbyuck.egoapiserver.util;
 
 
+import hanta.bbyuck.egoapiserver.domain.User;
 import hanta.bbyuck.egoapiserver.domain.UserType;
 import hanta.bbyuck.egoapiserver.domain.lol.LolProfileCard;
 import hanta.bbyuck.egoapiserver.domain.lol.LolRecommendationRefresh;
-import hanta.bbyuck.egoapiserver.response.lol.LolProcessedProfileCard;
-import hanta.bbyuck.egoapiserver.response.lol.LolRequestProfileCard;
+import hanta.bbyuck.egoapiserver.response.lol.LolProfileCardResponseDto;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.*;
 
+import static hanta.bbyuck.egoapiserver.util.Codes.*;
+
 public class ServiceUtil {
 
-    public static void addCardToProcessedDeck(List<LolProcessedProfileCard> cards, LolProfileCard card, UserType userType) {
-        LolProcessedProfileCard processedCard = new LolProcessedProfileCard();
-        processedCard.setProfileCardId(card.getId());
-        processedCard.setVoice(card.getVoice());
-        processedCard.setLimitedSummonerName(card.getSummonerName().substring(0, 1) + "***");
-        processedCard.setTier(card.getTier());
-        processedCard.setTierLev(card.getTierLev());
-        processedCard.setLp(card.getLp());
-        processedCard.setChampion1(card.getChampion1());
-        processedCard.setChampion2(card.getChampion2());
-        processedCard.setChampion3(card.getChampion3());
-        processedCard.setTop(card.getTop());
-        processedCard.setJungle(card.getJungle());
-        processedCard.setMid(card.getMid());
-        processedCard.setAd(card.getAd());
-        processedCard.setSupport(card.getSupport());
-        processedCard.setMainLolPosition(card.getMainLolPosition());
-        processedCard.setLastActiveTime(card.getOwner().getLastActiveTime());
-        processedCard.setMatchType(card.getMatchType());
-        processedCard.setFavoriteTier(card.getFavoriteTier());
-        processedCard.setFavoriteTop(card.getFavoriteTop());
-        processedCard.setFavoriteJungle(card.getFavoriteJungle());
-        processedCard.setFavoriteMid(card.getFavoriteMid());
-        processedCard.setFavoriteAd(card.getFavoriteAd());
-        processedCard.setFavoriteSupport(card.getFavoriteSupport());
-
-        if (userType == null) {
-            processedCard.setUserType(null);
-            processedCard.setEgoTestVersion(null);
-        }
-        else {
-            processedCard.setUserType(userType.getType());
-            processedCard.setEgoTestVersion(userType.getVersion());
-        }
-        cards.add(processedCard);
-    }
-
-    public static void addCardToRequestDeck(List<LolProcessedProfileCard> cards, LolProfileCard card, LocalDateTime requestTime) {
-        LolProcessedProfileCard processedCard = new LolProcessedProfileCard();
-        processedCard.setProfileCardId(card.getId());
-        processedCard.setLastActiveTime(card.getOwner().getLastActiveTime());
-        processedCard.setVoice(card.getVoice());
-        processedCard.setLimitedSummonerName(card.getSummonerName().substring(0, 1) + "***");
-        processedCard.setTier(card.getTier());
-        processedCard.setTierLev(card.getTierLev());
-        processedCard.setLp(card.getLp());
-        processedCard.setChampion1(card.getChampion1());
-        processedCard.setChampion2(card.getChampion2());
-        processedCard.setChampion3(card.getChampion3());
-        processedCard.setTop(card.getTop());
-        processedCard.setJungle(card.getJungle());
-        processedCard.setMid(card.getMid());
-        processedCard.setAd(card.getAd());
-        processedCard.setSupport(card.getSupport());
-        processedCard.setMainLolPosition(card.getMainLolPosition());
-        cards.add(processedCard);
-    }
+    public static Map<Character, String> URL_Encoding_Map;
 
     public static LolProfileCard checkRecommendation(List<LolProfileCard> recommendations, List<LolRecommendationRefresh> refreshes) {
         LolProfileCard answer = null;
@@ -98,4 +44,41 @@ public class ServiceUtil {
 
         return answer;
     }
+    @NotNull
+    public static  LolProfileCardResponseDto fillLolProfileCardResponseDto(LolProfileCard findCard, Integer flag) {
+        LolProfileCardResponseDto lolProfileCardDto = new LolProfileCardResponseDto();
+        lolProfileCardDto.setProfileCardId(findCard.getId());
+        lolProfileCardDto.setVoice(findCard.getVoice());
+        if (flag.equals(ORIGINAL)) lolProfileCardDto.setSummonerName(findCard.getSummonerName());
+        else if (flag.equals(PROCESSED)) lolProfileCardDto.setSummonerName(findCard.getSummonerName().charAt(0) + "***");
+        lolProfileCardDto.setTier(findCard.getTier());
+        lolProfileCardDto.setLastActiveTime(findCard.getOwner().getLastActiveTime());
+        lolProfileCardDto.setTierLev(findCard.getTierLev());
+        lolProfileCardDto.setLp(findCard.getLp());
+        lolProfileCardDto.setChampion1(findCard.getChampion1());
+        lolProfileCardDto.setChampion2(findCard.getChampion2());
+        lolProfileCardDto.setChampion3(findCard.getChampion3());
+        lolProfileCardDto.setTop(findCard.getTop());
+        lolProfileCardDto.setJungle(findCard.getJungle());
+        lolProfileCardDto.setMid(findCard.getMid());
+        lolProfileCardDto.setAd(findCard.getAd());
+        lolProfileCardDto.setSupport(findCard.getSupport());
+        lolProfileCardDto.setMainLolPosition(findCard.getMainLolPosition());
+        lolProfileCardDto.setMatchType(findCard.getMatchType());
+        lolProfileCardDto.setFavoriteTier(findCard.getFavoriteTier());
+        lolProfileCardDto.setFavoriteTop(findCard.getFavoriteTop());
+        lolProfileCardDto.setFavoriteJungle(findCard.getFavoriteJungle());
+        lolProfileCardDto.setFavoriteMid(findCard.getFavoriteMid());
+        lolProfileCardDto.setFavoriteAd(findCard.getFavoriteAd());
+        lolProfileCardDto.setFavoriteSupport(findCard.getFavoriteSupport());
+        lolProfileCardDto.setGameType(findCard.getGameType());
+
+        return lolProfileCardDto;
+    }
+
+    public static void addCardToDeck(List<LolProfileCardResponseDto> cards, LolProfileCard card) {
+        LolProfileCardResponseDto processedCard = fillLolProfileCardResponseDto(card, PROCESSED);
+        cards.add(processedCard);
+    }
+
 }

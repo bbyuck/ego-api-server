@@ -22,6 +22,18 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+/*
+ * HANTA - Web Security class
+ *
+ * @ description : JWT 관련 설정 클래스
+ *
+ * @      author : 강혁(bbyuck) (k941026h@naver.com)
+ * @       since : 2020. 01. 01
+ * @ last update : 2021. 02. 22
+ *
+ * <Copyright 2020. 한타. All rights reserved.>
+ */
+
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity

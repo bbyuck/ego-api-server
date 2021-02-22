@@ -4,7 +4,7 @@ import hanta.bbyuck.egoapiserver.request.lol.LolMatchingRequestDto;
 import hanta.bbyuck.egoapiserver.request.lol.LolReportRequestDto;
 import hanta.bbyuck.egoapiserver.response.ResponseMessage;
 import hanta.bbyuck.egoapiserver.response.lol.LolMatchingResponseDto;
-import hanta.bbyuck.egoapiserver.response.lol.LolProcessedProfileCardDeck;
+import hanta.bbyuck.egoapiserver.response.lol.LolProfileCardDeckDto;
 import hanta.bbyuck.egoapiserver.service.EgoScoreService;
 import hanta.bbyuck.egoapiserver.service.lol.LolMatchingService;
 import hanta.bbyuck.egoapiserver.service.lol.LolReportService;
@@ -13,6 +13,17 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+/*
+ * HANTA - Matching Controller class
+ *
+ * @      author : 강혁(bbyuck) (k941026h@naver.com)
+ * @       since : 2020. 01. 01
+ * @ last update : 2021. 02. 22
+ *
+ * <Copyright 2020. 한타. All rights reserved.>
+ */
+
 
 @RestController
 @RequiredArgsConstructor
@@ -37,6 +48,7 @@ public class LolMatchingController {
                                                    @RequestParam String generatedId,
                                                    @RequestParam Long opponentProfileId,
                                                    @RequestParam Long matchId) {
+        System.out.println("매치 정보 GET Controller 호출");
         LolMatchingRequestDto requestDto = new LolMatchingRequestDto();
         requestDto.setClientVersion(clientVersion);
         requestDto.setGeneratedId(generatedId);
@@ -49,7 +61,7 @@ public class LolMatchingController {
     @ApiOperation(value = "매칭 수락",
             notes = "매칭 수락시 이용할 API 요청을 보낸 유저와 요청을 받은 유저의 매칭이 생성\n" +
                     "1. 매칭시 유저 상태가 변경\n",
-            response = LolProcessedProfileCardDeck.class)
+            response = LolProfileCardDeckDto.class)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "generatedId", value = "회원가입 및 로그인시 제공받은 Id", defaultValue = "sdsnadnsao21n3o1ni3o1"),
             @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00"),
@@ -108,7 +120,7 @@ public class LolMatchingController {
         return new ResponseMessage("신고 완료", "LDM-NONE-006");
     }
 
-    @GetMapping("/match/match-id")
+    @GetMapping("/match/id")
     public ResponseMessage getMatchId(@RequestParam String generatedId,
                                       @RequestParam String clientVersion) {
 

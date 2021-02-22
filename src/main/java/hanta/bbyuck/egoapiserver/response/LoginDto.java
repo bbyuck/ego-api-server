@@ -7,8 +7,9 @@ import java.util.List;
 
 @Data
 public class LoginDto {
-    private String id;
     private String generatedId;
     private String generatedPw;
+    private String generatedIdForGet;
+    private String userAuthToken;
     private List<String> privileges = new ArrayList<>();
 }

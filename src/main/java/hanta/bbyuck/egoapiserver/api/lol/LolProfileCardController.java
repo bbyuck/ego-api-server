@@ -6,15 +6,24 @@ import hanta.bbyuck.egoapiserver.request.lol.LolMatchDeckRequestDto;
 import hanta.bbyuck.egoapiserver.request.lol.LolProfileCardRequestDto;
 import hanta.bbyuck.egoapiserver.request.lol.LolProfileCardMakeRequestDto;
 import hanta.bbyuck.egoapiserver.request.lol.LolProfileCardUpdateRequestDto;
-import hanta.bbyuck.egoapiserver.response.lol.LolProcessedProfileCard;
-import hanta.bbyuck.egoapiserver.response.lol.LolProcessedProfileCardDeck;
 import hanta.bbyuck.egoapiserver.response.ResponseMessage;
+import hanta.bbyuck.egoapiserver.response.lol.LolProfileCardDeckDto;
 import hanta.bbyuck.egoapiserver.response.lol.LolProfileCardResponseDto;
 import hanta.bbyuck.egoapiserver.service.lol.LolProfileCardService;
 import hanta.bbyuck.egoapiserver.service.lol.LolRecommendationRefreshService;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+/*
+ * HANTA - Lol Profile card Controller class
+ *
+ * @      author : 강혁(bbyuck) (k941026h@naver.com)
+ * @       since : 2020. 01. 01
+ * @ last update : 2021. 02. 22
+ *
+ * <Copyright 2020. 한타. All rights reserved.>
+ */
 
 @RestController
 @RequestMapping(value = "/user/api/v0.0.1/lol/duo")
@@ -100,7 +109,7 @@ public class LolProfileCardController {
     @ApiOperation(value = "매치 기능 프로필 카드 열람",
             notes = "매칭 시작 및 새로고침시 프로필 카드 덱 요청에 따른 덱 반환\n" +
                     "1. 이미 매칭중인 유저가 신청할 시 Bad Request 발생",
-            response = LolProcessedProfileCardDeck.class)
+            response = LolProfileCardDeckDto.class)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "generatedId", value = "회원가입 및 로그인시 제공받은 Id", defaultValue = "sdsnadnsao21n3o1ni3o1"),
             @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00"),
@@ -112,7 +121,7 @@ public class LolProfileCardController {
         LolMatchDeckRequestDto requestDto = new LolMatchDeckRequestDto();
         requestDto.setClientVersion(clientVersion);
         requestDto.setGeneratedId(generatedId);
-        LolProcessedProfileCardDeck deck = lolProfileCardService.takeDeck(requestDto);
+        LolProfileCardDeckDto deck = lolProfileCardService.takeDeck(requestDto);
         return new ResponseMessage("Lol duo profile card deck return API Call Success!", "LDPC-OBJ-004", deck);
     }
 
@@ -141,7 +150,7 @@ public class LolProfileCardController {
     @ApiOperation(value = "오늘 하루 추천 받은 카운트",
             notes = "추천 받은 카운트\n" +
                     "1. 0일경우 무조건 new-referral api 호출할 것",
-            response = LolProcessedProfileCardDeck.class)
+            response = LolProfileCardDeckDto.class)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "generatedId", value = "회원가입 및 로그인시 제공받은 Id", defaultValue = "sdsnadnsao21n3o1ni3o1"),
             @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00"),
@@ -163,7 +172,7 @@ public class LolProfileCardController {
     @ApiOperation(value = "메인페이지 새로고침 버튼 기능 / 오늘 새로고침한 카운트가 0이라면(날짜가 바뀜) 자동으로 호출해줄 것",
             notes = "새로고침 기능\n" +
                     "1. 새로고침 기회를 모두 사용하면 에러발생",
-            response = LolProcessedProfileCardDeck.class)
+            response = LolProfileCardDeckDto.class)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "generatedId", value = "회원가입 및 로그인시 제공받은 Id", defaultValue = "sdsnadnsao21n3o1ni3o1"),
             @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00"),
@@ -183,7 +192,7 @@ public class LolProfileCardController {
         // 이미 오늘 새로고침 기회를 다썼으면 예외발생
         if (todayRefreshCount.equals(MAX_RECOMMEND_COUNT_PER_DAY)) throw new RecommendRefreshOverException();
 
-        LolProcessedProfileCard responseDto = lolProfileCardService.getReferral(requestDto);
+        LolProfileCardResponseDto responseDto = lolProfileCardService.getReferral(requestDto);
         lolRecommendationRefreshService.refresh(requestDto, responseDto);
 
         return new ResponseMessage("새로고침 완료", "LREC-OBJ-002", responseDto);
@@ -191,7 +200,7 @@ public class LolProfileCardController {
 
     @ApiOperation(value = "메인페이지 놓친 카드 기능",
             notes = "메인 페이지 세션에 새로 접속할 때 마다 호출해줄 것",
-            response = LolProcessedProfileCardDeck.class)
+            response = LolProfileCardDeckDto.class)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "generatedId", value = "회원가입 및 로그인시 제공받은 Id", defaultValue = "sdsnadnsao21n3o1ni3o1"),
             @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00"),
@@ -204,7 +213,7 @@ public class LolProfileCardController {
         requestDto.setClientVersion(clientVersion);
         requestDto.setGeneratedId(generatedId);
 
-        LolProcessedProfileCardDeck responseDto = lolProfileCardService.getMissedDeck(requestDto);
+        LolProfileCardDeckDto responseDto = lolProfileCardService.getMissedDeck(requestDto);
 
         return new ResponseMessage("놓친 카드 덱", "LDPC-OBJ-006", responseDto);
     }

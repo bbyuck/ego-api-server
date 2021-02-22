@@ -15,6 +15,18 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/*
+ * HANTA - Response Controller class
+ *
+ * @ description : Custom Excepiton Handling Controller
+ *
+ * @      author : 강혁(bbyuck) (k941026h@naver.com)
+ * @       since : 2020. 01. 01
+ * @ last update : 2021. 02. 22
+ *
+ * <Copyright 2020. 한타. All rights reserved.>
+ */
+
 @Slf4j
 @ControllerAdvice
 @RestController

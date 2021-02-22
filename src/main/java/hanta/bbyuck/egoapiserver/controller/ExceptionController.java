@@ -8,6 +8,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/*
+ * HANTA - Exception Controller class
+ *
+ * @ description : Authentication (Spring security filter)관련 에러 핸들링 컨트롤러
+ *
+ * @      author : 강혁(bbyuck) (k941026h@naver.com)
+ * @       since : 2020. 01. 01
+ * @ last update : 2021. 02. 22
+ *
+ * <Copyright 2020. 한타. All rights reserved.>
+ */
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(value = "/exception")

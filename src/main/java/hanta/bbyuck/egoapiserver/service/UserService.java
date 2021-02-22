@@ -11,22 +11,48 @@ import hanta.bbyuck.egoapiserver.response.UserStatusResponseDto;
 import hanta.bbyuck.egoapiserver.util.AES256Util;
 import hanta.bbyuck.egoapiserver.util.ClientVersionManager;
 import hanta.bbyuck.egoapiserver.util.SHA256Util;
+import hanta.bbyuck.egoapiserver.util.ServiceUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.NoResultException;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 import static hanta.bbyuck.egoapiserver.util.ClientVersionManager.*;
+import static hanta.bbyuck.egoapiserver.util.ServiceUtil.*;
 
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
+
+    @PostConstruct
+    private void setURL_Encoding_Map() {
+        URL_Encoding_Map = new HashMap<>();
+        URL_Encoding_Map.put(' ', "%20");
+        URL_Encoding_Map.put('!', "%21");
+        URL_Encoding_Map.put('"', "%22");
+        URL_Encoding_Map.put('#', "%23");
+        URL_Encoding_Map.put('$', "%24");
+        URL_Encoding_Map.put('%', "%25");
+        URL_Encoding_Map.put('&', "%26");
+        URL_Encoding_Map.put('\'', "%27");
+        URL_Encoding_Map.put('(', "%28");
+        URL_Encoding_Map.put(')', "%29");
+        URL_Encoding_Map.put('*', "%2A");
+        URL_Encoding_Map.put('+', "%2B");
+        URL_Encoding_Map.put(',', "%2C");
+        URL_Encoding_Map.put('-', "%2D");
+        URL_Encoding_Map.put('.', "%2E");
+        URL_Encoding_Map.put('/', "%2F");
+    }
 
     @Override
     public UserDetails loadUserByUsername(String userGeneratedId) throws UsernameNotFoundException {
@@ -64,8 +90,8 @@ public class UserService implements UserDetailsService {
 
         LoginDto loginDto = new LoginDto();
 
-        loginDto.setId(user.getGeneratedId());
         loginDto.setGeneratedId(user.getGeneratedId());
+        loginDto.setGeneratedIdForGet(encodeForGet(user.getGeneratedId()));
         loginDto.setGeneratedPw(user.getGeneratedPw());
         loginDto.setPrivileges(user.getPrivileges());
 
@@ -81,8 +107,8 @@ public class UserService implements UserDetailsService {
 
         LoginDto loginDto = new LoginDto();
 
-        loginDto.setId(user.getGeneratedId());
         loginDto.setGeneratedId(user.getGeneratedId());
+        loginDto.setGeneratedIdForGet(encodeForGet(user.getGeneratedId()));
         loginDto.setGeneratedPw(user.getGeneratedPw());
         loginDto.setPrivileges(user.getPrivileges());
 
@@ -119,5 +145,20 @@ public class UserService implements UserDetailsService {
         responseDto.setStatus(apiCaller.getStatus());
 
         return responseDto;
+    }
+
+    private static String encodeForGet(String id) {
+        String answer = "";
+
+        for (int i = 0; i < id.length(); i++){
+            char c = id.charAt(i);
+
+            String enc = URL_Encoding_Map.get(c);
+
+            if (enc == null) answer += c;
+            else answer += enc;
+        }
+
+        return answer;
     }
 }

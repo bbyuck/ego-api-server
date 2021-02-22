@@ -27,6 +27,10 @@ public class UserRepository {
         em.persist(user);
     }
 
+    public User findById(Long userId) throws NoResultException {
+        return em.find(User.class, userId);
+    }
+
     // 성능 튜닝 필
     public User find(String userGeneratedId) throws NoResultException {
         String query = "select u from User u where u.generatedId = :generatedId";

@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class LolProfileCardResponseDto {
-    private Long id;
+    private Long profileCardId;
     private LocalDateTime lastActiveTime;
     private LocalDateTime lastUpdateTime;
     private Boolean voice;
@@ -31,7 +31,7 @@ public class LolProfileCardResponseDto {
     private LolPosition mainLolPosition;
     private MatchType matchType;
     private GameType gameType;
-    private String userType;
+    private UserType userType;
     private EgoTestVersion egoTestVersion;
     private LolTier favoriteTier;
     private Boolean favoriteTop;

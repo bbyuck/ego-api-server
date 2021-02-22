@@ -3,8 +3,7 @@ package hanta.bbyuck.egoapiserver.api.lol;
 import hanta.bbyuck.egoapiserver.request.lol.LolRequestDto;
 import hanta.bbyuck.egoapiserver.request.lol.LolRequestGetDto;
 import hanta.bbyuck.egoapiserver.response.ResponseMessage;
-import hanta.bbyuck.egoapiserver.response.lol.LolProcessedProfileCardDeck;
-import hanta.bbyuck.egoapiserver.response.lol.LolRequestProfileCardDeck;
+import hanta.bbyuck.egoapiserver.response.lol.LolProfileCardDeckDto;
 import hanta.bbyuck.egoapiserver.service.lol.LolRequestService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -12,6 +11,15 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+/*
+ * HANTA - Lol Request Controller class
+ *
+ * @      author : 강혁(bbyuck) (k941026h@naver.com)
+ * @       since : 2020. 01. 01
+ * @ last update : 2021. 02. 22
+ *
+ * <Copyright 2020. 한타. All rights reserved.>
+ */
 
 @RestController
 @RequestMapping(value = "/user/api/v0.0.1/lol/duo")
@@ -43,8 +51,7 @@ public class LolRequestController {
                     "1. 신청을 받은 유저가 프로필 카드 수정시 변경 사항 적용\n" +
                     "2. 현재 MAX_REQUEST_COUNT = 5\n" +
                     "3. 신청 받은 유저 정보 대신 유저의 프로필 카드 정보 리턴" +
-                    "4. 가공 처리 된 프로필 카드 정보(아이디 가려짐)",
-            response = LolRequestProfileCardDeck.class)
+                    "4. 가공 처리 된 프로필 카드 정보(아이디 가려짐)")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "generatedId", value = "회원가입 및 로그인시 제공받은 Id", defaultValue = "sdsnadnsao21n3o1ni3o1"),
             @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00"),
@@ -56,7 +63,7 @@ public class LolRequestController {
         LolRequestGetDto requestDto = new LolRequestGetDto();
         requestDto.setClientVersion(clientVersion);
         requestDto.setGeneratedId(generatedId);
-        LolProcessedProfileCardDeck sentRequestDeck = lolRequestService.getSendRequest(requestDto);
+        LolProfileCardDeckDto sentRequestDeck = lolRequestService.getSendRequest(requestDto);
         return new ResponseMessage("Sent Request List Get API Call Success", "LDR-OBJ-001", sentRequestDeck);
     }
 
@@ -65,8 +72,7 @@ public class LolRequestController {
                     "1. 신청을 받은 유저가 프로필 카드 수정시 변경 사항 적용\n" +
                     "2. 현재 MAX_REQUEST_COUNT = 5\n" +
                     "3. 신청 보낸 유저 정보 대신 유저의 프로필 카드 정보 리턴" +
-                    "4. 가공 처리 된 프로필 카드 정보(아이디 가려짐)",
-            response = LolRequestProfileCardDeck.class)
+                    "4. 가공 처리 된 프로필 카드 정보(아이디 가려짐)")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "generatedId", value = "회원가입 및 로그인시 제공받은 Id", defaultValue = "sdsnadnsao21n3o1ni3o1"),
             @ApiImplicitParam(name = "clientVersion", value = "클라이언트 애플리케이션 버전", defaultValue = "v1.00"),
@@ -78,7 +84,7 @@ public class LolRequestController {
         LolRequestGetDto requestDto = new LolRequestGetDto();
         requestDto.setClientVersion(clientVersion);
         requestDto.setGeneratedId(generatedId);
-        LolProcessedProfileCardDeck receivedRequestDeck = lolRequestService.getReceiveRequest(requestDto);
+        LolProfileCardDeckDto receivedRequestDeck = lolRequestService.getReceiveRequest(requestDto);
         return new ResponseMessage("Sent Request List Get API Call Success", "LDR-OBJ-002" ,receivedRequestDeck);
     }
 

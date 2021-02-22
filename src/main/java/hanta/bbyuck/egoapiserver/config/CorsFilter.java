@@ -10,6 +10,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/*
+ * HANTA - Cors Filter class
+ *
+ * @ description : Cross Origin 정책 관련 문제 해결 필터
+ *
+ * @      author : 강혁(bbyuck) (k941026h@naver.com)
+ * @       since : 2020. 01. 01
+ * @ last update : 2021. 02. 22
+ *
+ * <Copyright 2020. 한타. All rights reserved.>
+ */
+
 @WebFilter(urlPatterns = {"/exception/**"}, description = "API 필터")
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)

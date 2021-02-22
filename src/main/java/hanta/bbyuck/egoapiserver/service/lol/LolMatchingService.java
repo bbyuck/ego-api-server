@@ -25,6 +25,8 @@ import javax.persistence.NoResultException;
 import java.time.LocalDateTime;
 
 import static hanta.bbyuck.egoapiserver.util.ClientVersionManager.*;
+import static hanta.bbyuck.egoapiserver.util.Codes.ORIGINAL;
+import static hanta.bbyuck.egoapiserver.util.Codes.PROCESSED;
 import static hanta.bbyuck.egoapiserver.util.TimeCalculator.*;
 
 @Service
@@ -142,16 +144,21 @@ public class LolMatchingService {
 
             LolMatching matching = lolMatchingRepository.findDuoMatching(apiCaller);
 
-            LolProfileCard apiCallerCard = lolProfileCardRepository.find(apiCaller);
             LolProfileCard opponentCard = null;
+            Integer flag = ORIGINAL;
 
             if (matching.getRespondent() == apiCaller) {
-                opponentCard = lolProfileCardRepository.find(matching.getRequester());
+                User opponent = matching.getRequester();
+                if (opponent.getStatus() == UserStatus.LOL_DUO_MATCHING_READY) flag = PROCESSED;
+                opponentCard = lolProfileCardRepository.find(opponent);
+
             } else if (matching.getRequester() == apiCaller) {
-                opponentCard = lolProfileCardRepository.find(matching.getRespondent());
+                User opponent = matching.getRequester();
+                if (opponent.getStatus() == UserStatus.LOL_DUO_MATCHING_READY) flag = PROCESSED;
+                opponentCard = lolProfileCardRepository.find(opponent);
             }
 
-            return makeResponse(apiCallerCard, opponentCard, matching.getId());
+            return makeFindMatchResponse(opponentCard, matching, flag);
 
         } catch(NoResultException e) {
             throw new BadRequestException("존재하지 않는 매치입니다.");
@@ -159,28 +166,17 @@ public class LolMatchingService {
     }
 
 
-    private LolMatchingResponseDto makeResponse(LolProfileCard reqCard, LolProfileCard opponentCard, Long matchId) {
+    private LolMatchingResponseDto makeFindMatchResponse(LolProfileCard opponentCard, LolMatching matching, Integer flag) {
         LolMatchingResponseDto responseDto = new LolMatchingResponseDto();
 
-        responseDto.setMatchId(matchId);
+        responseDto.setMatchId(matching.getId());
+        responseDto.setMatchingStatus(matching.getMatchingStatus());
+        responseDto.setMatchStartTime(matching.getStartTime());
 
-        responseDto.setMyVoice(reqCard.getVoice());
-        responseDto.setMySummonerName(reqCard.getSummonerName());
-        responseDto.setMyTier(reqCard.getTier());
-        responseDto.setMyTierLev(reqCard.getTierLev());
-        responseDto.setMyLp(reqCard.getLp());
-        responseDto.setMyChampion1(reqCard.getChampion1());
-        responseDto.setMyChampion2(reqCard.getChampion2());
-        responseDto.setMyChampion3(reqCard.getChampion3());
-        responseDto.setMyTop(reqCard.getTop());
-        responseDto.setMyJungle(reqCard.getJungle());
-        responseDto.setMyMid(reqCard.getMid());
-        responseDto.setMyAd(reqCard.getAd());
-        responseDto.setMySupport(reqCard.getSupport());
-        responseDto.setMyMainLolPosition(reqCard.getMainLolPosition());
-
+        responseDto.setOpponentLastActiveTime(opponentCard.getOwner().getLastActiveTime());
         responseDto.setOpponentVoice(opponentCard.getVoice());;
-        responseDto.setOpponentSummonerName(opponentCard.getSummonerName());
+        if (flag.equals(ORIGINAL)) responseDto.setOpponentSummonerName(opponentCard.getSummonerName());
+        else if (flag.equals(PROCESSED)) responseDto.setOpponentSummonerName(opponentCard.getSummonerName().charAt(0) + "***");
         responseDto.setOpponentTier(opponentCard.getTier());
         responseDto.setOpponentTierLev(opponentCard.getTierLev());
         responseDto.setOpponentLp(opponentCard.getLp());
@@ -194,8 +190,6 @@ public class LolMatchingService {
         responseDto.setOpponentSupport(opponentCard.getSupport());
         responseDto.setOpponentMainLolPosition(opponentCard.getMainLolPosition());
 
-        responseDto.setMatchStartTime(LocalDateTime.now());
-
         return responseDto;
     }
 
@@ -205,7 +199,6 @@ public class LolMatchingService {
 
         User apiCaller = userRepository.find(requestDto.getGeneratedId());
         LolMatching matching = lolMatchingRepository.findDuoMatching(apiCaller);
-
         if (matching.getMatchingStatus().equals(LolMatchingStatus.MATCHING)){
             throw new BadRequestException("이미 방에 입장");
         }

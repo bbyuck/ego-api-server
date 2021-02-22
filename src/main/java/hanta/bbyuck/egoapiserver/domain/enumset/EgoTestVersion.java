@@ -1,8 +1,17 @@
 package hanta.bbyuck.egoapiserver.domain.enumset;
 
 /*
- * ESTI 버전 관리 -> 디비에 들어갈 내용이므로 추가는 하되 삭제는 절대 하지말것!!!!
+ * HANTA - Ego Test Version Enum
+ *
+ * @ description : Ego Test의 버전 관리를 위한 버전 Enum class
+ *
+ * @      author : 강혁(bbyuck) (k941026h@naver.com)
+ * @       since : 2020. 01. 01
+ * @ last update : 2021. 02. 22
+ *
+ * <Copyright 2020. 한타. All rights reserved.>
  */
+
 public enum EgoTestVersion {
     V1
 }
