@@ -4,16 +4,23 @@ import hanta.bbyuck.egoapiserver.exception.AbstractResponseException;
 import org.springframework.http.HttpStatus;
 
 /*
- * HANTA - Conflict Exception class
+ * <pre>
+ * Copyright (c) 2020 HANTA
+ * All rights reserved.
  *
- * @ description : http 프로토콜 관련 Custom Exception
+ * This software is the proprietary information of HANTA
+ * </pre>
  *
+ * @ author 강혁(bbyuck) (k941026h@naver.com)
+ * @ since  2020. 01. 01
  *
- * @      author : 강혁(bbyuck) (k941026h@naver.com)
- * @       since : 2020. 01. 01
- * @ last update : 2021. 02. 22
- *
- * <Copyright 2020. 한타. All rights reserved.>
+ * @History
+ * <pre>
+ * -----------------------------------------------------
+ * 2020.01.01
+ * bbyuck (k941026h@naver.com) 최초작성
+ * -----------------------------------------------------
+ * </pre>
  */
 
 public class ConflictException extends AbstractResponseException {

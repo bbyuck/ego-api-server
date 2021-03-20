@@ -16,21 +16,23 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /*
- * HANTA - User Entity class
+ * <pre>
+ * Copyright (c) 2020 HANTA
+ * All rights reserved.
  *
- * @ description : User Entity 클래스 / E - R Diagram 참고해 연관관계 확인
- *                 유저를 모델링한 Entity. 거의 모든 Entity와 연관관계를 갖고 있으므로 웬만하면 추가 이외에 업데이트는 지양
+ * This software is the proprietary information of HANTA
+ * </pre>
  *
+ * @ author 강혁(bbyuck) (k941026h@naver.com)
+ * @ since  2020. 01. 01
  *
- * @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
- * @ 기획상 문제가 있지 않는 경우 절대 건드리지 말 것 @
- * @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
- *
- * @      author : 강혁(bbyuck) (k941026h@naver.com)
- * @       since : 2020. 01. 01
- * @ last update : 2021. 02. 22
- *
- * <Copyright 2020. 한타. All rights reserved.>
+ * @History
+ * <pre>
+ * -----------------------------------------------------
+ * 2020.01.01
+ * bbyuck (k941026h@naver.com) 최초작성
+ * -----------------------------------------------------
+ * </pre>
  */
 
 @Entity

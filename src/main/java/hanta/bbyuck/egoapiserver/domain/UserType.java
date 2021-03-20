@@ -8,20 +8,23 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 /*
- * HANTA - User Type Entity class
+ * <pre>
+ * Copyright (c) 2020 HANTA
+ * All rights reserved.
  *
- * @ description : User Type Entity 클래스 / E - R Diagram 참고해 연관관계 확인
- *                 기획상 잠시 사용하지 않음
+ * This software is the proprietary information of HANTA
+ * </pre>
  *
- * @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
- * @ 기획상 문제가 있지 않는 경우 절대 건드리지 말 것 @
- * @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+ * @ author 강혁(bbyuck) (k941026h@naver.com)
+ * @ since  2020. 01. 01
  *
- * @      author : 강혁(bbyuck) (k941026h@naver.com)
- * @       since : 2020. 01. 01
- * @ last update : 2021. 02. 22
- *
- * <Copyright 2020. 한타. All rights reserved.>
+ * @History
+ * <pre>
+ * -----------------------------------------------------
+ * 2020.01.01
+ * bbyuck (k941026h@naver.com) 최초작성
+ * -----------------------------------------------------
+ * </pre>
  */
 
 @Entity

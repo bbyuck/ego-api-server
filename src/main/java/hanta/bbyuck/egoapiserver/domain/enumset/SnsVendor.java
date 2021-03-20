@@ -1,15 +1,23 @@
 package hanta.bbyuck.egoapiserver.domain.enumset;
 
 /*
- * HANTA - Sns Vendor Enum class class
+ * <pre>
+ * Copyright (c) 2020 HANTA
+ * All rights reserved.
  *
- * @ description : SNS 로그인 기능을 제공할 때, 어떤 sns의 로그인을 제공하는지 관리하기 위한 Enum class
+ * This software is the proprietary information of HANTA
+ * </pre>
  *
- * @      author : 강혁(bbyuck) (k941026h@naver.com)
- * @       since : 2020. 01. 01
- * @ last update : 2021. 02. 22
+ * @ author 강혁(bbyuck) (k941026h@naver.com)
+ * @ since  2020. 01. 01
  *
- * <Copyright 2020. 한타. All rights reserved.>
+ * @History
+ * <pre>
+ * -----------------------------------------------------
+ * 2020.01.01
+ * bbyuck (k941026h@naver.com) 최초작성
+ * -----------------------------------------------------
+ * </pre>
  */
 
 public enum SnsVendor {

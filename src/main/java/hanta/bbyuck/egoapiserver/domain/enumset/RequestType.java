@@ -1,17 +1,24 @@
 package hanta.bbyuck.egoapiserver.domain.enumset;
 
 /*
- * HANTA - Request Type Enum class
+ * <pre>
+ * Copyright (c) 2020 HANTA
+ * All rights reserved.
  *
- * @ description : 기본 메인 기능으로 매칭 신청을 한 것인지, 추천 받은 카드에 매칭 신청을 한 것인지 구분해 관리하기 위한 Enum class
+ * This software is the proprietary information of HANTA
+ * </pre>
  *
- * @      author : 강혁(bbyuck) (k941026h@naver.com)
- * @       since : 2020. 01. 01
- * @ last update : 2021. 02. 22
+ * @ author 강혁(bbyuck) (k941026h@naver.com)
+ * @ since  2020. 01. 01
  *
- * <Copyright 2020. 한타. All rights reserved.>
+ * @History
+ * <pre>
+ * -----------------------------------------------------
+ * 2020.01.01
+ * bbyuck (k941026h@naver.com) 최초작성
+ * -----------------------------------------------------
+ * </pre>
  */
-
 public enum RequestType {
     NORMAL, RECOMMENDED
 }

@@ -1,15 +1,23 @@
 package hanta.bbyuck.egoapiserver.domain.enumset;
 
 /*
- * HANTA - Report Status Enum class
+ * <pre>
+ * Copyright (c) 2020 HANTA
+ * All rights reserved.
  *
- * @ description : 신고 받은 내용의 처리 상황을 관리하기 위한 Enum class
+ * This software is the proprietary information of HANTA
+ * </pre>
  *
- * @      author : 강혁(bbyuck) (k941026h@naver.com)
- * @       since : 2020. 01. 01
- * @ last update : 2021. 02. 22
+ * @ author 강혁(bbyuck) (k941026h@naver.com)
+ * @ since  2020. 01. 01
  *
- * <Copyright 2020. 한타. All rights reserved.>
+ * @History
+ * <pre>
+ * -----------------------------------------------------
+ * 2020.01.01
+ * bbyuck (k941026h@naver.com) 최초작성
+ * -----------------------------------------------------
+ * </pre>
  */
 
 public enum ReportStatus {

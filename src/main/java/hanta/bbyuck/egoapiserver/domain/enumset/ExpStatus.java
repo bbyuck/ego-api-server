@@ -1,17 +1,24 @@
 package hanta.bbyuck.egoapiserver.domain.enumset;
 
 /*
- * HANTA - ExpStatus Enum class
+ * <pre>
+ * Copyright (c) 2020 HANTA
+ * All rights reserved.
  *
- * @ description : 기본 지급되는 경험치와 조건을 만족해 추가 지급되는 경험치를 나누기 위한 Enum class
+ * This software is the proprietary information of HANTA
+ * </pre>
  *
- * @      author : 강혁(bbyuck) (k941026h@naver.com)
- * @       since : 2020. 01. 01
- * @ last update : 2021. 02. 22
+ * @ author 강혁(bbyuck) (k941026h@naver.com)
+ * @ since  2020. 01. 01
  *
- * <Copyright 2020. 한타. All rights reserved.>
+ * @History
+ * <pre>
+ * -----------------------------------------------------
+ * 2020.01.01
+ * bbyuck (k941026h@naver.com) 최초작성
+ * -----------------------------------------------------
+ * </pre>
  */
-
 public enum ExpStatus {
     COMPLETE, ADDITIONAL
 }

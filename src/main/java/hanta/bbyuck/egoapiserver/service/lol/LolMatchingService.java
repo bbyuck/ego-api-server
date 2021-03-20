@@ -29,6 +29,26 @@ import static hanta.bbyuck.egoapiserver.util.Codes.ORIGINAL;
 import static hanta.bbyuck.egoapiserver.util.Codes.PROCESSED;
 import static hanta.bbyuck.egoapiserver.util.TimeCalculator.*;
 
+/*
+ * <pre>
+ * Copyright (c) 2020 HANTA
+ * All rights reserved.
+ *
+ * This software is the proprietary information of HANTA
+ * </pre>
+ *
+ * @ author 강혁(bbyuck) (k941026h@naver.com)
+ * @ since  2020. 01. 01
+ *
+ * @History
+ * <pre>
+ * -----------------------------------------------------
+ * 2020.01.01
+ * bbyuck (k941026h@naver.com) 최초작성
+ * -----------------------------------------------------
+ * </pre>
+ */
+
 @Service
 @RequiredArgsConstructor
 public class LolMatchingService {
@@ -143,7 +163,6 @@ public class LolMatchingService {
             }
 
             LolMatching matching = lolMatchingRepository.findDuoMatching(apiCaller);
-
             LolProfileCard opponentCard = null;
             Integer flag = ORIGINAL;
 
@@ -153,7 +172,7 @@ public class LolMatchingService {
                 opponentCard = lolProfileCardRepository.find(opponent);
 
             } else if (matching.getRequester() == apiCaller) {
-                User opponent = matching.getRequester();
+                User opponent = matching.getRespondent();
                 if (opponent.getStatus() == UserStatus.LOL_DUO_MATCHING_READY) flag = PROCESSED;
                 opponentCard = lolProfileCardRepository.find(opponent);
             }
@@ -173,6 +192,7 @@ public class LolMatchingService {
         responseDto.setMatchingStatus(matching.getMatchingStatus());
         responseDto.setMatchStartTime(matching.getStartTime());
 
+        responseDto.setOpponentProfileCardId(opponentCard.getId());
         responseDto.setOpponentLastActiveTime(opponentCard.getOwner().getLastActiveTime());
         responseDto.setOpponentVoice(opponentCard.getVoice());;
         if (flag.equals(ORIGINAL)) responseDto.setOpponentSummonerName(opponentCard.getSummonerName());
